@@ -155,7 +155,7 @@ class DailyWritingFriendsScraper:
 
     def html_to_markdown(self, html: str) -> str:
         """
-        Convert simple HTML (p, br, img tags) to Markdown.
+        Convert simple HTML (p, br, img, blockquote tags) to Markdown.
 
         Args:
             html: HTML content string
@@ -164,7 +164,6 @@ class DailyWritingFriendsScraper:
             Markdown formatted string
         """
         # Convert <img> tags to Markdown image syntax
-        # Handle both src="..." and alt="..." attributes
         def replace_img(match):
             tag = match.group(0)
             # Extract src
@@ -178,12 +177,27 @@ class DailyWritingFriendsScraper:
             return f"\n\n![{alt}]({src})\n\n"
 
         text = re.sub(r"<img[^>]*>", replace_img, html)
+
+        # Convert <blockquote> tags to Markdown blockquotes
+        def replace_blockquote(match):
+            content = match.group(1)
+            # Add > prefix to each line
+            lines = content.strip().split("\n")
+            quoted = "\n".join(f"> {line}" for line in lines)
+            return f"\n\n{quoted}\n\n"
+
+        text = re.sub(r"<blockquote>(.*?)</blockquote>", replace_blockquote, text, flags=re.DOTALL)
+
         # Replace <br> with newlines
         text = re.sub(r"<br\s*/?>", "\n", text)
         # Replace </p><p> with double newlines
         text = re.sub(r"</p>\s*<p>", "\n\n", text)
         # Remove remaining p tags
         text = re.sub(r"</?p>", "", text)
+
+        # Escape curly braces (JSX expression syntax in MDX)
+        text = text.replace("{", "\\{").replace("}", "\\}")
+
         # Clean up excessive newlines
         text = re.sub(r"\n{3,}", "\n\n", text)
         return text.strip()

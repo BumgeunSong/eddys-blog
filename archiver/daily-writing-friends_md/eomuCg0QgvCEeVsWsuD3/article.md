@@ -33,7 +33,8 @@ lang: ko
 <h2>최근 나를 울컥하게 만든 뉴스나 사건은?</h2>기억에 남는 게.. 없다. 이런 나 이상한가? ㅜ
 
 <h2>좋아하는 영화/드라마/소설의 명대사가 있어?</h2>
-<blockquote>"An idea is like a virus. Resilient. Highly contagious. Once an idea has taken hold of the brain, it's almost impossible to eradicate."</blockquote>
+
+> "An idea is like a virus. Resilient. Highly contagious. Once an idea has taken hold of the brain, it's almost impossible to eradicate."
 
 나는 지적으로 사람들에게 영향을 끼치고 싶은 욕망을 느끼는 사람이다. &lt;인셉션&gt;의 모든 대사와 장면은 하나하나 감명깊었습니다. 같은 거 2번 보기 싫어하는 내가 4번을 본 영화.
 

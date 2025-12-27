@@ -4,14 +4,50 @@ published_date: 2025-09-01 00:00
 lang: ko
 ---
 
-<h2><strong><a href="https://dailywritingfriends.com/board/lifXQBwkpfaQ0GQAYPap/post/bwPkjHiUQ8gOlz1EqZ1G" rel="noopener noreferrer" target="_blank">매글프의 목표</a></strong></h2>작성일: 25. 05. 01.<blockquote>저는 많은 사람들이 정신이 건강해지고 생각이 또렷해지며, 더 자기만의 기준으로 살아갔으면 좋겠습니다. 그러기 위해서 매일 글쓰기를 즐기고 꾸준히 하는 것이 매우 도움이 된다고 믿고요. 그렇기 때문에 매일 글쓰기를 즐기는 사람을 많이 만들어내고 싶습니다.</blockquote>
-<blockquote>그렇다면 무엇을 핵심 지표로 해야할까요?</blockquote><blockquote>연속 7일 이상 글쓰기 달성 유저 비율, 하루 평균 글의 갯수, 하루 평균 댓글 갯수</blockquote><blockquote>앞으로 당분간은 이 지표를 올리는데 집중해볼 겁니다.</blockquote>
+<h2><strong><a href="https://dailywritingfriends.com/board/lifXQBwkpfaQ0GQAYPap/post/bwPkjHiUQ8gOlz1EqZ1G" rel="noopener noreferrer" target="_blank">매글프의 목표</a></strong></h2>작성일: 25. 05. 01.
 
-<h2><strong><a href="https://dailywritingfriends.com/board/V08vERLMDmSh4RH7sUFN/post/F8ICNBfR857pjHr4lhVQ" rel="noopener noreferrer" target="_blank">매글프를 만들면서 드는 생각</a></strong></h2>작성일: 25. 04. 08.<blockquote>내 퇴근 후 시간은 한정되어있는데 매글프는 무엇부터 고쳐나가야할지 참으로 고민입니다. 앱을 만든 대가로 밥 벌어먹는 사람으로서 사실 팀에서도 밥먹듯이 하는 고민입니다만. 회사에서 하는 것과 온전히 무보상으로 제가 좋아서 하는 프로젝트에서 하는 고민은 또 느껴지는 찐함이 또 다릅니다.</blockquote><h1>
-</h1><h2><strong><a href="https://dailywritingfriends.com/board/lifXQBwkpfaQ0GQAYPap/post/s4sIVOIlYMZZG0gZIxNk" rel="noopener noreferrer" target="_blank">5.7 매글프 개발 일지</a></strong></h2>작성일: 25. 05. 07.<blockquote>- Daily Posting (7D Avg): 12.4개</blockquote><blockquote>- Daily Comment (7d Avg): 42개</blockquote><blockquote>- 연속 7일 이상 달성 유저 비율: 11.5%</blockquote>
-<blockquote>1. 푸시 알림을 고쳤으나 별로 효과적인 방법은 아닌 듯 하다.</blockquote><blockquote>2. 다음 우선순위는 글쓰기의 도파민 만들기</blockquote>
-<h2><strong><a href="https://dailywritingfriends.com/board/lifXQBwkpfaQ0GQAYPap/post/4xyhc3Xc184qnb1IQBwq" rel="noopener noreferrer" target="_blank">5.20 매글프 개발 일지</a></strong></h2><blockquote>- Daily Posting (7D Avg): 11.6개</blockquote><blockquote>- Daily Comment (7d Avg): 30개</blockquote><blockquote>- 연속 7일 이상 달성 유저 비율: 7.6%</blockquote>
-<blockquote>1. 글쓰기 완료 페이지: 글을 쓰고 나면 업로드 중이라는 메시지와 함께 연속 일수를 축하해주는 화면을 추가</blockquote><blockquote>2. 프로젝트 구조 변경: 폴더를 나누고, 하위 폴더 구조를 통일시켰다.</blockquote><blockquote>3. 푸시 메시지는 포기: 푸시 메시지라는 것이 정말로 이 정도 노력을 들일만한가?</blockquote><blockquote>4. Streak 버그: 연속 일수 계산 버그를 고쳤다</blockquote><blockquote>5. 사용자 프로필 페이지 만들기: 내가 여태까지 썼던 글을 쭉 모아볼 수 있는 프로필 페이지 기능</blockquote>
+> 저는 많은 사람들이 정신이 건강해지고 생각이 또렷해지며, 더 자기만의 기준으로 살아갔으면 좋겠습니다. 그러기 위해서 매일 글쓰기를 즐기고 꾸준히 하는 것이 매우 도움이 된다고 믿고요. 그렇기 때문에 매일 글쓰기를 즐기는 사람을 많이 만들어내고 싶습니다.
+
+> 그렇다면 무엇을 핵심 지표로 해야할까요?
+
+> 연속 7일 이상 글쓰기 달성 유저 비율, 하루 평균 글의 갯수, 하루 평균 댓글 갯수
+
+> 앞으로 당분간은 이 지표를 올리는데 집중해볼 겁니다.
+
+<h2><strong><a href="https://dailywritingfriends.com/board/V08vERLMDmSh4RH7sUFN/post/F8ICNBfR857pjHr4lhVQ" rel="noopener noreferrer" target="_blank">매글프를 만들면서 드는 생각</a></strong></h2>작성일: 25. 04. 08.
+
+> 내 퇴근 후 시간은 한정되어있는데 매글프는 무엇부터 고쳐나가야할지 참으로 고민입니다. 앱을 만든 대가로 밥 벌어먹는 사람으로서 사실 팀에서도 밥먹듯이 하는 고민입니다만. 회사에서 하는 것과 온전히 무보상으로 제가 좋아서 하는 프로젝트에서 하는 고민은 또 느껴지는 찐함이 또 다릅니다.
+
+<h1>
+</h1><h2><strong><a href="https://dailywritingfriends.com/board/lifXQBwkpfaQ0GQAYPap/post/s4sIVOIlYMZZG0gZIxNk" rel="noopener noreferrer" target="_blank">5.7 매글프 개발 일지</a></strong></h2>작성일: 25. 05. 07.
+
+> - Daily Posting (7D Avg): 12.4개
+
+> - Daily Comment (7d Avg): 42개
+
+> - 연속 7일 이상 달성 유저 비율: 11.5%
+
+> 1. 푸시 알림을 고쳤으나 별로 효과적인 방법은 아닌 듯 하다.
+
+> 2. 다음 우선순위는 글쓰기의 도파민 만들기
+
+<h2><strong><a href="https://dailywritingfriends.com/board/lifXQBwkpfaQ0GQAYPap/post/4xyhc3Xc184qnb1IQBwq" rel="noopener noreferrer" target="_blank">5.20 매글프 개발 일지</a></strong></h2>
+
+> - Daily Posting (7D Avg): 11.6개
+
+> - Daily Comment (7d Avg): 30개
+
+> - 연속 7일 이상 달성 유저 비율: 7.6%
+
+> 1. 글쓰기 완료 페이지: 글을 쓰고 나면 업로드 중이라는 메시지와 함께 연속 일수를 축하해주는 화면을 추가
+
+> 2. 프로젝트 구조 변경: 폴더를 나누고, 하위 폴더 구조를 통일시켰다.
+
+> 3. 푸시 메시지는 포기: 푸시 메시지라는 것이 정말로 이 정도 노력을 들일만한가?
+
+> 4. Streak 버그: 연속 일수 계산 버그를 고쳤다
+
+> 5. 사용자 프로필 페이지 만들기: 내가 여태까지 썼던 글을 쭉 모아볼 수 있는 프로필 페이지 기능
 
 <h2><strong><a href="https://dailywritingfriends.com/board/ImpCznXpaAskJEXYt8kh/post/EQqYzjROJjD9PPhq1XJw" rel="noopener noreferrer" target="_blank">6.2 매글프 개발 일지</a></strong></h2>- Daily Posting (7D Avg): 14.6개 (+3개)
 

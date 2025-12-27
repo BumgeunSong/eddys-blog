@@ -4,7 +4,11 @@ published_date: 2025-08-04 00:00
 lang: ko
 ---
 
-<blockquote>”됐어, 내가 참고 말지“</blockquote><blockquote>”어차피 말해도 다를 거 없잖아“ </blockquote><blockquote>”뭘 잘 못했는지 꼭 내 입으로 말해야해?“</blockquote>
+> ”됐어, 내가 참고 말지“
+
+> ”어차피 말해도 다를 거 없잖아“
+
+> ”뭘 잘 못했는지 꼭 내 입으로 말해야해?“
 
 내가 연애를 할 때 가장 힘들어했던 말이다. 
 
