@@ -17,6 +17,7 @@ SOURCE_DIRS = [
     ('velog_md', 'velog'),
     ('learning_man_md', 'learning_man'),
     ('daily-writing-friends_md', 'daily-writing-friends'),
+    ('instagram_md', 'instagram'),
 ]
 POSTS_OUTPUT_DIR = PROJECT_ROOT / 'content'
 ASSETS_OUTPUT_DIR = PROJECT_ROOT / 'public' / 'assets' / 'posts'
@@ -45,8 +46,9 @@ def transform_frontmatter(fm: dict, source: str = '', slug: str = '') -> str:
     """Convert frontmatter to Nextra format."""
     lines = ['---']
 
-    # Title (escape quotes)
+    # Title (escape quotes and angle brackets)
     title = fm.get('title', 'Untitled').replace('"', '\\"')
+    title = title.replace('<', '').replace('>', '')  # Remove angle brackets from title
     lines.append(f'title: "{title}"')
 
     # Date (extract just the date part)
@@ -72,6 +74,8 @@ def transform_frontmatter(fm: dict, source: str = '', slug: str = '') -> str:
     desc = fm.get('meta_description', '')
     if desc:
         desc = desc.replace('"', '\\"').strip("'")
+        # Remove angle brackets from description (they cause YAML parsing issues)
+        desc = desc.replace('<', '').replace('>', '')
         lines.append(f'description: "{desc}"')
 
     # Cover image - transform ./assets/ paths to absolute paths
@@ -105,6 +109,10 @@ def update_image_paths(body: str, old_dir: str, new_slug: str) -> str:
 
 def clean_mdx_content(body: str) -> str:
     """Clean content for MDX compatibility."""
+    # Remove video file references (MDX can't handle them)
+    body = re.sub(r'!\[([^\]]*)\]\([^)]*\.mp4\)', '', body)
+    body = re.sub(r'!\[([^\]]*)\]\([^)]*\.mov\)', '', body)
+
     # Convert HTML headings to Markdown
     body = re.sub(r'<h1[^>]*>(.*?)</h1>', r'# \1', body, flags=re.DOTALL)
     body = re.sub(r'<h2[^>]*>(.*?)</h2>', r'## \1', body, flags=re.DOTALL)
@@ -158,20 +166,18 @@ def clean_mdx_content(body: str) -> str:
     # <[늦깎이 천재들의 비밀](url)> -> [늦깎이 천재들의 비밀](url)
     body = re.sub(r'<(\[[^\]]+\]\([^)]+\))>', r'\1', body)
 
-    # Escape <<< and >>> symbols (used for emphasis in Korean)
-    body = body.replace('<<<', '\\<\\<\\<')
-    body = body.replace('>>>', '\\>\\>\\>')
+    # Escape all remaining angle brackets (after HTML conversion is done)
+    # Skip already-escaped ones and markdown image syntax ![...](...)
 
-    # Escape angle brackets containing Korean text (book titles)
-    # <한글제목> -> \<한글제목\>
-    # This prevents MDX from interpreting them as JSX tags
-    # Also handle titles starting with numbers like <1만 시간의 재발견>
-    body = re.sub(r'<([0-9가-힣][^>]*[가-힣])>', r'\\<\1\\>', body)
-    body = re.sub(r'<([가-힣]+)>', r'\\<\1\\>', body)
+    # Temporarily protect markdown images: ![alt](/path) or ![alt](http...)
+    body = re.sub(r'!\[([^\]]*)\]\(([^)]+)\)', r'__IMG_PLACEHOLDER__\1__SEP__\2__END__', body)
 
-    # Escape remaining unmatched angle brackets with Korean or numbers
-    # Handle cases like <text without closing bracket
-    body = re.sub(r"<([0-9가-힣][^>\n]*?)(?=\n|$)", r"\\<\1", body)
+    # Escape all < and > that aren't already escaped
+    body = re.sub(r'(?<!\\)<', r'\\<', body)
+    body = re.sub(r'(?<!\\)>', r'\\>', body)
+
+    # Restore markdown images
+    body = re.sub(r'__IMG_PLACEHOLDER__([^_]*)__SEP__([^_]*)__END__', r'![\1](\2)', body)
 
     # Clean up excessive newlines
     body = re.sub(r'\n{3,}', '\n\n', body)
