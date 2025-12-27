@@ -1,0 +1,16 @@
+---
+title: 인생에 너무 빨리 길을 내려 하지 말자
+published_date: 2021-04-19 00:00
+tags: 진로, 인생, 미래
+meta_description: 인생에도 디자이어드 패스(Desired path)가 필요하다
+meta_image: https://img1.daumcdn.net/thumb/R1280x0.fwebp/?fname=http://t1.daumcdn.net/brunch/service/user/15UX/image/zvlVS-mRGL5IMdoNNuh2OGvXdBg.jpeg
+lang: ko
+---
+
+# 인생에 너무 빨리 길을 내려 하지 말자
+
+무언가를 세상에 내놓고 경험해보기 전에는 미리 알 수 없다는 생각을 많이 한다. 콘텐츠도, 사업도, 나라는 인간도 그렇다.
+
+나는 이러이러한 인간일 줄 알고, 막 짱구 굴려가면서 나를 위한 길을 설계한다. 막상 시간이 지나면 내가 '걷고 싶은 길'은 내가 고려도 하지 않은 잔디밭에 나있을 때가 태반이다..
+
+계획을 너무 미리 세우지 않는다. 불확실성은 조금 참는다. 발길 가는대로 간다. 만들어진 길을 곰곰히 살펴본다. 그 때 길을 낸다.
