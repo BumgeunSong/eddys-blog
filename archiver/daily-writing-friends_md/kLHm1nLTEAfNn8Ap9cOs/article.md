@@ -1,0 +1,9 @@
+---
+title: 피마새, 에디터, 미소
+published_date: 2025-09-22 00:00
+lang: ko
+---
+
+<h2>피를 마시는 새</h2><ol><li data-list="bullet"><span class="ql-ui" contenteditable="false"></span>&lt;눈물을 마시는 새&gt; 다시 읽고 너무 재밌다고 호들갑을 떨었었다. 지난주부터는 후속작인 &lt;피를 마시는 새&gt;를 읽고 있다. 눈마새보다는 좀 더 속도감이 떨어진다. 액션 활극보다는 정치 드라마 같은 느낌. 그래도 캐릭터와 세계관은 여전히 재미있다.</li><li data-list="bullet"><span class="ql-ui" contenteditable="false"></span>완벽한 도덕관과 실력을 갖춘 황제의 대장군, 엘시가 주인공 중 하나로 나오는데 그가 이룰수 없는 목표 앞에서 어떻게 변해가지는지가 매우 궁금하다.</li></ol>
+<h2>에디터</h2><ol><li data-list="bullet"><span class="ql-ui" contenteditable="false"></span>주말 간 에디터와 씨름했다. 지금 내가 글을 쓰고 있는 매글프의 에디터다. 하 정말 들이박고서야 깨달은 건데 에디터는 정말 엄청난 기술력의 물건이다. 브라우저 호환성, 복잡한 서식 처리, 이미지/ 영상 처리 등을 해야한다. 유저가 코딩한 텍스트 자체가 실제 렌더링되는 UI와 동일해야한다. 게다가 양놈들은 버그가 있어도 고치지 않는 CJK 언어의 특수 버그까지... 에디터란 정말 수많은 앱에서 쓰는 것인데 구글링으로 해결책을 찾다보면 모두가 고통스러워하고 있다. 여기에 실시간 편집 까지 있으면 정말 상상하기도 싫은데.. 갑자기 구글 시트와 노션이 존경스러워진다.</li><li data-list="bullet"><span class="ql-ui" contenteditable="false"></span>주말에는 에디터에 이미지 여러개 첨부 기능과 유튜브 첨부 기능을 만들었는데, 역시나 생각하지 못한 버그가 줄줄이 나왔다. </li><li data-list="bullet"><span class="ql-ui" contenteditable="false"></span>매글프의 메인 기능인데 더 들이 박고 공부를 해봐야 실력이 늘지! 라고 생각하다가도.. 상상치도 못한 버그를 보면 들여다보기가 싫어진다. 후</li></ol>
+<h2>미소 앱</h2><ol><li data-list="bullet"><span class="ql-ui" contenteditable="false"></span>나는 웬만하면 짜증을 잘 내진 않는 편이라 생각하고 있다. 하지만 유난히 내가 참지 못하는 짜증은 </li><li data-list="bullet"><span class="ql-ui" contenteditable="false"></span>첫째 지하철에서 안 내렸는데 타는 사람.</li><li data-list="bullet"><span class="ql-ui" contenteditable="false"></span>둘째는 중간에 결제가 에러나면 앱이 멈추면서 처음부터 입력해야되는 그지 같은 앱. 그리고 그런 앱을 어쩔 수 없이 써야할 때... </li></ol>

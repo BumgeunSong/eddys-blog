@@ -1,0 +1,11 @@
+---
+title: 360도 성공!
+published_date: 2025-07-18 00:00
+lang: ko
+---
+
+오늘은 하남 스타필드에 있는 스몹이라는 곳에 다녀왔습니다! 생각보다 엄청 땀나고 재미있더라고요. 여기에 360도 스윙 그네가 있는데, 10%의 사람만 180도 이상 돈대요. 이게 생각보다 어렵더라고요. 꼭대기 가면 진짜 살짝 후달거립니다.
+
+하지만 재시도 끝에 저는 오늘의 유일한 360도 성공자였습니다 ㅎㅅㅎ 아니 근데 같이 간 분들이 그때 안봐서 거짓말 아니냐고.. 억울쓰
+
+<img src="https://firebasestorage.googleapis.com/v0/b/artico-app-4f9d4.firebasestorage.app/o/postImages%2F20250718%2F234447_IMG_3487.jpeg?alt=media&amp;token=5cdd5f61-4f77-40ff-bcbc-901536aad95c">
