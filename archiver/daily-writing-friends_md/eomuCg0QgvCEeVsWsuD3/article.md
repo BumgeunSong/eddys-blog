@@ -12,7 +12,7 @@ lang: ko
 
 다른 사람들의 감성 사진에 비해 많이 메마르다. 다른 걸로 올릴까, 생각도 했다. 하지만 나의 삶을 있는 그대로 드러내주는 것 같아 오히려 재밌기도 하다. 송유수이삼, 이륙, 이칠 같은 수많은 자녀 테스트 계정까지도 너무 '내 일'을 잘 보여준다.
 
-<img src="https://firebasestorage.googleapis.com/v0/b/artico-app-4f9d4.firebasestorage.app/o/postImages%2F20250721%2F215639_IMG_3649.PNG?alt=media&amp;token=6e38c5ae-7ce4-4475-947c-7a83b8926dff">
+![image](https://firebasestorage.googleapis.com/v0/b/artico-app-4f9d4.firebasestorage.app/o/postImages%2F20250721%2F215639_IMG_3649.PNG?alt=media&token=6e38c5ae-7ce4-4475-947c-7a83b8926dff)
 
 <h2>내 책상 위에 있는 아이템을 설명해본다면?</h2>
 

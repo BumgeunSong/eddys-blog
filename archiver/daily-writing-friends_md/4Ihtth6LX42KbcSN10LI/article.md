@@ -6,7 +6,7 @@ lang: ko
 
 6년 전, 나는 내가 만들고 이름지은 회사를 퇴사했다.
 
-<img src="https://firebasestorage.googleapis.com/v0/b/artico-app-4f9d4.firebasestorage.app/o/postImages%2F20250625%2F183054_image.PNG?alt=media&amp;token=7fdfc07f-3610-4738-b0e2-d6cdfb02e5d6">
+![image](https://firebasestorage.googleapis.com/v0/b/artico-app-4f9d4.firebasestorage.app/o/postImages%2F20250625%2F183054_image.PNG?alt=media&token=7fdfc07f-3610-4738-b0e2-d6cdfb02e5d6)
 
 오랜만에 이 포스팅을 보니 여러가지 기억들이 떠오른다. 사실 이 썰을 풀자면 할 얘기가 많다. 왜 창업을 해놓고 빈손으로 퇴사했는가. 애초에 왜 창업을 하게 되었고 왜 블록체인 판에 뛰어들게 되었는가. 그리고 왜 2019년 이후로는 쳐다보지 않았는가. 왜 그때 비트코인을 사지 않았는가 (?) 퇴사를 하기까지의 수많은 갈등과 고민들은 무엇이었는가.
 

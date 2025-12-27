@@ -155,7 +155,7 @@ class DailyWritingFriendsScraper:
 
     def html_to_markdown(self, html: str) -> str:
         """
-        Convert simple HTML (p, br tags) to Markdown.
+        Convert simple HTML (p, br, img tags) to Markdown.
 
         Args:
             html: HTML content string
@@ -163,8 +163,23 @@ class DailyWritingFriendsScraper:
         Returns:
             Markdown formatted string
         """
+        # Convert <img> tags to Markdown image syntax
+        # Handle both src="..." and alt="..." attributes
+        def replace_img(match):
+            tag = match.group(0)
+            # Extract src
+            src_match = re.search(r'src="([^"]*)"', tag)
+            src = src_match.group(1) if src_match else ""
+            # Extract alt
+            alt_match = re.search(r'alt="([^"]*)"', tag)
+            alt = alt_match.group(1) if alt_match else "image"
+            # Unescape HTML entities in URL
+            src = src.replace("&amp;", "&")
+            return f"\n\n![{alt}]({src})\n\n"
+
+        text = re.sub(r"<img[^>]*>", replace_img, html)
         # Replace <br> with newlines
-        text = re.sub(r"<br\s*/?>", "\n", html)
+        text = re.sub(r"<br\s*/?>", "\n", text)
         # Replace </p><p> with double newlines
         text = re.sub(r"</p>\s*<p>", "\n\n", text)
         # Remove remaining p tags

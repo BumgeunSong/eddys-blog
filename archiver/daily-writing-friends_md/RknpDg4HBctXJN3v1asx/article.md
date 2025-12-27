@@ -24,7 +24,7 @@ SNS가 UI 기술이라면, 리액트는 인스타그램 정도라고 생각하�
 
 <h2>알바와 일하는 2가지 방법</h2>자, 여러분이 식당 사장이라고 해봅시다. 맛있는 브런치 식당을 열었습니다. 개업 후 혼자서 뼈빠지게 일을 하다가 드디어 알바를 한 명 뽑았습니다. 
 
-<img src="https://firebasestorage.googleapis.com/v0/b/artico-app-4f9d4.firebasestorage.app/o/postImages%2F20250505%2F160229_26487_22387_186.jpg?alt=media&amp;token=4f930030-c022-4599-a0b5-ebfc674fc7c1">
+![image](https://firebasestorage.googleapis.com/v0/b/artico-app-4f9d4.firebasestorage.app/o/postImages%2F20250505%2F160229_26487_22387_186.jpg?alt=media&token=4f930030-c022-4599-a0b5-ebfc674fc7c1)
 
 이제 이 알바와 어떻게 일을 해야할까요?
 

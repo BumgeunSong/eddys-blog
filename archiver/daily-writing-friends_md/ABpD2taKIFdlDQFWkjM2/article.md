@@ -6,7 +6,11 @@ lang: ko
 
 오랫동안 안경을 써왔다. 내가 기억하는 모든 과거에는 내 얼굴에 안경이 붙어있다. 거의 평생을 같이 살아왔다고 봐도 무방하다. 
 
-너 누구 닮았네, 하고 들은 것도 평생 안경남들 뿐이었다. 그러다보니 나 스스로도 안경을 눈코입과 같은 얼굴의 일부로 여기고 살았다.<img alt="IMG_5133.JPG" src="https://firebasestorage.googleapis.com/v0/b/artico-app-4f9d4.firebasestorage.app/o/postImages%2F20251114%2F153334_IMG_5133.JPG?alt=media&amp;token=263d1a93-0d38-4d70-a53c-e2d4ee642b97">(지금 안경은 내가 여태까지 썼던 안경들 중에서 가장 마음에 드는 안경이다. '스탠다드 안경원'이라는 곳에서 맞췄다. 굳이굳이 멀리있는 안경원을 찾아갈 정도로 안경 핏을 잘 본다. 안경 쓰시는 분이면 추천.)
+너 누구 닮았네, 하고 들은 것도 평생 안경남들 뿐이었다. 그러다보니 나 스스로도 안경을 눈코입과 같은 얼굴의 일부로 여기고 살았다.
+
+![IMG_5133.JPG](https://firebasestorage.googleapis.com/v0/b/artico-app-4f9d4.firebasestorage.app/o/postImages%2F20251114%2F153334_IMG_5133.JPG?alt=media&token=263d1a93-0d38-4d70-a53c-e2d4ee642b97)
+
+(지금 안경은 내가 여태까지 썼던 안경들 중에서 가장 마음에 드는 안경이다. '스탠다드 안경원'이라는 곳에서 맞췄다. 굳이굳이 멀리있는 안경원을 찾아갈 정도로 안경 핏을 잘 본다. 안경 쓰시는 분이면 추천.)
 
 ---
 

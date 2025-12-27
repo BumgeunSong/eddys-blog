@@ -10,7 +10,7 @@ lang: ko
 
 이건 100퍼센트 저희 어머니한테 물려받은 유전자인 것 같아요. 엄마는 굉장히 유명한 책벌레이자 국어 선생님인데요. 얼마 전에 가족 카톡방에 엄마가 사진을 하나 올리셨더라고요. 
 
-<img src="https://firebasestorage.googleapis.com/v0/b/artico-app-4f9d4.firebasestorage.app/o/postImages%2F20251222%2F203957_KakaoTalk_Snapshot_20251222_203417.png?alt=media&amp;token=fed6560a-fe86-4016-be5c-2b525891e728">
+![image](https://firebasestorage.googleapis.com/v0/b/artico-app-4f9d4.firebasestorage.app/o/postImages%2F20251222%2F203957_KakaoTalk_Snapshot_20251222_203417.png?alt=media&token=fed6560a-fe86-4016-be5c-2b525891e728)
 
 아버지는 시간이 조금이라도 있으면 등산이나 여행을 다니시는 반면, 엄마는 조금이라도 시간이 남으면 도서관에 들어가 이 책 저 책을 읽으며 시간 보내는 걸 매우 좋아하십니다. 저 카톡을 보면서 '나도 결국 DNA의 산물이군' 싶었습니다.
 
@@ -22,7 +22,7 @@ lang: ko
 
 대학교 다닐 때도 공강 시간에는 항상 '중앙도서관'에 갔어요. 시간남으면 책 구경을 하고요. 괜히 권장도서 100권 이런 거 하나씩 들춰보고.. (다 읽은 책 없음) 서점에 가면 신간이나 트렌디한 책밖에 없는데 50년 넘은 그 올드한 대학 도서관은 그렇지가 않아서 오히려 숨은 맛도리를 발견하는 재미가 있습니다. 약간 빈티지샵 쇼핑 같달까요.
 
-<img src="https://firebasestorage.googleapis.com/v0/b/artico-app-4f9d4.firebasestorage.app/o/postImages%2F20251222%2F205624_%E1%84%8C%E1%85%AE%E1%86%BC%E1%84%8B%E1%85%A1%E1%86%BC%E1%84%83%E1%85%A9%E1%84%89%E1%85%A5%E1%84%80%E1%85%AA%E1%86%AB.jpg?alt=media&amp;token=e2e1aafd-95c9-4b30-984f-1a647998e8db">
+![image](https://firebasestorage.googleapis.com/v0/b/artico-app-4f9d4.firebasestorage.app/o/postImages%2F20251222%2F205624_%E1%84%8C%E1%85%AE%E1%86%BC%E1%84%8B%E1%85%A1%E1%86%BC%E1%84%83%E1%85%A9%E1%84%89%E1%85%A5%E1%84%80%E1%85%AA%E1%86%AB.jpg?alt=media&token=e2e1aafd-95c9-4b30-984f-1a647998e8db)
 
 아무튼..! 저는 이렇게 '책 구경'을 좋아하는 인간입니다. '책 구경'을 맘껏할 수 있는 일이라면 평생 해도 될 것 같습니다.  그래서 저는 돈을 똑같이 준다면 '<strong>도서관 사서'</strong>를 하고 싶어요. 
 

@@ -14,4 +14,4 @@ lang: ko
 
 다이빙은 자주 할수는 없고 돈도 꽤 많이 들지만 그래도 나중에 또 여행가면 다이빙 스팟은 한번 꼭 놓치지 말아야겠어요.
 
-<img src="https://firebasestorage.googleapis.com/v0/b/artico-app-4f9d4.firebasestorage.app/o/postImages%2F20251030%2F230702_GOPR4550-compressed.jpeg?alt=media&amp;token=4dd8d275-117a-465a-8adc-648b8b2b7b27">
+![image](https://firebasestorage.googleapis.com/v0/b/artico-app-4f9d4.firebasestorage.app/o/postImages%2F20251030%2F230702_GOPR4550-compressed.jpeg?alt=media&token=4dd8d275-117a-465a-8adc-648b8b2b7b27)

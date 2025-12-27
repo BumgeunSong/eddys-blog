@@ -22,4 +22,6 @@ lang: ko
 
 그러나 지금 생각해보니 뭔가 남겨야 한다는, 쓸모있어야 한다는 평소의 그 생각 자체를 아예 안했던 것이 아주 쓸모있었지 않았나 싶네요. 뭐, 생산적인 일은 이제 한국에 돌아가서 하면 되죠. 
 
-넘 잘 놀아서 이제 미련도 없는 발리 안녕-<img alt="IMG_4851.jpeg" src="https://firebasestorage.googleapis.com/v0/b/artico-app-4f9d4.firebasestorage.app/o/postImages%2F20251106%2F221858_IMG_4851.jpeg?alt=media&amp;token=b8002392-5adb-4cca-87e3-763f890b350f">
+넘 잘 놀아서 이제 미련도 없는 발리 안녕-
+
+![IMG_4851.jpeg](https://firebasestorage.googleapis.com/v0/b/artico-app-4f9d4.firebasestorage.app/o/postImages%2F20251106%2F221858_IMG_4851.jpeg?alt=media&token=b8002392-5adb-4cca-87e3-763f890b350f)

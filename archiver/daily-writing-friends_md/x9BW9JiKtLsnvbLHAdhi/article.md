@@ -18,7 +18,11 @@ lang: ko
 
 10분 해서 크게 뭐가 느껴지지 않으니까 최근 1년간은 좀 게을리했습니다. 
 
-뭔가 찍먹만 하고 진도가 안 나간 느낌이었어요. 그러다 이번 기회에 명상 코스를 가서 제대로 한번 배워봐야겠다 싶었습니다.<img alt="IMG_4378.JPG" src="https://firebasestorage.googleapis.com/v0/b/artico-app-4f9d4.firebasestorage.app/o/postImages%2F20251022%2F151912_IMG_4378.JPG?alt=media&amp;token=70a95e51-7fc4-40ea-a02e-504c8cd59e2f"><h2>명상을 오래 하면 어떤 느낌인가</h2>제가 갔다온 명상 코스는 10박 11일인데요. 
+뭔가 찍먹만 하고 진도가 안 나간 느낌이었어요. 그러다 이번 기회에 명상 코스를 가서 제대로 한번 배워봐야겠다 싶었습니다.
+
+![IMG_4378.JPG](https://firebasestorage.googleapis.com/v0/b/artico-app-4f9d4.firebasestorage.app/o/postImages%2F20251022%2F151912_IMG_4378.JPG?alt=media&token=70a95e51-7fc4-40ea-a02e-504c8cd59e2f)
+
+<h2>명상을 오래 하면 어떤 느낌인가</h2>제가 갔다온 명상 코스는 10박 11일인데요. 
 
 시간표를 보면, 
 

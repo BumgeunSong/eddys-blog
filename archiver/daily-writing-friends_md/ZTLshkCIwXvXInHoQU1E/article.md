@@ -17,4 +17,4 @@ lang: ko
 
 결국 하나를 시켰습니다. 치킨은 흥이 깨졌으니 피자로! 블랙맘바 피자라는 녀석인데 맛있습니다.
 
-<img src="https://firebasestorage.googleapis.com/v0/b/artico-app-4f9d4.firebasestorage.app/o/postImages%2F20250613%2F225519_IMG_3130.jpeg?alt=media&amp;token=bd87f56a-8f11-4202-9fd4-e4239be4868d">
+![image](https://firebasestorage.googleapis.com/v0/b/artico-app-4f9d4.firebasestorage.app/o/postImages%2F20250613%2F225519_IMG_3130.jpeg?alt=media&token=bd87f56a-8f11-4202-9fd4-e4239be4868d)

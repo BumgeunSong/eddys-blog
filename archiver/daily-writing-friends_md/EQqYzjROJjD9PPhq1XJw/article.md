@@ -46,7 +46,7 @@ lang: ko
 
 그러나 적어도 이번 기수를 어떤 사람들이 하고 있는지는 보여줄만 하다는 생각이 들었다. 매글프를 추천받은 지인이거나 궁금해서 들어와본 사람이라면, 내가 아는 사람이 있으려나? 하면서 궁금해할 것이다. 그래서 현재 활동중인 멤버들의 목록 리스트를 볼 수 있도록 개선했다.
 
-<img src="https://firebasestorage.googleapis.com/v0/b/artico-app-4f9d4.firebasestorage.app/o/postImages%2F20250602%2F194630_Screenshot%202025-06-02%20at%207.46.09%E2%80%AFPM.png?alt=media&amp;token=d1872560-36fc-4940-a9da-e00638570274">
+![image](https://firebasestorage.googleapis.com/v0/b/artico-app-4f9d4.firebasestorage.app/o/postImages%2F20250602%2F194630_Screenshot%202025-06-02%20at%207.46.09%E2%80%AFPM.png?alt=media&token=d1872560-36fc-4940-a9da-e00638570274)
 
 나중에 좀 더 나아간다면, 매글프에서 어떤 글과 댓글이 오가는지도 보여주고 싶다. 그러려면 공개 글이 있어야 겠지? 매글프 내에서 글쓴이가 원한다면 공개로 돌릴 수 있도록 한다. 신청자가 미리 댓글과 글을 체험해볼 수 있으면 지금보다 훨씬 가입 전환율이 올라갈 것 같다. 당장은 여기가 신경쓰는 포인트는 아니지만.
 
