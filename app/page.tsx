@@ -10,12 +10,14 @@ export default async function HomePage() {
 
   return (
     <article>
-      <h1>에디의 블로그</h1>
-      <ul style={{ listStyle: 'none', padding: 0 }}>
+      <header className="page-header">
+        <h1 className="page-title">에디의 블로그</h1>
+      </header>
+      <div className="post-list">
         {posts.map((post) => (
           <PostItem key={post.route} post={post} />
         ))}
-      </ul>
+      </div>
     </article>
   )
 }
