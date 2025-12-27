@@ -105,6 +105,44 @@ def update_image_paths(body: str, old_dir: str, new_slug: str) -> str:
 
 def clean_mdx_content(body: str) -> str:
     """Clean content for MDX compatibility."""
+    # Convert HTML headings to Markdown
+    body = re.sub(r'<h1[^>]*>(.*?)</h1>', r'# \1', body, flags=re.DOTALL)
+    body = re.sub(r'<h2[^>]*>(.*?)</h2>', r'## \1', body, flags=re.DOTALL)
+    body = re.sub(r'<h3[^>]*>(.*?)</h3>', r'### \1', body, flags=re.DOTALL)
+
+    # Remove empty headings
+    body = re.sub(r'^#{1,3}\s*$', '', body, flags=re.MULTILINE)
+
+    # Convert <strong> to **bold**
+    body = re.sub(r'<strong[^>]*>(.*?)</strong>', r'**\1**', body, flags=re.DOTALL)
+
+    # Convert <em> to *italic*
+    body = re.sub(r'<em[^>]*>(.*?)</em>', r'*\1*', body, flags=re.DOTALL)
+
+    # Remove <span> tags (keep content)
+    body = re.sub(r'<span[^>]*>(.*?)</span>', r'\1', body, flags=re.DOTALL)
+
+    # Convert lists - handle <ol> and <ul> with <li> items
+    def convert_list(match):
+        tag = match.group(1)  # ol or ul
+        content = match.group(2)
+        is_ordered = tag == 'ol'
+        # Extract list items
+        items = re.findall(r'<li[^>]*>(.*?)</li>', content, flags=re.DOTALL)
+        result = []
+        for i, item in enumerate(items, 1):
+            item = item.strip()
+            if is_ordered:
+                result.append(f"{i}. {item}")
+            else:
+                result.append(f"- {item}")
+        return '\n' + '\n'.join(result) + '\n'
+
+    body = re.sub(r'<(ol|ul)[^>]*>(.*?)</\1>', convert_list, body, flags=re.DOTALL)
+
+    # Remove any remaining list tags
+    body = re.sub(r'</?(?:ol|ul|li)[^>]*>', '', body)
+
     # Convert angle-bracket URLs to plain URLs
     # <https://example.com> -> https://example.com
     body = re.sub(r'<(https?://[^>]+)>', r'\1', body)
@@ -134,6 +172,9 @@ def clean_mdx_content(body: str) -> str:
     # Escape remaining unmatched angle brackets with Korean or numbers
     # Handle cases like <text without closing bracket
     body = re.sub(r"<([0-9가-힣][^>\n]*?)(?=\n|$)", r"\\<\1", body)
+
+    # Clean up excessive newlines
+    body = re.sub(r'\n{3,}', '\n\n', body)
 
     return body
 
