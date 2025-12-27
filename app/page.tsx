@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { PostItem } from '@/components/PostItem'
 import { getPosts } from './posts/get-posts'
 
 export const metadata = {
@@ -13,13 +13,7 @@ export default async function HomePage() {
       <h1>에디의 블로그</h1>
       <ul style={{ listStyle: 'none', padding: 0 }}>
         {posts.map((post) => (
-          <li key={post.route} style={{ marginBottom: '0.5rem' }}>
-            <Link href={post.route}>
-              <span>{post.frontMatter?.date}</span>{' '}
-              <strong>{post.title}</strong>{' '}
-              <span>{post.frontMatter?.description}</span>
-            </Link>
-          </li>
+          <PostItem key={post.route} post={post} />
         ))}
       </ul>
     </article>
