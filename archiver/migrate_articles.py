@@ -107,6 +107,41 @@ def update_image_paths(body: str, old_dir: str, new_slug: str) -> str:
     return body
 
 
+def clean_instagram_content(body: str) -> str:
+    """Clean Instagram-specific content."""
+    # Replace Instagram's special space character (⠀) with newline
+    body = body.replace('⠀', '\n')
+
+    # Remove hashtags (e.g., #1일1글, #태그)
+    body = re.sub(r'#\w+\s*', '', body)
+
+    return body
+
+
+def get_first_sentence(text: str, max_length: int = 80) -> str:
+    """Extract first sentence from text, with ellipsis if too long."""
+    # Remove hashtags first
+    text = re.sub(r'#\w+\s*', '', text)
+    # Replace special spaces
+    text = text.replace('⠀', ' ')
+    # Get first line/sentence
+    text = text.strip()
+
+    # Split by sentence endings
+    match = re.match(r'^(.+?[.!?。])', text)
+    if match:
+        sentence = match.group(1).strip()
+    else:
+        # No sentence ending found, take first line
+        sentence = text.split('\n')[0].strip()
+
+    # Truncate if too long
+    if len(sentence) > max_length:
+        sentence = sentence[:max_length-3].strip() + '...'
+
+    return sentence or 'Instagram Post'
+
+
 def clean_mdx_content(body: str) -> str:
     """Clean content for MDX compatibility."""
     # Remove video file references (MDX can't handle them)
@@ -202,6 +237,13 @@ def migrate_article(source_dir: Path, article_dir: str, platform: str):
     if not fm:
         print(f"  Skipping {article_dir}: no frontmatter found")
         return
+
+    # Instagram-specific processing
+    if platform == 'instagram':
+        # Override title with first sentence from body
+        fm['title'] = get_first_sentence(body)
+        # Clean Instagram content (hashtags, special spaces)
+        body = clean_instagram_content(body)
 
     # Transform frontmatter
     new_frontmatter = transform_frontmatter(fm, source=platform, slug=slug)
