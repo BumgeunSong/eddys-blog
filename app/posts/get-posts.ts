@@ -21,9 +21,3 @@ export async function getPosts() {
       return dateB.getTime() - dateA.getTime()
     })
 }
-
-export async function getTags(): Promise<string[]> {
-  const posts = await getPosts()
-  const tags = posts.flatMap((post) => post.frontMatter?.tags || [])
-  return [...new Set(tags)]
-}
