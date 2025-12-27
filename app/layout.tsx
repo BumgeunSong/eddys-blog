@@ -2,6 +2,7 @@ import { Footer, Layout, Navbar } from 'nextra-theme-blog'
 import { Head } from 'nextra/components'
 import { getPageMap } from 'nextra/page-map'
 import 'nextra-theme-blog/style.css'
+import './globals.css'
 import type { ReactNode } from 'react'
 
 export const metadata = {

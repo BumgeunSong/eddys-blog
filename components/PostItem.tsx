@@ -7,17 +7,27 @@ interface Post {
   frontMatter?: {
     date?: string
     description?: string
+    source?: string
   }
 }
 
 export function PostItem({ post }: { post: Post }) {
+  const { date, description, source } = post.frontMatter || {}
+
   return (
-    <li style={{ marginBottom: '0.5rem' }}>
-      <Link href={post.route}>
-        <span>{post.frontMatter?.date}</span>{' '}
-        <strong>{post.title}</strong>{' '}
-        <span>{post.frontMatter?.description}</span>
-      </Link>
-    </li>
+    <Link href={post.route} className="post-item">
+      <div className="post-meta">
+        {date && <span className="post-date">{date}</span>}
+        {source && (
+          <span className={`post-source ${source}`}>
+            {source}
+          </span>
+        )}
+      </div>
+      <div className="post-title">{post.title}</div>
+      {description && (
+        <div className="post-description">{description}</div>
+      )}
+    </Link>
   )
 }

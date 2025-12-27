@@ -14,7 +14,8 @@ SCRIPT_DIR = Path(__file__).parent
 PROJECT_ROOT = SCRIPT_DIR.parent
 SOURCE_DIRS = [
     ('brunch_md', 'brunch'),
-    ('velog_md', 'velog')
+    ('velog_md', 'velog'),
+    ('learning_man_md', 'learning_man'),
 ]
 POSTS_OUTPUT_DIR = PROJECT_ROOT / 'content'
 ASSETS_OUTPUT_DIR = PROJECT_ROOT / 'public' / 'assets' / 'posts'
@@ -39,7 +40,7 @@ def parse_frontmatter(content: str) -> tuple[dict, str]:
     return {}, content
 
 
-def transform_frontmatter(fm: dict) -> str:
+def transform_frontmatter(fm: dict, source: str = '', slug: str = '') -> str:
     """Convert frontmatter to Nextra format."""
     lines = ['---']
 
@@ -52,6 +53,10 @@ def transform_frontmatter(fm: dict) -> str:
     if date_str:
         date_only = date_str.split()[0]
         lines.append(f'date: {date_only}')
+
+    # Source (original publishing platform)
+    if source:
+        lines.append(f'source: {source}')
 
     # Tags (convert comma-separated to YAML array)
     tags_str = fm.get('tags', '')
@@ -68,9 +73,13 @@ def transform_frontmatter(fm: dict) -> str:
         desc = desc.replace('"', '\\"').strip("'")
         lines.append(f'description: "{desc}"')
 
-    # Cover image
+    # Cover image - transform ./assets/ paths to absolute paths
     image = fm.get('meta_image', '')
     if image:
+        if image.startswith('./assets/') and slug:
+            # Convert ./assets/xxx.png to /assets/posts/{slug}/xxx.png
+            filename = image[9:]  # Remove './assets/'
+            image = f'/assets/posts/{slug}/{filename}'
         lines.append(f'image: {image}')
 
     lines.append('---')
@@ -79,11 +88,18 @@ def transform_frontmatter(fm: dict) -> str:
 
 def update_image_paths(body: str, old_dir: str, new_slug: str) -> str:
     """Update image paths to use /assets/posts/{slug}/ paths."""
-    # Pattern: ![...](brunch_md/bumgeunsong-160/assets/xxx.png)
+    # Pattern 1: ![...](brunch_md/bumgeunsong-160/assets/xxx.png)
     # or: ![...](velog_md/eddy_song-rejection/assets/xxx.png)
     pattern = rf'!\[([^\]]*)\]\({re.escape(old_dir)}/assets/([^)]+)\)'
     replacement = rf'![image](/assets/posts/{new_slug}/\2)'
-    return re.sub(pattern, replacement, body)
+    body = re.sub(pattern, replacement, body)
+
+    # Pattern 2: ![...](./assets/xxx.png) - used by learning_man
+    pattern2 = r'!\[([^\]]*)\]\(\./assets/([^)]+)\)'
+    replacement2 = rf'![image](/assets/posts/{new_slug}/\2)'
+    body = re.sub(pattern2, replacement2, body)
+
+    return body
 
 
 def clean_mdx_content(body: str) -> str:
@@ -98,6 +114,25 @@ def clean_mdx_content(body: str) -> str:
 
     # Remove empty anchor tags
     body = re.sub(r'<a[^>]*/>', '', body)
+
+    # Handle <[book title](url)> pattern - convert to just the link
+    # <[늦깎이 천재들의 비밀](url)> -> [늦깎이 천재들의 비밀](url)
+    body = re.sub(r'<(\[[^\]]+\]\([^)]+\))>', r'\1', body)
+
+    # Escape <<< and >>> symbols (used for emphasis in Korean)
+    body = body.replace('<<<', '\\<\\<\\<')
+    body = body.replace('>>>', '\\>\\>\\>')
+
+    # Escape angle brackets containing Korean text (book titles)
+    # <한글제목> -> \<한글제목\>
+    # This prevents MDX from interpreting them as JSX tags
+    # Also handle titles starting with numbers like <1만 시간의 재발견>
+    body = re.sub(r'<([0-9가-힣][^>]*[가-힣])>', r'\\<\1\\>', body)
+    body = re.sub(r'<([가-힣]+)>', r'\\<\1\\>', body)
+
+    # Escape remaining unmatched angle brackets with Korean or numbers
+    # Handle cases like <text without closing bracket
+    body = re.sub(r"<([0-9가-힣][^>\n]*?)(?=\n|$)", r"\\<\1", body)
 
     return body
 
@@ -121,7 +156,7 @@ def migrate_article(source_dir: Path, article_dir: str, platform: str):
         return
 
     # Transform frontmatter
-    new_frontmatter = transform_frontmatter(fm)
+    new_frontmatter = transform_frontmatter(fm, source=platform, slug=slug)
 
     # Update image paths
     old_path = f"{source_dir.name}/{article_dir}"
