@@ -35,5 +35,6 @@ yarn-error.log*
 # Vercel
 .vercel
 
-# Claude
-.claude/
+# Claude (keep agents/, ignore local settings)
+.claude/settings.local.json
+.claude/plans/
