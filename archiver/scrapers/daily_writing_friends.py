@@ -122,6 +122,8 @@ class DailyWritingFriendsScraper:
         """
         Fetch all posts from the beginning.
 
+        API has a 365-day limit, so we batch requests if needed.
+
         Args:
             weeks_ago: How many weeks back to start from (default: 85)
 
@@ -130,13 +132,26 @@ class DailyWritingFriendsScraper:
         """
         end_date = datetime.now()
         start_date = end_date - timedelta(weeks=weeks_ago)
+        max_days = 364  # API limit is 365 days, use 364 to be safe
 
-        print(f"Fetching posts from {start_date.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')}...")
+        all_posts = []
+        current_end = end_date
 
-        return self.fetch_posts(
-            start_date=start_date.strftime("%Y-%m-%d"),
-            end_date=end_date.strftime("%Y-%m-%d"),
-        )
+        while current_end > start_date:
+            current_start = max(start_date, current_end - timedelta(days=max_days))
+
+            print(f"Fetching posts from {current_start.strftime('%Y-%m-%d')} to {current_end.strftime('%Y-%m-%d')}...")
+
+            posts = self.fetch_posts(
+                start_date=current_start.strftime("%Y-%m-%d"),
+                end_date=current_end.strftime("%Y-%m-%d"),
+            )
+            all_posts.extend(posts)
+            print(f"  Found {len(posts)} posts in this batch")
+
+            current_end = current_start - timedelta(days=1)
+
+        return all_posts
 
     def html_to_markdown(self, html: str) -> str:
         """
