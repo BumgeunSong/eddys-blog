@@ -115,6 +115,25 @@ def clean_mdx_content(body: str) -> str:
     # Remove empty anchor tags
     body = re.sub(r'<a[^>]*/>', '', body)
 
+    # Handle <[book title](url)> pattern - convert to just the link
+    # <[늦깎이 천재들의 비밀](url)> -> [늦깎이 천재들의 비밀](url)
+    body = re.sub(r'<(\[[^\]]+\]\([^)]+\))>', r'\1', body)
+
+    # Escape <<< and >>> symbols (used for emphasis in Korean)
+    body = body.replace('<<<', '\\<\\<\\<')
+    body = body.replace('>>>', '\\>\\>\\>')
+
+    # Escape angle brackets containing Korean text (book titles)
+    # <한글제목> -> \<한글제목\>
+    # This prevents MDX from interpreting them as JSX tags
+    # Also handle titles starting with numbers like <1만 시간의 재발견>
+    body = re.sub(r'<([0-9가-힣][^>]*[가-힣])>', r'\\<\1\\>', body)
+    body = re.sub(r'<([가-힣]+)>', r'\\<\1\\>', body)
+
+    # Escape remaining unmatched angle brackets with Korean or numbers
+    # Handle cases like <text without closing bracket
+    body = re.sub(r"<([0-9가-힣][^>\n]*?)(?=\n|$)", r"\\<\1", body)
+
     return body
 
 
