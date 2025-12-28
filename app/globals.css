@@ -73,6 +73,37 @@ article.x\:container > header.x\:mb-8 {
   letter-spacing: -0.02em;
 }
 
+/* Year navigation */
+.year-nav {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.year-nav a {
+  font-size: 0.9rem;
+  color: #666;
+  padding: 0.25rem 0;
+}
+
+.year-nav a.active {
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.year-nav a:hover {
+  opacity: 0.7;
+}
+
+:is(html[class~="dark"]) .year-nav a {
+  color: #999;
+}
+
+:is(html[class~="dark"]) .year-nav a.active {
+  color: #f0f0f0;
+}
+
 /* Clean article styling */
 article {
   max-width: 680px;
