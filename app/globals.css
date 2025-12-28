@@ -1,11 +1,10 @@
-/* Global style overrides */
+@import "tailwindcss";
 
-/* Remove underlines from all links */
+/* Nextra theme overrides */
 a {
   text-decoration: none;
 }
 
-/* Override Nextra theme container padding */
 article.x\:container {
   padding-top: 0 !important;
 }
@@ -14,97 +13,6 @@ article.x\:container > header.x\:mb-8 {
   margin-bottom: 0 !important;
 }
 
-/* Post list styling */
-.post-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-/* Post item */
-.post-item {
-  display: flex;
-  align-items: baseline;
-  gap: 0.75rem;
-  padding: 0.6rem 0;
-  border-bottom: 1px solid rgba(128, 128, 128, 0.15);
-  transition: opacity 0.15s ease;
-}
-
-.post-item:hover {
-  opacity: 0.6;
-}
-
-.post-item:last-child {
-  border-bottom: none;
-}
-
-.post-date {
-  font-size: 0.85rem;
-  color: #888;
-  font-variant-numeric: tabular-nums;
-  flex-shrink: 0;
-}
-
-/* Post title */
-.post-title {
-  font-size: 1rem;
-  font-weight: 500;
-  color: #1a1a1a;
-  line-height: 1.4;
-}
-
-:is(html[class~="dark"]) .post-title {
-  color: #f0f0f0;
-}
-
-/* Page header */
-.page-header {
-  margin-top: 0;
-  margin-bottom: 1.25rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid rgba(128, 128, 128, 0.15);
-}
-
-.page-title {
-  font-size: 1.75rem;
-  font-weight: 700;
-  margin: 0;
-  letter-spacing: -0.02em;
-}
-
-/* Year navigation */
-.year-nav {
-  display: flex;
-  gap: 1rem;
-  margin-top: 0.75rem;
-  flex-wrap: wrap;
-}
-
-.year-nav a {
-  font-size: 0.9rem;
-  color: #666;
-  padding: 0.25rem 0;
-}
-
-.year-nav a.active {
-  font-weight: 600;
-  color: #1a1a1a;
-}
-
-.year-nav a:hover {
-  opacity: 0.7;
-}
-
-:is(html[class~="dark"]) .year-nav a {
-  color: #999;
-}
-
-:is(html[class~="dark"]) .year-nav a.active {
-  color: #f0f0f0;
-}
-
-/* Clean article styling */
 article {
   max-width: 680px;
 }

@@ -37,11 +37,11 @@ export default async function YearPage({ params }: { params: Promise<{ year: str
 
   return (
     <article>
-      <header className="page-header">
-        <h1 className="page-title">에디의 블로그</h1>
+      <header className="mb-5 pb-3 border-b border-gray-200/15">
+        <h1 className="text-3xl font-bold tracking-tight">에디의 블로그</h1>
         <YearNav years={years} currentYear={year} />
       </header>
-      <div className="post-list">
+      <div className="flex flex-col">
         {posts.map((post) => (
           <PostItem key={post.route} post={post} />
         ))}
