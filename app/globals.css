@@ -1,18 +1,50 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+@import 'nextra-theme-blog/style.css';
 
-/* Nextra theme overrides */
+@variant dark (&:where(.dark *));
+
+/* Unlayered styles override Nextra's layered styles via CSS cascade */
 a {
-  text-decoration: none;
+  text-decoration-line: none;
 }
 
-article.x\:container {
-  padding-top: 0 !important;
+@layer base {
+  article {
+    @apply max-w-[680px] px-4 sm:px-6;
+  }
 }
 
-article.x\:container > header.x\:mb-8 {
-  margin-bottom: 0 !important;
-}
+@layer components {
+  .prose-content {
+    @apply text-lg leading-relaxed text-gray-900 dark:text-gray-100 overflow-x-clip;
+  }
 
-article {
-  max-width: 680px;
+  .prose-content p {
+    @apply mb-5;
+  }
+
+  .prose-content h2 {
+    @apply text-2xl font-semibold mt-8 mb-3;
+  }
+
+  .prose-content h3 {
+    @apply text-xl font-semibold mt-6 mb-2;
+  }
+
+  .prose-content blockquote {
+    @apply border-l-3 border-gray-300 dark:border-gray-600 pl-4 my-5 text-gray-600 dark:text-gray-400 italic;
+  }
+
+  .prose-content ul,
+  .prose-content ol {
+    @apply my-5 pl-6;
+  }
+
+  .prose-content li {
+    @apply mb-1.5;
+  }
+
+  .prose-content img {
+    @apply max-w-full h-auto my-5 rounded-lg;
+  }
 }

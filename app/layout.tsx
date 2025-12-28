@@ -1,7 +1,7 @@
-import { Footer, Layout, Navbar } from 'nextra-theme-blog'
+import { Layout, Navbar } from 'nextra-theme-blog'
 import { Head } from 'nextra/components'
 import { getPageMap } from 'nextra/page-map'
-import 'nextra-theme-blog/style.css'
+import { Footer } from '@/components/Footer'
 import './globals.css'
 import type { ReactNode } from 'react'
 
@@ -18,9 +18,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <Layout>
           <Navbar pageMap={await getPageMap()} />
           {children}
-          <Footer>
-            <span>에디의 블로그</span> {new Date().getFullYear()}
-          </Footer>
+          <Footer />
         </Layout>
       </body>
     </html>
