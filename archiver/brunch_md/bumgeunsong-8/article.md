@@ -1,0 +1,76 @@
+---
+title: 네덜란드 마스트리흐트 대학교의 인문교양대학, UCM
+published_date: 2017-02-01 00:00
+tags: 대학, 교육, 인문
+meta_description: 화란견문록 #4
+meta_image: https://img1.daumcdn.net/thumb/R1280x0.fjpg/?fname=http://t1.daumcdn.net/brunch/service/user/15UX/image/QyhgmoUQr9InoDUngPHNWN9Zbtk.jpg
+lang: ko
+---
+
+# 네덜란드 마스트리흐트 대학교의 인문교양대학, UCM
+
+## University College란 무엇인가?
+
+나는 그중 UCM(University College Maastricht)이라는 단과대에 다니고 있다.
+
+University College는 전 세계 대학들이 사용하는 이름인데 나라에 따라서 뜻이 많이 다르다. 영국이나 아일랜드에서 University Colleges는 종합 대학으로 법적으로 인정받기 전 단계의 이름으로 그 이름을 종합대학으로 인정받고 나서도 쓰는 경우라고 한다. 또 덴마크의 University College는 교육, 엔지니어링, 의료, 간호 등 특정 분야에 특화된 학사 과정을 말한다.
+
+![255D6C345842F05D20038D](/Users/bumgeunsong/coding/writing-archiver/archiver/brunch_md/bumgeunsong-8/assets/99dbf1da5541db70f35ba90260372b82b534e50d.webp)
+
+하지만 네덜란드의 University College는 미국의 Liberal art college와 같은 개념이다. 즉, 인문학, 사회과학, 자연과학, 어학 등 교양과목에 중점을 둔 학부 과정을 의미한다. 소수로 진행되는 수업과 교수와의 밀접한 커뮤니케이션 등이 특징이다. 가장 큰 특징은 학생들에게 굉장히 넓은 커리큘럼이 주어진다. 인문, 사회과학, 어학, 과학, 공학 수업이 모두 있다. 특정 전문 지식에 집중하는 법대, 공대, 경영대 등과 달리, 전체적인 밸런스에 더 초점을 맞춘다고 할 수 있겠다.
+
+![Screen Shot 2017-02-01 at 14.04.04.png](/Users/bumgeunsong/coding/writing-archiver/archiver/brunch_md/bumgeunsong-8/assets/424750ab75b60d616385f027803d3bb1aed7ad85.png)
+
+![Screen Shot 2017-02-01 at 14.04.19.png](/Users/bumgeunsong/coding/writing-archiver/archiver/brunch_md/bumgeunsong-8/assets/6a0aae1c14bcc56c64fbdbcb1b8a407d021f4186.png)
+
+![Screen Shot 2017-02-01 at 14.04.29.png](/Users/bumgeunsong/coding/writing-archiver/archiver/brunch_md/bumgeunsong-8/assets/37d91aae98e6d4816e52ff70bfd6d07a502aaad3.png)
+
+![Screen Shot 2017-02-01 at 14.04.39.png](/Users/bumgeunsong/coding/writing-archiver/archiver/brunch_md/bumgeunsong-8/assets/f947c8d55bc8f2c08f9bd98dcb9606346f6b3c63.png)
+
+## 폭넓은 커리큘럼
+
+UCM의 커리큘럼을 보면 인공지능과 통계학에서부터 국제정치학과 유럽 역사학까지, 정말 범위가 넓다. 그리고 자신이 원하는 수업을 제한 없이 선택해서 들을 수 있다. 2학년 때 focus라고 해서 자신이 집중적으로 수업을 듣는 전공을 정하지만 필수과목을 지정하거나 엄격한 제한이 있는 건 아니다. 커리큘럼에 대해 자유도가 높다.
+
+각 학생마다 자신의 academic advisor가 있다. 몇 백 명을 가르치는 교수보다 훨씬 밀접하게 커뮤니케이션을 할 수 있다. academic advisor의 조언과 상담을 통해서 자신의 커리큘럼을 스스로 정한다.
+
+## 공동체스러운 작은 대학
+
+![272485345842F057245AD0](/Users/bumgeunsong/coding/writing-archiver/archiver/brunch_md/bumgeunsong-8/assets/bdff4182d7690e21a3595b72e7af2b71ce7994f8.webp)
+
+![ucm common room.jpg](/Users/bumgeunsong/coding/writing-archiver/archiver/brunch_md/bumgeunsong-8/assets/17823360c96f2eecc784697d57548ee2d5bfb208.jpg)
+
+## '넓고 얕은 교육'의 장점과 단점
+
+UCM은 네덜란드 내에서 학사 과정 랭킹 1,2위를 다툴 정도로 수준 있는 대학이다. (진짜 그런지는 확실하지 않지만 비교를 해볼 수가 없어서… 그냥 그렇다고 한다.)
+
+하지만 그걸 떠나 개인적으로 이런 형태의 교육이 매우 마음에 들고 UCM이 상당히 좋은 교육과정을 가지고 있다고 생각한다. 대학은 단순히 전문 지식을 얻는 곳이 아니라, 커뮤니케이션과 문제 해결 능력을 배우는 곳이어야 한다고 생각하기 때문이다. 거대한 종합 대학(University)이나 좀 더 특화된 대학도 필요하지만 인문/사회/과학을 고루 배우면서 '통섭적인 접근'을 원하는 사람에게는 가장 좋은 시스템이다. 소규모 토론을 기반으로 하는 마스트리흐트 대학의 PBL 시스템(이전 글)과도 궁합이 잘 맞는다.
+
+우리나라도 한 때 자유전공학부 등의 도입을 통해 '통섭적인' '다학제적' 교육을 발전시키려고 했으나 현재는 대부분 로스쿨, 고시 준비 학과로 바뀐 슬픈 현실이 있다. 확실히 여기 학생들은 한국 학생들보다 취업에 대한 압박이 훨씬 덜하다. (한국의 교육 pressure가 생각보다 유명해서 깜짝 놀랐다. 많은 학생들이 한국에서 왔다고 하면 'competitive'하지 않냐는 질문부터 한다.)
+
+하지만, 취업에 대한 압박이 덜하다고 해도 여전히 UCM의 상대적인 단점은 전문성(Speacialty)이 약하다는 점이다. 그래서 많은 UCM 학생들이 학부를 마치고 Master를 진학한다고 들었다. 일반적인 석사 기간이 1년밖에 되지 않아서 지원이 많기도 하고, 네덜란드에서 좋은 직업을 얻으려면 석사 학위가 상당히 필수적이라고 한다.
+
+참고로, 학부 3년에 석사 1년이다 보니 학위를 2개 딴다고 해도 평균 취업 연령이 내 또래다. 우리나라서 내가 석사 따려면 몇 살일지 생각해보니 씁쓸해진다.
+
+## 교육에 대한 학생들의 적극적인 참여와 의견 제시
+
+서울대에서 수업을 들을 때, 강의에 대한 학생들의 생각에 대해서 관심 없는 교수들이 정말 많다고 느꼈던 적이 있다. 그래서 항상 생각했던 게 ‘왜 교수들은 학생들의 피드백을 듣지 않을까? 수업 내용과 방식이 이렇게 일방적으로 정해지는 것이 맞는 걸까? 왜 학생들은 그걸 말할 곳이 없어서 비밀스럽게 만들어져 있는 수업 평가 사이트에 익명으로 별점 테러를 남기게 되는가?' 이런 고민을 한 적이 있었다. 그뿐만이 아니라 학교의 교육과 관련된 여러 가지 의사결정에 학생들의 의견은 항상 소외되어있다는 느낌을 받을 때가 많았다. (물론 이건 학생들의 무관심 등 다양한 요인이 있고 단순히 교수님 탓이라는 뜻은 아니다.)
+
+그에 비해 UCM은 확실히 학생들의 권한이 강하고 적극적으로 대학과 관련된 의사결정에 참여한다. 학교도 이를 당연하게 생각하는 분위기다. UCM은 그에 비해 수업이 끝나면 학생들에게 수업에 대한 자세한 피드백과 평가를 제출하도록 의무화되어있다. 수업 중간에 당당하게 한 학생이 “왜 이 수업은 시험을 두 번이나 치냐. 상당히 비효율적인 것 같다. 리포트 같은 걸 쓰면 더 흥미로울 것 같다.” 이런 이야기를 하고 튜터는 좋은 지적이라면서 고민해보겠다고 말한다. 직접 본 사례다.
+
+## 리버럴한 분위기
+
+![](/Users/bumgeunsong/coding/writing-archiver/archiver/brunch_md/bumgeunsong-8/assets/b8e9d470f054e3d52f5bd4e8768cb06ba6897e41.webp)
+
+UCM의 또 하나의 특징은 굉장히 리버럴한(진보적인) 분위기이다. 페미니즘, 환경 문제, 정치 문제, 불평등 문제, 난민 문제, 인권 문제 등에 대해 관심을 가진 학생들이 많고 이와 관련된 활동이 항상 있다. 예를 들면, 케냐에서 온 인권 운동가를 초대해서 강연을 듣는다든지, 페미니즘 주간(Feminism week)을 열고 페미니즘과 관련된 그림들을 전시한다.
+
+전에 미국 대선을 생중계로 다 같이 모여보는 이벤트가 있었는데 참석자가 엄청 많았다. Trump가 당선될 걸 보고 다들 흥분해서 ‘어떻게 이럴 수가 있냐’며 common room이 시끌시끌했었다. 이런 모습을 보고 어떤 친구들은 ‘UCM 스럽다 (UCM-y)’ 란 말을 쓰기도 한다.
+
+물론 그런 분위기를 좋아하지 않는 학생들도 있다. UCM의 이런 분위기를 ‘힙스터 코스프레’ 같다며 시니컬하게 보는 친구도 있었다. 얼마 전에 페미니즘 주간 행사가 있었는데, 몇몇 친구들이 같이 얘기를 하다가 걔네들이 진짜 아시아나 아프리카의 여성들이 고통받고 있는 것을 알기나 하는지, 그거에 비하면 자기들은 'previliged'라는 것을 모른다고 비판하는 것을 듣기도 했다. 또 전체적인 분위기가 그렇다 보니 비판적인 논쟁이 별로 오고 가지 않다는 의견도 나온다.
+
+어쨌든 전체적으로 정치 사회 인권 환경 이슈에 대한 관심도가 한국 대학에 비해서 높은 편임을 느낄 수 있다.
+
+**나의 Focus**
+
+나는 그중에서도 이곳에서 지속 가능한 개발(Sustainable development) 관련 과목을 집중적으로 듣고 있다. 기존의 경제 모델의 문제점을 극복하고 사회적, 환경적 지속가능성을 추구하는 사회 모델에 기여하고 싶은 게 나의 오랜 꿈이다. 그래서 나에게는 정말 흥미로운 과목이다. 저번 period에는 세계화와 불평등(Globalization & Inequality)이라는 과목을 들었고 이번 period에는 지속 가능한 개발(Sustainable development)을 듣고 있다. 이외에도 Globalisation & Environmental change, Urban development & poverty Sustainability assessment 등 다양하다. 한국 대학에서는 쉽게 접할 수 없는 수업들이다.
+
+이런 수업을 듣다 보면 평소에 생각해왔던 주제들과 맞물려서 많은 고민을 하게 하는데, 그래서 다음번에는 Sustainable development에 대한 생각을 써보려고 한다.

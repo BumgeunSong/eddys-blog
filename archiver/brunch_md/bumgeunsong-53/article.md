@@ -1,0 +1,110 @@
+---
+title: 블록체인/암호화폐의 사회적, 역사적 의미
+published_date: 2018-03-13 00:00
+tags: 블록체인, 암호화폐, 신뢰
+meta_description: 투자자도 아닌 문돌이가 블록체인/암호화폐를 공부하는 이유
+meta_image: https://img1.daumcdn.net/thumb/R1280x0.fjpg/?fname=http://t1.daumcdn.net/brunch/service/user/15UX/image/cnof6bMbwp-GYGIXp2CfxxKzanU.jpg
+lang: ko
+---
+
+# 블록체인/암호화폐의 사회적, 역사적 의미
+
+내가 블록체인/암호화폐에 관한 글을 쓴다는 걸 알면, 이런 반응이 자주 나온다.
+
+"투자 많이 하나보네? 뭐..? 투자도 안하는데, 블록체인 글을 쓴다고?"
+
+"요즘 코인 시장 재미없지 않아? 아직도 그거 글 써?"
+
+"그래서 무슨 코인 사야되냐?"
+
+"너 프로그래밍 좀 알아? 블록체인 개발하려고?"
+
+나는 암호화폐로 돈을 버는 투자자도 아니고, 블록체인 기반으로 서비스를 개발하는 개발자도 아니다. 내가 이걸 공부하고 글을 쓰는 주요한 이유는 **'재미있어서'**다. 정확히 말하면 **블록체인이 기술, 암호화폐라는 자산 그 자체보다는 그것들이 가져올 사회적 변화가 정말 흥미롭고 기대되기 때문**이다. 블록체인을 사회과학적 관점에서 보면 내가 경제, 정치, 역사, 철학을 공부하면서 배웠던 내용들과 밀접한 관련이 있다. 그 부분을 탐구하고 알아가는게 주된 재미다.
+
+오늘은 투자나 기술의 관점이 아닌, 블록체인/암호화폐가 가지는 사회적, 역사적 의미에 대해서 나의 생각을 써보려고 한다.
+
+#
+
+#
+
+![Screen Shot 2018-03-13 at 00.22.17.png](/Users/bumgeunsong/coding/writing-archiver/archiver/brunch_md/bumgeunsong-53/assets/f3893dc026054401849877825681543ef713fec7.png)
+
+#
+
+![Screen Shot 2018-03-13 at 01.53.19.png](/Users/bumgeunsong/coding/writing-archiver/archiver/brunch_md/bumgeunsong-53/assets/89414fa637d3efda2df72a0e379dfa0ce10bcd17.png)
+
+![Screen Shot 2018-03-13 at 01.53.10.png](/Users/bumgeunsong/coding/writing-archiver/archiver/brunch_md/bumgeunsong-53/assets/809412791167c7f64ec7496e931aae2f12da240e.png)
+
+> 인간의 협력 방식은 연결이 확장되고, 사회적 신뢰가 증가하는 방향으로 발전해왔다. 바꿔 말하면 개인들 간의 연결과 신뢰를 증가시키는 기술이 등장할 때마다 인류가 발전해왔다는 뜻이다.
+
+>
+
+#
+
+![Screen Shot 2018-03-13 at 00.28.56.png](/Users/bumgeunsong/coding/writing-archiver/archiver/brunch_md/bumgeunsong-53/assets/8a56c6a2f281310fb0236f0e824666165cdd3f4f.png)
+
+> 반면에 ‘신뢰’는 어떨까?
+
+#
+
+##
+
+![Screen Shot 2018-03-13 at 00.52.11.png](/Users/bumgeunsong/coding/writing-archiver/archiver/brunch_md/bumgeunsong-53/assets/20cdc6c72090da4143e1d8cd0a2a561079298c83.png)
+
+##
+
+##
+
+------------------------------------------------------------------------
+
+###
+
+------------------------------------------------------------------------
+
+#
+
+<a href="https://brunch.co.kr/@bumgeunsong/50" class="inner_wrap #opengraph" target="_blank"></a>
+
+**5분 만에 이해하는 블록체인의 원리 (1)**
+
+초보자들을 위한 가장 짧고 쉬운 설명 \| 블록체인의 원리: 기초 과정 블록체인이 은행 없이 화폐를 만드는 원리를 알아보자. 가장 중요한 내용이면서 가장 사람들이 어려워하는 내용이다. 어려운 내용은 빼고 기초적인 내용만 담았다. 은행을 없애려면 먼저 은행이 무슨 일을 하는지 알아야 한다. 은행은 전자화폐의 신뢰를 유지하기 위해서 2가지 일을 한다. 1) 보관: 거래 내역이 담긴 장부를 안전하게
+
+https://brunch.co.kr/@bumgeunsong/50
+
+<a href="https://brunch.co.kr/@bumgeunsong/51" class="inner_wrap #opengraph" target="_blank"></a>
+
+**5분 만에 이해하는 블록체인의 원리 (2)**
+
+초보자들을 위한 짧고 쉬운 설명 \| 블록체인의 원리: 심화 과정 블록체인의 기본적인 작동 원리를 이해했다. 이제 살짝 더 심화된 내용으로 들어가 보도록 하자. 이 글에서는 다음의 3가지를 설명한다. 1. 제비뽑기를 하는 방법2. 장부를 봉인하는 방법3. 정직한 놈이 많이 벌게 하는 방법 1. 제비뽑기를 하는 방법 검증할 사람을 뽑는 것은 여러 가지 방법이 있다. 가장 널리 알려진 비트코인
+
+https://brunch.co.kr/@bumgeunsong/51
+
+###
+
+![Screen Shot 2018-03-13 at 00.29.28.png](/Users/bumgeunsong/coding/writing-archiver/archiver/brunch_md/bumgeunsong-53/assets/4ca57617fd256fd241d793cf079c5e5d856dfcd9.png)
+
+## **블록체인은 '효율성'을 희생해서 '탈중앙화'를 얻는다.**
+
+블록체인은 현재 기업 중심의 중앙화 네트워크보다 훨씬 더 비효율적이다. 중앙화 네트워크에서는 모든 중개 작업을 하나의 기업이 처리하고, 기업의 서버에 모든 데이터가 저장된다. 그 기업의 처리 속도만 향상시키면 전체 네트워크의 효율성도 올라간다. 하지만 탈중앙화 네트워크에서는 모든 사람들이 동일한 데이터를 같이 저장해야 한다. 중개 작업을 불특정 다수가 처리하기 때문에 네트워크에 참여하는 컴퓨터의 평균적인 처리 속도 이상을 낼 수가 없다.
+
+독재 체제와 민주주의를 생각해보면 이해가 될 지도 모르겠다. 한 명이 결정하고 따르는 게 사실 제일 효율적이다. 그런 의미에서 민주주의는 가장 '효율적인'시스템은 아니다.
+
+물론 앞으로 기술이 발전하면서 탈중앙화 네트워크의 효율성도 점점 올라갈 것이다. 탈중앙화 네트워크의 효율성 증가는 전세계 수많은 개발자들의 핫이슈이기도 하다.
+
+하지만 아무리 기술이 발전해도 탈중앙화 네트워크가 중앙화 네트워크보다 빨라질 수는 없다. 이걸 바탕으로 새로운 블록체인/암호화폐가 나왔을 때 성공 가능성을 생각해볼 수 있다.
+
+**특정 서비스를 탈중앙화하는 것의 가치가 중앙화된 서비스의 효율성과 편의성보다 큰가?** 여기에 Yes라고 대답할 수 있어야만 의미있는 탈중앙화라고 할 수 있다.
+
+#
+
+![programming.jpeg](/Users/bumgeunsong/coding/writing-archiver/archiver/brunch_md/bumgeunsong-53/assets/02edb011a722dd82191de738ad0d7709b479f228.webp)
+
+![Price chart.png](/Users/bumgeunsong/coding/writing-archiver/archiver/brunch_md/bumgeunsong-53/assets/1114ce50933d4a8b066ea094f99e08025c3a7395.png)
+
+------------------------------------------------------------------------
+
+**참고자료**
+
+<a href="https://medium.com/@cdixon/why-decentralization-matters-5e3f79f7638e" class="link" target="_blank"></a> by Chris dixon
+
+<a href="http://unenumerated.blogspot.kr/2017/02/money-blockchains-and-social-scalability.html" class="link" target="_blank"></a> by Nick Szabo

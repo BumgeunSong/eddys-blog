@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>오토레이아웃 조건이 충돌하면 어떻게 하지?</title>
+</head>
+<body>
+  <h1>오토레이아웃 조건이 충돌하면 어떻게 하지?</h1>
+  <p><em>by eddy_song</em></p>
+  <p>오토레이아웃은 '조건'을 가지고 위치와 크기를 계산하는 시스템이다.</p>
+<p>교실에서 학생 자리를 정하는 비유를 다시 떠올려보자.</p>
+<blockquote>
+<p>선생님 👩‍🏫 : 자, 각자 원하는 자리의 조건을 말해봐.</p>
+</blockquote>
+<blockquote>
+<p>수철 🙋 : 선생님 저는 지수 옆에 앉아야 돼요.<br/>
+지수 🙋🏻‍♀️: 선생님 전 에어컨 옆자리 앉을 거에요.<br/>
+형식 🙍🏼‍♂️: 선생님 전 칠판에서 2줄이상 떨어지기 싫은데요.<br/>
+진영 🤷🏻‍♂️: 선생님 지각해도 티 안 나게 맨 구석자리로 주세요.</p>
+</blockquote>
+<p>이 조건들이 모두 잘 맞아떨어져서 학생들의 자리를 잘 정해줄 수도 있다.<br/>
+하지만....</p>
+<h2 id="오토레이아웃이-에러를-띄울-때">오토레이아웃이 에러를 띄울 때</h2>
+<p>이 <strong>조건을 충분히 설정해주지 않거나,</strong></p>
+<blockquote>
+<p>민정: 선생님, 저는 맨 앞자리만 아니면 아무데나 앉을래요.<br/>
+선생님: (음... 아무데나? 그럼 정확히 어디에 앉혀야 하지?)</p>
+</blockquote>
+<p>서로 <strong>충돌하는 2개의 조건을 설정</strong>했을 때는 에러가 뜨게 된다.</p>
+<blockquote>
+<p>수철: 선생님, 저는 무조건 지수 옆에 앉고 싶어요!<br/>
+지수: 선생님, 저 수철이랑 무조건 2자리 이상 띄워주세요.<br/>
+선생님: (...😓)</p>
+</blockquote>
+<p>물론 현실세계의 선생님이라면, 직접 충돌을 조정하거나, 자리를 지정해줄 수 있겠지만.</p>
+<p>우리의 엔진은 그저 프로그램일 뿐이기 때문에, 우리가 명확히 모든 걸 지정해주지 않으면 에러를 띄운다.</p>
+<p>만약 Xcode에서 인터페이스 빌더로 UI를 만들고 있다면, 다큐먼트 아웃라인(Document Outline)에 이런 빨간색 화살표가 뜨는 걸 볼 수 있다.</p>
+<p><img src="https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/AutolayoutPG/Art/Document_Outline_With_Errors_2x.png"/></p>
+<p>에러는 주로 2가지 중 하나에 해당한다.</p>
+<ul>
+<li>조건이 부족해! 👉 <strong>Ambiguous Layouts </strong></li>
+<li>서로 다른 조건이 충돌해! 👉 <strong>Unsatisfiable Layouts<br/>
+</strong></li>
+</ul>
+<h3 id="1-조건이-부족할-때-ambiguous-layouts">1. 조건이 부족할 때 (Ambiguous Layouts)</h3>
+<p>조건을 간단한 방정식으로 바꿔서 생각해보자.</p>
+<blockquote>
+<p>y = x + 10</p>
+</blockquote>
+<p>이 조건이 주어졌을 때<br/>
+x, y의 값은 무엇일까?</p>
+<p>... 🤷‍♂️</p>
+<p>맞다. 알 수 없다. x + y = 10을 만족시키는<br/>
+(x, y)에는 무한한 해가 존재한다.</p>
+<p>방정식이 충분히 주어지지 않기 때문이다.</p>
+<blockquote>
+<p>y &gt;= x + 10<br/>
+y = 2x</p>
+</blockquote>
+<p>이번에는 <code>y = 2x</code>를 추가하고,<br/>
+위의 식을 부등식으로 바꿨다.</p>
+<p>이 때 x, y는?</p>
+<p>... 🤷‍♀️</p>
+<p>이것도 알 수 없다.<br/>
+저 두 식을 만족시키는 x, y 값이 매우 많다.</p>
+<p>이렇게 조건이 충분히 주어지지 않아서<br/>
+오토레이아웃 엔진이 값을 구할 수 없을 때<br/>
+<code>Ambiguous Layouts</code> 에러를 띄운다.</p>
+<p>인터페이스 빌더에서 <code>Missing Constraints</code>나,<br/>
+<code>Constraints Ambiguity</code> 같은 메시지가 뜨면<br/>
+조건이 충분히 주어지지 않았다는 것을 알 수 있다.</p>
+<p><img src="https://velog.velcdn.com/images%2Feddy_song%2Fpost%2Fadc7a787-95f3-4391-853e-294c9729f5a2%2FScreen%20Shot%202022-02-09%20at%205.27.04%20PM.png"/></p>
+<p><img src="https://velog.velcdn.com/images%2Feddy_song%2Fpost%2F11111144-667b-4c43-9ec8-8d033621f286%2FScreen%20Shot%202022-02-09%20at%205.27.13%20PM.png"/></p>
+<p>혹은 코드로 UI를 만들고 있다면,<br/>
+잘못 설정된 뷰에 <code>hasAmbiguousLayout</code> 프로퍼티를 확인해보면 된다.</p>
+<blockquote>
+<p>이 에러가 뜨면 어떻게 해결해야하지?</p>
+</blockquote>
+<p>쉽게 말하면, 필요한 조건을 더 정해줘야 한다.</p>
+<p>먼저 X축/Y축 한 축을 정하고,<br/>
+각 뷰에서 계산이 안 되는 속성이 있는지 찾아본다.</p>
+<ul>
+<li>X축 속성 (Leading, Trailing, CenterX, Width) 중 2개 이상.</li>
+<li>Y축 속성 (Top, Bottom, CenterY, Height)이 2개 이상.</li>
+</ul>
+<p>하나의 뷰에 이 둘이 명확히 정해져야 크기와 위치를 계산할 수 있다.</p>
+<p>속성 조건을 정했다 하더라도,<br/>
+만약 관계를 맺고 있는 다른 뷰의 크기나 위치가 정해지지 않았다면<br/>
+조건이 부족하다고 뜰 수 있다.</p>
+<h3 id="2-조건이-충돌할-때-unsatisfiable-layouts">2. 조건이 충돌할 때 (Unsatisfiable Layouts)</h3>
+<p>이번에는 이런 방정식이 3개 주어진다.</p>
+<blockquote>
+<p>y = x + 20<br/>
+2y + x = 4<br/>
+y = 6 - x</p>
+</blockquote>
+<p>이 방정식에는 '해가 없다'<br/>
+이 3개의 식을 모두 만족시키는 x, y가 없다.</p>
+<p>오토레이아웃에서 이런 상태가 되면,<br/>
+'Conflicting Constraints' 라는 오류를 띄운다.</p>
+<p>충돌하는 조건이 있어서 뷰의 위치와 크기를 계산할 수 없다는 뜻이다.</p>
+<p>이 때 다큐먼트 아웃라인에서는<br/>
+서로 양립할 수 없는 모든 식들을 보여준다.</p>
+<p><img src="https://velog.velcdn.com/images%2Feddy_song%2Fpost%2F362d97f2-9c0e-4ac7-9b74-7188130f2785%2FScreen%20Shot%202022-02-09%20at%205.26.49%20PM.png"/></p>
+<blockquote>
+<p>이 에러가 뜨면 어떻게 해결해야하지?</p>
+</blockquote>
+<p>해결 방법은 간단한데, 일단 중요하지 않은 조건부터<br/>
+하나씩 삭제해나가면서 에러가 사라지는지 본다.</p>
+<p>코드로 UI를 만들었다면, 흔한 실수는 <code>translatesAutoresizingMaskIntoConstraints</code> 를 <code>false</code> 로 해제해주지 않는 것이다. 이러면 <code>Confliciting Constraints</code>가 뜬다.</p>
+<p>AutoresizingMask는 오토레이아웃이 나오기 전, iOS에서 뷰의 위치와 크기를 설정하는 방법이었다. 인터페이스 빌더를 쓸 때는 자동으로 false가 된다. </p>
+<p>코드로 쓸 때에는 false를 명시적으로 지정해줘야 오토레이아웃이 작동한다. </p>
+<p>아니면 '우선순위(Priority)'라는 걸 활용할 수도 있다.</p>
+<h2 id="조건-우선순위-priority">조건 우선순위 (Priority)</h2>
+<p>각 조건에는 1-1000까지 숫자로 된 우선순위가 부여돼 있다.</p>
+<p>만약 서로 충돌하는 조건이 있다면, 우선순위 숫자가 높은 것부터 우선 적용한다.</p>
+<p><img src="https://velog.velcdn.com/images%2Feddy_song%2Fpost%2F46a6a6e1-8af9-4e2c-b1fa-db6dd33c7fa3%2FScreen%20Shot%202022-02-09%20at%2010.55.19%20PM.png"/></p>
+<p>디폴트 값은 1000이다. 1000이 설정돼있으면, 충돌은 할지언정 절대 포기할 수 없는 필수 조건이라는 뜻이다. 충돌 시 1이라도 낮은 쪽은 오토레이아웃에서 반영되지 않는다.</p>
+<blockquote>
+<p>그런데 우선순위는 왜 있는 걸까?</p>
+</blockquote>
+<p>서로 충돌하는 두 조건이 굳이 필요한 경우가 있을까?<br/>
+<code>X = 50</code> 이라는 조건 <code>X = 100</code>이라는 조건이 충돌한다면 한쪽을 지우면 되지 않나?</p>
+<p>우선순위가 필요한 이유는 조건이 꼭 <code>=</code>가 아니기 대문이다.<br/>
+우선순위는 부등식이 될 수도 있다.</p>
+<p>예를 들어보자.</p>
+<blockquote>
+<p>조건 1<br/>
+A.width = 0.3 * Superview.width (<code>priority</code> = 1000)<br/>
+조건 2<br/>
+A.width &gt;= 150 (<code>priority</code> = 1000)</p>
+</blockquote>
+<p>이 경우 둘의 우선순위가 같고, Superview 사이즈가 500보다 작다면 충돌이 일어날 것이다.</p>
+<p>하지만 A 뷰의 크기를 상위 뷰의 30%로 하고 싶으면서, 동시에 상위 뷰가 150 이하로 작아지는 상황에서는 최소 크기를 유지하고 싶다면?</p>
+<p>저 두 조건이 모두 필요하다.<br/>
+그럴 때 이렇게 부등식에 우선순위를 높여준다.</p>
+<blockquote>
+<p>조건 1<br/>
+A.width = 0.3 * Superview.width (<code>priority</code> = 750)<br/>
+조건 2<br/>
+A.width &gt;= 150 (<code>priority</code> = 1000)</p>
+</blockquote>
+<p>이렇게 하면, 상위 뷰가 500보다 클 때는 상위 뷰의 30% 크기로 늘어난다.<br/>
+동시에 500보다 작을 때는 150이하로 줄어들지 않고 150을 유지한다.</p>
+<p>이런 상황들이 꽤나 많이 일어나기 때문에,<br/>
+충돌 가능성이 있는 조건들은 우선순위를 잘 설정해줘야 한다.</p>
+<h2 id="요약-정리">요약 정리</h2>
+<ul>
+<li><strong>조건이 부족하면</strong> Ambiguous Layouts 에러가 뜬다.</li>
+<li>이 때는 <strong>X/Y축에 2개 이상의 조건</strong>이 설정됐는지 확인한다. 조건을 건 <strong>다른 뷰의 속성이 명확하게 정해졌는지</strong> 체크한다. 빠진 조건을 추가한다.</li>
+<li><strong>충돌하는 조건</strong>이 있으면 Unsatisfiable Layouts 에러가 뜬다.</li>
+<li>중요하지 않은 조건을 삭제하고, 공존해야 하는 조건이라면 <strong>우선순위</strong>를 정해준다.</li>
+</ul>
+<h2 id="다음-글">다음 글</h2>
+<p><img src="https://velog.velcdn.com/images%2Feddy_song%2Fpost%2Fc3d5ca14-734b-4401-b5ce-4159f1d8bc9c%2FScreen%20Shot%202022-02-09%20at%2011.11.50%20PM.png"/></p>
+<p>Label을 하나 만들고, Top과 Leading에 조건을 정해주었다.<br/>
+Bottom과 Trailing은 주지 않았다. </p>
+<p>어...? 분명 조건을 부족하게 설정했는데, 오토레이아웃이 에러를 뱉지 않는다.<br/>
+왜 이러지?</p>
+<p>그 비밀은 다음 글에서 알아보도록 하자.</p>
+</body>
+</html>

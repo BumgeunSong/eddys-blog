@@ -1,0 +1,29 @@
+---
+title: 운동에 재미 들리게 만든 앱
+published_date: 2020-07-19 00:00
+tags: 운동, 기록, 헬스
+meta_description: 웨이트 트레이닝 기록 앱, 스트롱(Strong)
+meta_image: https://img1.daumcdn.net/thumb/R1280x0.fjpg/?fname=http://t1.daumcdn.net/brunch/service/user/15UX/image/bZyx486V0ARc_bD8vzNhM3XsSvg.jpg
+lang: ko
+---
+
+# 운동에 재미 들리게 만든 앱
+
+최근 운동에 다시 재미가 들렸다. 스트롱(Strong)이라는 앱 때문이다.�️‍♀️
+⠀
+웨이트 트레이닝 기록 앱이다. 원하는 루틴을 만든다. 루틴 스타트를 누른다. 지난번에 무게를 얼마 들었는지도 나온다. 한 세트 끝나고 체크 표시를 한다. 띠링 하면서 완료했다는 표시로 바뀐다. 맨 마지막 피니시를 누르면 팡팡 터지면서 축하를 해준다.
+⠀
+단순 기록 앱인데 뭐 그리 대단하냐 싶을 수 있다. 정확한 메타인지를 도와준다. 헬스 해본 사람이면 알겠지만 혼자서 운동하면 문제가 있다. 힘드니까 합리화를 한다. 정해놓은 세트랑 중량을 다했다고 생각하지만 사실 아니다.
+
+'아 오늘은 좀 늦게 왔으니까...' '아 어제는 좀 피곤했으니까' 하면서 세트 수를 줄이거나 중량을 적게 친다. 이게 은근 무의식적이다.
+⠀
+근데 앱 켜놓고, 한 세트 칠 때마다 애니팡처럼 터뜨리니까 할맛이 난다. 약간 트레이너가 옆에서 하나, 둘 세주는 그런 느낌이랄까? 이성적으론 별거 아니지만, 감성적으론 효과 만점이다.
+⠀
+지난번 무게 바로 보여주는 기능도 꿀. 웨이트에서 가장 중요한 게 점진적 과부하인데, 과부하 걸기도 쉽다. 지난주 한 거에 5키로만 더 얹으면 된다. 예전에는 이전에 얼마 들었는지 잘 기억도 못했고, 그냥 감으로 대충 때렸다.
+⠀
+한 3주 정도 썼는데, 갑자기 운동을 제대로 하는 느낌이 난다. 그동안 가라로 하고 있었던 것..� 인바디 재보니 최근 2달 동안 안 늘었던 근육량이 갑자기 늘었다. UI도 편리하고, 무료 버전도 쓸만하다. 앞으로도 애용할 것 같다!
+
+![strong.jpg](/Users/bumgeunsong/coding/writing-archiver/archiver/brunch_md/bumgeunsong-121/assets/792c80211200b024fda0f7b1f7052efac9e5bae6.jpg)
+
+![strong2.jpg](/Users/bumgeunsong/coding/writing-archiver/archiver/brunch_md/bumgeunsong-121/assets/f24a6813dc2aa000a726ee58226047ec18d3a27c.jpg)
+

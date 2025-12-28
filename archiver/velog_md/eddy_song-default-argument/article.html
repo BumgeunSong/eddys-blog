@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>Default Argument로 안전하고 편리하게 인터페이스 설계하기</title>
+</head>
+<body>
+  <h1>Default Argument로 안전하고 편리하게 인터페이스 설계하기</h1>
+  <p><em>by eddy_song</em></p>
+  <h2 id="많은-일을-하면서도-이해하기-쉬운-인터페이스">많은 일을 하면서도, 이해하기 쉬운 인터페이스</h2>
+<p>코딩하다보면 인터페이스를 많이 만든다. 함수, 생성자. 프로토콜 등. 하루에도 수십번씩 인터페이스를 어떻게 할지 결정해야 한다.</p>
+<p>인터페이스를 만들 때 황금률이 있다. ‘구현은 많은 일을 하면서도, 인터페이스는 간단해야 한다’. 간단하게 말해 내부에서는 많은 일을 하지만, 밖에서는 그런 거 다 몰라도 쉽게 쓸 수 있으면 된다. 그러면 좋은 인터페이스다.</p>
+<p>하나의 인터페이스를 다양한 곳에서 재사용할 수 있다면 인터페이스는 간단해진다. 그래서 사용하는 맥락이 달라질 때도 쓸 수 있도록 하고 싶을 때, 흔히 하는 표현으로 ‘파라미터를 뚫어준다’. 사용자가 직접 커스텀할 수 있는 파라미터를 넣도록 설계한다는 뜻이다.</p>
+<p>흔한 예시로, 아래와 같은 코드가 있다.</p>
+<pre><code class="language-swift"><span class="token keyword">func</span> <span class="token function">queryValue</span><span class="token punctuation">(</span><span class="token keyword">for</span> key<span class="token punctuation">:</span> <span class="token builtin">String</span><span class="token punctuation">,</span> caseSensitive<span class="token punctuation">:</span> <span class="token builtin">Bool</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> <span class="token builtin">String</span><span class="token operator">?</span></code></pre>
+<p>특정 key에 대한 값을 조회하는 함수다. 보통은 대문자 key를 넣어도 소문자 key까지 알아서 조회해주면 편하다. 하지만 어떤 경우에는 대문자 key를 넣었으면 대문자 key만 나와야 한다. 그래서 둘다 가능할 수 있게 <code>caseSensitive: Bool</code> 이라는 파라미터를 뚫어준다.</p>
+<p>다만 이게 항상 좋지는 않다. <code>caseSensitive: Bool</code> 같은 파라미터가 계속 늘어나면, 인터페이스가 복잡해진다. 파라미터가 너무 많으니 호출하는 쪽에서 이해하기 어려워진다. </p>
+<p>그냥 잘 몰라도 알잘딱깔센으로 해주면 안돼? 하는 마음이 든다.</p>
+<h2 id="인터페이스를-쉽게-만들어주는-default-argument">인터페이스를 쉽게 만들어주는 Default Argument</h2>
+<p>그럴 때 쓰는 훌륭한 도구가 바로 Default Argument다. Swift 언어뿐만 아니라 대부분의 modern language에서 대부분 제공하는 기능이다.</p>
+<p>함수를 선언할 때, default argument도 같이 선언한다. 사용하는 쪽에서는 이 argument가 optional parameter가 된다. 즉, 이 값을 굳이 넣지 않아도 컴파일 에러가 나지 않는다. 알아서 default 값으로 넣어준다.</p>
+<pre><code class="language-swift"><span class="token keyword">func</span> <span class="token function">queryValue</span><span class="token punctuation">(</span><span class="token keyword">for</span> key<span class="token punctuation">:</span> <span class="token builtin">String</span><span class="token punctuation">,</span> caseSensitive<span class="token punctuation">:</span> <span class="token builtin">Bool</span> <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> <span class="token builtin">String</span><span class="token operator">?</span></code></pre>
+<p><code>caseSensitive: Bool</code> 에 default argument를 설정했다. 이제 호출하는 쪽이 간단해진다.</p>
+<pre><code class="language-swift"><span class="token keyword">let</span> accountNumber <span class="token operator">=</span> <span class="token function">queryValue</span><span class="token punctuation">(</span><span class="token keyword">for</span><span class="token punctuation">:</span> <span class="token string">"accountNumber"</span><span class="token punctuation">)</span></code></pre>
+<p>default argument를 사용하면 구현에서 더 많은 기능을 하면서도, 인터페이스는 간단하다. 좋은 인터페이스를 만들 수 있는 효과적인 기능이다. 그래서 많은 개발자들이 애용한다.</p>
+<h2 id="쓰기-전에-생각했나요">쓰기 전에 생각했나요?</h2>
+<p>여기까지는 기본적인 내용. default argmuent에 대한 글을 쓰게 된 이유는 따로 있다. 생각없이 default argument를 썼다가 버그를 만든 경험을 몇번 하게 됐기 때문이다.</p>
+<p>호출하는 쪽에서는 안 넣었는데, 알아서 값이 들어간다. 분명 편리한 기능이지만, 어떤 상황에서는 굉장히 짜증나는 버그를 만든다. 간단한 default argument 하나 때문에 몇 시간을 디버깅한 적도 있다.</p>
+<p>몇 번 큰코 다치면서 default argument 를 쓸 때 주의해야하는 경우를 체득하게 되었다.</p>
+<h2 id="1-argument가-잘못-들어갔을-때-위험할-수-있는-경우">1. Argument가 잘못 들어갔을 때 위험할 수 있는 경우</h2>
+<p><code>skipAd: Bool</code> 이라는 파라미터를 default argument 로 지정한 코드가 있었다. 화면 여러개로 구성된 퍼널을 띄우는 인터페이스였다. </p>
+<p>이 퍼널에는 마지막에 광고 단계가 있다. 이 광고 단계를 skip할 수 있게 만드는 파라미터였다. default argument는 <code>true</code>로 돼있었다.</p>
+<p>대부분의 경우 광고는 보여준다. 특정 퍼널만 예외다. 그러면 default argument 를 <code>true</code> 로 설정하는 것? 문제가 없어보인다. 나도 그렇게 생각했다. </p>
+<p>하지만 생각해보면 이 파라미터에는 애초에 안전한 default parameter라는 게 없었다. 왜냐하면 이 광고라는 게 굉장히 중요한 비즈니스 로직이었기 때문이다. </p>
+<p>이 파라미터를 실수해서 발생할 수 있는 상황은 이렇다.</p>
+<p>1/ 광고를 띄우면 안 되는데 광고를 띄웠다.<br/>
+2/ 광고를 띄워야 하는데 광고를 안 띄웠다.</p>
+<p>둘 중 하나가 별 문제 없는 상황이면 default 로 해도 된다. 하지만 이 퍼널을 통과하는 유저 트래픽과, 광고 매출의 중요성을 생각해봤을 때, 1번과 2번 둘다 매우 큰 문제였다. </p>
+<p>광고를 실수로 안 띄웠을 경우, 매출에 타격이 갈 수 있다. 광고를 실수로 띄웠을 경우? 고객에게 항의를 받을 수 있다는 것이다. </p>
+<p>즉, 잘 모르고 호출하면 안되는 종류의 파라미터였던 것이다.</p>
+<p>또 하나 예를 들어보자면 이런 게 있다. <strong><a href="https://www.swiftbysundell.com/articles/default-arguments-in-swift/">Default arguments in Swift</a></strong> 라는 글에서 인용했다.</p>
+<pre><code class="language-swift"><span class="token keyword">enum</span> <span class="token builtin">ConflictResolution</span> <span class="token punctuation">{</span>
+    <span class="token keyword">case</span> overwriteExisting
+    <span class="token keyword">case</span> stopIfExisting
+    <span class="token keyword">case</span> askUser
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> store<span class="token operator">&lt;</span>T<span class="token punctuation">:</span> <span class="token builtin">Storable</span><span class="token operator">&gt;</span><span class="token punctuation">(</span>
+    <span class="token number">_</span> value<span class="token punctuation">:</span> T<span class="token punctuation">,</span>
+    conflictResolution<span class="token punctuation">:</span> <span class="token builtin">ConflictResolution</span> <span class="token operator">=</span> <span class="token punctuation">.</span>stopIfExisting
+<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span></code></pre>
+<p>어떤 값을 저장하는 인터페이스다. 그런데 conflict가 있을 때 해결하는 방식을 optional parameter로 뚫어놓았다.</p>
+<p>호출하는 쪽에서는 간단하게 이렇게 호출한다.</p>
+<pre><code class="language-swift"><span class="token keyword">try</span> <span class="token function">store</span><span class="token punctuation">(</span>value<span class="token punctuation">)</span></code></pre>
+<p>문제는 conflict가 있을 때 <strong>멈추는 것 (<code>stopIfExisting</code>)이 그렇게 뻔한 동작이 아니라는 점</strong>이다. 사용 하는 쪽에서는 store를 호출했으니 분명 값이 있기를 기대했다. 근데 기대와는 다르게 파라미터의 유무에 따라 아예 store 가 약속한 동작을 하지 않아버린다. </p>
+<p>default argument 를 <strong>덮어쓰기 (<code>overwriteExisting</code>) 로 해도 위험한 건 마찬가지</strong>다. 기존에 있는 데이터가 예상치 못하게 날아가버릴 수 있기 때문.</p>
+<p>이 경우에는, 편리하려고 쓴 <strong>default argument가 오히려 나중의 큰 버그를 만드는 불씨</strong>가 될 수 있다.</p>
+<p>나는 이미 많은 곳에서 호출하고 있는 API를 바꿀 때는 default argument를 많이 쓰곤 했다. 왜냐하면 일일이 다 호출부를 바꾸지 않아도, 내가 원하는 곳에서만 파라미터를 넣으면 동작하니까. </p>
+<p>하지만 그렇게 많은 곳에서 호출하는 인터페이스라면, 오히려 앱의 동작에 끼치는 영향은 더 크다고 볼 수 있다. 게다가 내가 optional로 만든 parameter가 예상과 전혀 다른 동작을 만들 수도 있다면? </p>
+<p>그럴 때는 아무리 귀찮더라도, default argument를 안 쓰는 게 안전하다. <code>skipAd</code> 케이스에서 버그를 일으키고 내가 배운 경험칙이다.</p>
+<h2 id="2-중요한-data-transfer-object-인-경우">2. 중요한 Data Transfer Object 인 경우</h2>
+<p>Data transfer object의 정확한 정의는 조금씩 다 다른 것 같다. 값 객체라고 부르기도 하고. 불변 객체라고 하기도 하고. </p>
+<p>아무튼 여기서 DTO는 1) 객체가 스스로 행동/기능을 갖지 않고. 2) 값만 다른 객체로 전달하기 위한 목적일 때를 말한다.</p>
+<p>예를 들면 이런 객체.</p>
+<pre><code class="language-swift"><span class="token keyword">struct</span> <span class="token builtin">UserDTO</span><span class="token punctuation">:</span> <span class="token builtin">Codable</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> id<span class="token punctuation">:</span> <span class="token builtin">Int</span>
+    <span class="token keyword">let</span> name<span class="token punctuation">:</span> <span class="token builtin">String</span>
+    <span class="token keyword">let</span> email<span class="token punctuation">:</span> <span class="token builtin">String</span><span class="token operator">?</span>
+    <span class="token keyword">let</span> age<span class="token punctuation">:</span> <span class="token builtin">Int</span><span class="token operator">?</span>
+    
+    <span class="token comment">// You can also provide default values if needed</span>
+    <span class="token keyword">init</span><span class="token punctuation">(</span>id<span class="token punctuation">:</span> <span class="token builtin">Int</span><span class="token punctuation">,</span> name<span class="token punctuation">:</span> <span class="token builtin">String</span><span class="token punctuation">,</span> email<span class="token punctuation">:</span> <span class="token builtin">String</span><span class="token operator">?</span> <span class="token operator">=</span> <span class="token constant">nil</span><span class="token punctuation">,</span> age<span class="token punctuation">:</span> <span class="token builtin">Int</span><span class="token operator">?</span> <span class="token operator">=</span> <span class="token constant">nil</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">self</span><span class="token punctuation">.</span>id <span class="token operator">=</span> id
+        <span class="token keyword">self</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name
+        <span class="token keyword">self</span><span class="token punctuation">.</span>email <span class="token operator">=</span> email
+        <span class="token keyword">self</span><span class="token punctuation">.</span>age <span class="token operator">=</span> age
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>클라이언트 개발을 하다보면, DTO 안에 들어있는 필드가 많은 경우, 그리고 각각의 필드가 채워지는 시점이 다른 경우가 꽤 있다. 사용자가 폼을 하나씩 채워가면서 그 안에 있는 값이 생긴다든지. 여러 개의 API를 서버로 호출해서 그 결과값을 받고, DTO에 저장한 다음, 최종적으로 마지막 API의 요청값으로 보낸다든지..</p>
+<p>위의 코드에서 보다시피 이 DTO에는 default argument를 많이 쓴다. 특정 값은 없을 수도 있고. 나중에 채워질 수도 있고 하기 때문.</p>
+<p>DTO는 1/ 전달이 되면서 복사, 생성이 많이 일어난다, 2/ 프로퍼티가 빈번하게 추가된다. </p>
+<p>그러다보니 <strong>새로운 프로퍼티를 추가했을 때 생성, 복사 함수에 깜빡하고 파라미터를 넣지 않는 실수가 자주 발생</strong>한다.</p>
+<p>그러다보면 이런 버그가 발생한다. 특정 퍼널을 시작할 때 분명히 age를 24로 넣고 시작했다. 그런데 화면을 몇개 지나 최종적으로 서버에 올라가는 값이 nil이다? 이거 왜 그러지?</p>
+<p>컴파일 에러가 발생하지 않고 중간에 값이 바뀌기 때문에 디버깅하기가 어렵다. DTO가 여러 컴포넌트에 걸쳐 쓰이고 있다면 더더욱 짜증이 난다.</p>
+<p>그래서 크고 중요한 DTO일 때는 가급적이면 default argument를 안 쓴다.</p>
+<h2 id="3-프로토콜-익스텐션에서-default-parameter를-제공하는-경우">3. 프로토콜 익스텐션에서 default parameter를 제공하는 경우</h2>
+<p>다른 언어에서는 <code>interface</code> 를 정의할 때 보통 구현은 추가할 수 없다. 하지만 swift의 가장 큰 특징 중 하나인 <code>protocol</code>은 인터페이스를 정의하는데 쓰이면서도, 기본 구현을 추가할 수 있다. 이것을 protocol extension이라고 한다. (이 protocol extesion을 적극적으로 쓰는 것을 protocol-oriented programming 라고 부르기도 한다.)</p>
+<p>Protocol은 추상화된 타입이다. default argument 기능을 제공하지 않는다. 하지만 protocol extension 으로 사용해서 default argument 기능을 만들 수 있다. </p>
+<p>protocol extension 안에서 protocol 내부에 선언된 함수를 한번 더 호출하면 된다. 이 패턴을 쓰면, 외부에서는 알 수 없지만, message 파라미터를 넣지 않았을 때 자동으로 2번 함수가 불린다. 그리고 2번 함수는 default argument와 함께 1번 함수의 구현체를 호출한다.</p>
+<pre><code class="language-swift"><span class="token keyword">protocol</span> <span class="token builtin">Greetable</span> <span class="token punctuation">{</span>
+    <span class="token keyword">func</span> <span class="token function">greet</span><span class="token punctuation">(</span>message<span class="token punctuation">:</span> <span class="token builtin">String</span><span class="token punctuation">)</span> <span class="token comment">// 1) 여기서는 default argument 불가능</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">extension</span> <span class="token builtin">Greetable</span> <span class="token punctuation">{</span>
+    <span class="token keyword">func</span> <span class="token function">greet</span><span class="token punctuation">(</span>message<span class="token punctuation">:</span> <span class="token builtin">String</span> <span class="token operator">=</span> <span class="token string">"Hello"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment">// 2) extension의 구현부에서는 default argument 가능</span>
+        <span class="token function">greet</span><span class="token punctuation">(</span>message<span class="token punctuation">:</span> message<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>위의 케이스와 다르게, protocol extension에 default arugment를 꼭 쓰지 말아야하는 것은 아니다. 하지만 잘못 하면 실수할 수 있는 여지가 있다. 예를 들면, <code>greet</code>에 파라미터가 2개 추가되었다고 하자.</p>
+<pre><code class="language-swift"><span class="token keyword">protocol</span> <span class="token builtin">Greetable</span> <span class="token punctuation">{</span>
+    <span class="token keyword">func</span> <span class="token function">greet</span><span class="token punctuation">(</span>message<span class="token punctuation">:</span> <span class="token builtin">String</span><span class="token punctuation">,</span> name<span class="token punctuation">:</span> <span class="token builtin">String</span><span class="token punctuation">,</span> emoji<span class="token punctuation">:</span> <span class="token builtin">String</span><span class="token punctuation">)</span> <span class="token comment">// 1</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">extension</span> <span class="token builtin">Greetable</span> <span class="token punctuation">{</span>
+    <span class="token keyword">func</span> <span class="token function">greet</span><span class="token punctuation">(</span>message<span class="token punctuation">:</span> <span class="token builtin">String</span> <span class="token operator">=</span> <span class="token string">"Hello"</span><span class="token punctuation">,</span> to name<span class="token punctuation">:</span> <span class="token builtin">String</span> <span class="token operator">=</span> <span class="token string">"Guest"</span><span class="token punctuation">,</span> withEmoji emoji<span class="token punctuation">:</span> <span class="token builtin">String</span> <span class="token operator">=</span> <span class="token string">"😊"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">greet</span><span class="token punctuation">(</span>message<span class="token punctuation">:</span> message<span class="token punctuation">,</span> name<span class="token punctuation">:</span> name<span class="token punctuation">,</span> emoji<span class="token punctuation">:</span> emoji<span class="token punctuation">)</span> <span class="token comment">// 2</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>그런데 깜빡하고 (!) 구현체에는 파라미터를 추가해주지 않았다.</p>
+<pre><code class="language-swift"><span class="token keyword">struct</span> <span class="token builtin">Person</span><span class="token punctuation">:</span> <span class="token builtin">Greetable</span> <span class="token punctuation">{</span>
+	<span class="token keyword">func</span> <span class="token function">greet</span><span class="token punctuation">(</span>message<span class="token punctuation">:</span> <span class="token builtin">String</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment">// 3</span>
+		<span class="token function">print</span><span class="token punctuation">(</span>message<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>그렇지만 다음과 같이 구현체에 greet 을 호출했을 때 컴파일 에러가 나지 않는다. </p>
+<pre><code class="language-swift"><span class="token keyword">let</span> person <span class="token operator">=</span> <span class="token function">Person</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+person<span class="token punctuation">.</span><span class="token function">greet</span><span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+<p>왜냐하면, person에게는 Greetable의 extension이 이 준 기본 구현 함수 (2)가 있기 때문이다. </p>
+<p>대신 여기서 개발자는 이상한 에러를 겪는다. <strong>protocol 내부에서 ‘무한 루프’</strong>가 일어난다.</p>
+<ul>
+<li>person.greet() 을 했을 때 2번이 호출되고, 이 2번은 1번에 연결된 구현체를 찾으려 한다. </li>
+<li>하지만 구현체에 파라미터를 추가해주지 않았다. 따라서 구현체에는 파라미터 3개가 모두 있는 함수가 없는 상황. </li>
+<li>파라미터가 3개가 있는 함수는 결국 extension으로 딸려온 2번 함수밖에 없다. </li>
+<li>따라서 2번 함수는 자기 자신을 호출한다. </li>
+<li>무한 루프가 일어난다.</li>
+</ul>
+<p>이것이 protocol extension을 사용해서 default parameter를 사용했을 때의 함정이다. 무한 루프는 곧 크래시로 이어진다. 1번, 2번 케이스처럼 크래시도 안 나고 아예 동작을 이상하게 해버리는 경우보다 좀 낫긴 하다.</p>
+<p>하지만 실수하기 좋은 코드인데 컴파일 에러가 나지 않는다. 개발자를 어리둥절하게 만드는 케이스다. 조심해서 써야 한다.</p>
+<h2 id="결론">결론</h2>
+<p>원칙은 쉽고 도구는 많다. 하지만 실제로 써보면서 상황에 맞게 판단하고 위험할 때를 알아야 한다. 편리하면 실수하기 쉽다. 어려우면 실수하기 어렵다. 그 밸런스는 결국 시행착오 과정에서 배우는 것 같다.</p>
+<h2 id="요약">요약</h2>
+<ul>
+<li>Default Argument는 인터페이스를 간단하게 유지하면서도 많은 일을 하게 해준다.</li>
+<li>편리한 만큼, 버그를 일으킬 위험이 있으므로 조심해서 써야 한다.</li>
+<li>파라미터가 Argument가 잘못 들어갔을 때 위험할 수 있는 경우. 중요한 Data Transfer Object인 경우에는 가급적 쓰지 말자.</li>
+<li>Protocol Extension을 활용한 default argument 사용 시, 잘못하면 무한 루프가 생길 수 있다.</li>
+</ul>
+</body>
+</html>

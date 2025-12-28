@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>메모리 계층과 캐싱 뽀개기</title>
+</head>
+<body>
+  <h1>메모리 계층과 캐싱 뽀개기</h1>
+  <p><em>by eddy_song</em></p>
+  <p><img alt="library" src="https://cdn.kbmaeil.com/news/photo/202101/865124_871742_3310.jpg"/></p>
+<p>거대한 도서관을 생각해보자.</p>
+<p>이 도서관은 수십만권의 책을 보관하고 있다. 수백년 된 고서부터 신간까지. 이 많은 책은 다 어떤 방식으로 보관하고 있을까?</p>
+<blockquote>
+<p>뭐... 책꽂이에 꽂아놓겠지.</p>
+</blockquote>
+<p>쉽게 생각하면 그렇다. 하지만 자세히 들여다보면 더 복잡한 시스템이 있다.</p>
+<p>사람들이 <strong>자주 찾는 책이나 신간</strong>은 입구 근처, 눈에 잘 띄는 곳에 배치한다. 책표지가 잘 보이도록 꺼내놓거나 눕혀놓는다.</p>
+<p>사람들이 <strong>잘 찾지 않는 책이나 오래된 책</strong>도 있다. 이런 책들은 일반 서가가 아닌 별도 서고에 집어넣는다. 서고는 많은 책을 효율적으로 저장할 수 있는 구조다. 정말 큰 도서관은 보통 사람들이 들어갈 수 없는 서고가 수십개씩 있는 경우도 있다.</p>
+<p><img alt="서고" src="https://image.edaily.co.kr/images/Photo/files/NP/S/2016/04/PS16040400349.jpg"/><br/>
+(출처: 이데일리)</p>
+<p>디지털 데이터도 마찬가지다. 컴퓨터의 저장 공간도 여러 방식의 층으로 나뉘어있다.</p>
+<p>CPU 레지스터는 현재 실행 중인 명령어, 데이터 등을 저장한다. 엄청나게 빨리 데이터를 가져올 수 있다. </p>
+<p>그 다음엔 작지만 빠른 캐시 메모리가 있다. 캐시 메모리는 비교적 느린 메인 메모리와 프로세서 사이 중간 다리 역할을 한다.</p>
+<p>메인 메모리는 그것보다 더 느린 디스크나 원격 서버의 중간 저장소 역할을 한다.</p>
+<p><img src="https://velog.velcdn.com/images/eddy_song/post/fdf738a9-e875-4d42-82e0-c34e0f7e0c04/image.png"/></p>
+<p>(출처: 컴퓨터 시스템)</p>
+<p><strong>모든 컴퓨팅 시스템은 이런 '메모리 계층'을 가진다.</strong> 메모리 계층이 생기는 근본 이유는 2가지다.</p>
+<ol>
+<li>저장 매체의 가격, 성능 간 트레이드 오프</li>
+<li>프로그램이 가지는 지역성(Locality)</li>
+</ol>
+<p>이 2가지에 대해서는 뒤에 좀 더 자세히 설명하자.</p>
+<h1 id="잠깐-우리가-왜-이걸-알아야-하는데">잠깐, 우리가 왜 이걸 알아야 하는데?</h1>
+<p>프로그래머가 메모리 계층에 대해 알아야 하는 이유. 프로그램의 성능을 이해하려면 메모리 계층을 알아야 하기 때문이다. </p>
+<p>메모리 계층 구조는 프로그램 성능을 좌지우지한다. 프로그램이 사용하는 데이터가 어떤 층에 저장돼있냐, 여기에 따라서 프로그램 성능은 수십배에서 수천만배까지 차이가 난다.</p>
+<p>시간이 흐르면서 CPU의 계산 속도와 메모리 접근 속도는 모두 향상되고 있다. </p>
+<p>하지만 메모리 접근 속도는 CPU 계산 속도만큼 빠르게 증가하진 않는다. 따라서 <strong>메모리에서 데이터를 '가져오는 시간'은 전체 프로그램 실행 시간을 크게 좌우</strong>한다.</p>
+<p><strong>메모리 계층을 잘 알아야 프로그램의 성능을 이해할 수 있다.</strong></p>
+<p>이 글을 끝까지 읽고나면 메모리 계층과 캐싱이 무엇인지 알게 될 것이다. 메모리 접근 속도의 원리를 이해하는 개발자가 될 수 있다!</p>
+<h1 id="1-저장-매체">1. 저장 매체</h1>
+<p>첫번째, 저장 매체 기술.</p>
+<p>컴퓨터에는 데이터를 저장하고 유지한 공간이 필요하다. 데이터는 0과 1의 비트로 어딘가에 저장된다. 이 정보를 저장하기 위해 컴퓨터는 다양한 방식을 쓴다.</p>
+<p>가장 중요한 3개 카테고리만 알아보자. <strong>RAM, ROM, 디스크</strong>다.</p>
+<h2 id="1-ram">1. RAM</h2>
+<p><strong>Random Access Memory.</strong></p>
+<p>임의 접근(Random Access)은 처음 들으면 무슨 소린지 잘 이해가 안 된다. 랜덤하게 메모리에 접근한다는 뜻은 아니다. 어떤 랜덤한 위치가 주어질 때, 그 위치로 즉시 이동해서 값을 읽을 수 있다는 뜻이다. 덕분에 RAM은 데이터 접근이 빠르다.</p>
+<p>반대로 '순차 접근'이 있다. 순차 접근은 어떤 위치가 주어지면, 차례차례 일정한 순서를 거쳐서 해당 위치를 찾아가야 한다.</p>
+<p>RAM의 중요한 특징은 '휘발성'이다. <strong>전원이 꺼지면 RAM에 저장된 데이터는 날아간다.</strong></p>
+<p>RAM도 2가지 종류가 있다.</p>
+<h3 id="static-ram-sram">Static RAM (SRAM)</h3>
+<p><img alt="sram" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Hyundai_RAM_HY6116AP-10.jpg/640px-Hyundai_RAM_HY6116AP-10.jpg"/><br/>
+(wikipedia)</p>
+<p><strong>가장 빠르고 비싼 메모리다.</strong> 메모리계의 포르쉐다.</p>
+<p>컴퓨터에서는 CPU 내부에 있는 캐시 메모리에 사용된다.</p>
+<p>SRAM은 6개의 트랜지스터로 만든 '플립플롭' 회로에 하나의 비트를 저장한다. 트랜지스터가 6개 사용되기 때문에 밀도를 높이거나, 가격을 낮추기가 어렵다.</p>
+<p>비싼 대신 빠르고, 안정적이다. SRAM은 '전기가 들어오는' 동안에는 외부 방해에도 끄떡없고, 기록한 비트값이 안정적으로 유지된다. <strong>'Static'</strong> RAM인 이유다.</p>
+<p>그렇다면 끄떡있는 녀석도 있겠지? 그게 바로...</p>
+<h3 id="dynamic-ram-dram">Dynamic RAM (DRAM)</h3>
+<p>흔히 '그 컴퓨터 램 몇 기가야?' 할 때 말하는 바로 그 램이 DRAM이다. 보통 4-32GB 정도 용량이다.</p>
+<p>DRAM은 캐시 메모리보다 용량이 더 큰 주 기억 장치 (메인 메모리)에 사용되는 저장 매체다. 컴퓨터의 가장 핵심 부품 중 하나.</p>
+<blockquote>
+<p>참고로 우리나라 시가총액 1,2위 기업인 삼성전자와 SK하이닉스의 주력 상품이 바로 이 DRAM이다. 전세계 DRAM의 70-80%는 메이드 인 코리아. DRAM은 한국 최대의 수출품이다.</p>
+</blockquote>
+<p><img alt="dram" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Pair32mbEDO-DRAMdimms.jpg/220px-Pair32mbEDO-DRAMdimms.jpg"/><br/>
+(wikipedia)</p>
+<p>DRAM에 많은 양의 데이터가 들어가는 이유는 뭘까? DRAM은 '캐파시터(Capacitor)'라는 아주 작은 상자에 전자를 담는다. 트랜지스터 1개를 사용해 캐파시터의 뚜껑을 덮고 상태를 유지한다. 캐파시터에 전자가 있으면 1, 아니면 0으로 비트를 표현한다.</p>
+<p>캐파시터는 매우 작고, 트랜지스터를 하나만 사용한다. 밀도를 매우 높일 수 있다. 가격도 SRAM보다 저렴하다.</p>
+<p>하지만 이 캐파시터의 전자가 시간이 지나면 새어나간다. 시간이 지나면 값이 사라진다. 마치 모래 위에 쓴 글씨처럼. 이게 문제다.</p>
+<p>안정적인 SRAM과 다르다고 해서, '<strong>Dynamic</strong> RAM'이라는 이름이 붙었다.</p>
+<p>DRAM은 방전되어 내용이 사라지기 전에 충전을 다시 해줘야 한다. DRAM의 전자가 유지되는 시간은 10-100ms 정도다. 0.01초에서 0.1초만 지나면 내용이 사라진다.</p>
+<blockquote>
+<p>아니, 그런 걸 쓸 수가 있나? </p>
+</blockquote>
+<p>라는 생각이 들지만, 우리의 시간과 컴퓨터의 시간은 다르기 때문에 괜찮다.<br/>
+컴퓨터의 클락 사이클은 나노 세컨드다. 계속 충전해가면서 쓰면 된다.</p>
+<blockquote>
+<p><strong>(중간 요약) SRAM과 DRAM</strong><br/>
+빠르고 안정적이지만, 비싸서 조금밖에 못쓰는 게 SRAM.<br/>
+덜 빠르고 불안정하지만, 싸서 많이 쓸 수 있는 게 DRAM.</p>
+</blockquote>
+<h2 id="2-rom">2. ROM</h2>
+<p>ROM은 RAM과 달리 전원이 꺼져서 내용이 사라지지 않는 메모리다. RAM만큼 데이터를 빠르게 가져올 수는 없다. 하지만 전원이 꺼져도 정보를 저장해주는 믿을 수 있는 친구다.</p>
+<p>어떻게 전기가 공급되지 않아도 정보를 저장할 수 있을까? </p>
+<p>최초의 'ROM'은 천공 카드라고 한다. 시험 볼 때 쓰던 OMR 카드 같이 생겼다. 여기에 구멍을 뚫어 비트를 표시한다. 물론 손으로 일일이 구멍을 뚫는 건 매우 비효율적이었다.</p>
+<p>점점 더 효율적인 ROM들이 등장했다. 프로그래밍이 가능한 PROM, 쓴 데이터를 지울 수 있는 EPROM, 전기로 작동하는 EEPROM 등.</p>
+<h3 id="플래시-메모리">플래시 메모리</h3>
+<p><img alt="Flash" src="https://www.electrorules.com/wp-content/uploads/2022/03/flash-memory.webp"/><br/>
+(electrorules)</p>
+<p>플래시 메모리는 EEPROM의 일종이자 가장 중요한 ROM 기술이다. 1980년대 일본 도시바에서 개발했다.</p>
+<p>플래시 메모리는 비휘발성인데도 속도가 빠르고, 내구성이 강하고, 전력도 적게 쓴다.</p>
+<p>우리가 사용하는 USB 드라이브, 디지털 카메라, 스마트폰, 노트북, 다 이 플래시 메모리를 사용한다.</p>
+<h2 id="3-디스크-드라이브">3. 디스크 드라이브</h2>
+<p>윈도우를 써봤다면, '내 컴퓨터' 안에 C 드라이브, D 드라이브를 본적이 있을 거다. 이게 바로 디스크 드라이브다. </p>
+<p><img alt="C-drive" src="https://www.easeus.co.kr/images/partition-manager/windows-10-c-drive-full.png"/></p>
+<p>디스크는 앞에 나온 저장 매체보다 훨씬 느리다. 얼마나 느리냐면... DRAM보다 수십만배 느리다.</p>
+<p>대신 디스크는 전원이 꺼져도 데이터가 사라지지 않는다. 무엇보다 엄청나게 많은 용량을 저장할 수 있다.<br/>
+DRAM은 보통 커야 수십 GB인 반면, 디스크는 수천 GB다.</p>
+<p>자주 꺼내기는 힘들지만, 많은 양이 들어가는 창고 느낌이랄까? 그래서 디스크는 컴퓨터에서 '보조 기억 장치' 역할을 한다.</p>
+<p>디스크 드라이브에는 전통적인 하드 디스크 드라이브(HDD)와 솔리드 스테이트 드라이브(SSD)가 있다.</p>
+<h3 id="하드-디스크-드라이브-hdd">하드 디스크 드라이브 (HDD)</h3>
+<blockquote>
+<p>LP판을 본 적이 있는가? </p>
+</blockquote>
+<p><img alt="vinyl" src="https://cf.shopee.sg/file/5b3587e6ec110cc3aacaf5eb890fcd7d"/></p>
+<p>LP판을 보면 판에 미세한 홈이 파여있다. 이 홈들이 음악 데이터를 저장한다. </p>
+<p>턴테이블에 LP를 올리면, 바늘이 홈을 읽어서 음악을 재생한다.</p>
+<p><strong>HDD도 같다.</strong> 플래터라고 부르는 원판이 있다. 이 원판에 자성(Magnetic)으로 데이터를 기록하도록 돼있다. </p>
+<p>이 원판은 모터로 빠르게 회전한다. 그 위에 헤드라는 녀석이 데이터를 읽고 쓴다.</p>
+<p><img alt="HDD" src="https://m.media-amazon.com/images/I/81yHZDfM3GL._AC_SL1500_.jpg"/></p>
+<p>물리적 속도에 한계가 있다. 데이터가 저장된 위치로 헤드가 이동하는 시간이 필요하다. <strong>접근 속도가 느리다. </strong></p>
+<p>반면에 <strong>기록 밀도는 매우 높다</strong>. 많은 양의 데이터가 들어간다. 용량당 가격도 무지 싸다.</p>
+<blockquote>
+<p>(참고) '하드' 디스크인 이유는, 플로피 디스크라는 (지금은 안 쓰이는) 저장 매체와 구분하기 위해서였다. 플로피 디스크는 구부러지는 '소프트한' 재질이었기 때문.</p>
+</blockquote>
+<h3 id="솔리드-스테이트-디스크-ssd">솔리드 스테이트 디스크 (SSD)</h3>
+<p>SSD는 최근 새롭게 떠오르는 기술이다. 하드 디스크보다 훨씬 더 빠르고, 내구성도 좋다.</p>
+<p>SSD가 어떻게 그렇게 빠를 수 있냐? </p>
+<p>위에서 말했던 <strong>플래시 메모리를 사용</strong>한다.</p>
+<p>기계식 디스크 대신 플래시 메모리 여러개를 담아 디스크로 패키징했다. 보조 기억 장치로 쓰인다는 점은 같지만, HDD와는 사실 구현이 전혀 다르다.</p>
+<p>물리적 회전 없이 전자적 방식으로 데이터를 읽고 쓴다. 움직이는 부품이 없으니 소음도 없다. 전력 소모나 내구성도 좋다. 접근 속도도 훨씬 빠르다.</p>
+<p>가격 면에서 <strong>아직 하드 디스크보다 비싸다</strong>는 게 유일한 흠이다. 그러나 SSD가격은 빠르게 싸지고 있고, 이 차이는 거의 줄어들고 있다.</p>
+<p>휴대성이 중요한 디바이스에서는 완전히 하드 디스크를 대체했다.</p>
+<h2 id="4-저장-매체에서-중요한-점">4. 저장 매체에서 중요한 점</h2>
+<p>여기까지 주요 저장 매체 기술을 알아봤다.</p>
+<p>가장 중요한 시사점 2가지만 꼽아보겠다.<br/>
+다 안 읽고 스크롤 내렸어도, <strong>이 2가지만 기억</strong>하면 된다.</p>
+<h3 id="1-저장-매체의-가격과-성능은-반비례-관계다">1) 저장 매체의 가격과 성능은 반비례 관계다.</h3>
+<p><img src="https://i0.wp.com/semiengineering.com/wp-content/uploads/2017/12/fig2.png?fit=529%2C408&amp;ssl=1"/></p>
+<p>(semiengineering.com)</p>
+<p>'용량당 가격'과 '성능'은 반비례한다. </p>
+<p>SRAM - DRAM - SSD - HDD 로 갈 수록, 가격은 싸지고 용량은 늘어나지만, 반대로 접근 속도가 느려진다.</p>
+<p>SRAM은 HDD보다 수백만배 빠르다. 용량은 수십만배 적다.</p>
+<p>우리는 데이터를 많이 저장하는 것도 필요하고, 빠른 것도 중요하다. 각 저장 매체는 다 명확한 장단점이 존재한다.</p>
+<h3 id="2-저장-매체-성능은-프로그램-성능을-결정하는-열쇠다">2) 저장 매체 성능은 프로그램 성능을 결정하는 열쇠다.</h3>
+<p><a href="http://www.yes24.com/Product/Goods/31950404">'컴퓨터 시스템'</a> 책을 보면 1985년부터 2015년까지 메모리와 CPU 성능 변화를 비교한 표가 나온다. </p>
+<p><strong>&lt;저장 매체 성능 변화&gt;</strong><br/>
+<img src="https://velog.velcdn.com/images/eddy_song/post/bdc6e307-52df-4fa0-be2e-01af07473cd9/image.png"/><br/>
+<img src="https://velog.velcdn.com/images/eddy_song/post/61750aec-d551-48e3-8e9c-d4c552f28eab/image.png"/></p>
+<p><strong>&lt;CPU 성능 변화&gt;</strong><br/>
+<img src="https://velog.velcdn.com/images/eddy_song/post/2a908b46-0ce4-4bb8-9f8e-e9592d4adb99/image.png"/></p>
+<p>30년 전과 비교해볼때,<br/>
+SRAM의 접근 속도는 100배 빨라졌다.<br/>
+DRAM의 접근 속도는 10배 빨라졌다.<br/>
+DISK의 접근 속도는 25배 빨라졌다.</p>
+<p>하지만 CPU의 실질 속도 (사이클 타임)은 2000배 증가했다.</p>
+<p>무어의 법칙이라고 들어본 적이 있겠지? 반도체 칩에 집적할 수 있는 트랜지스터의 숫자가 적어도 매 18개월마다 두 배씩 증가한다는 법칙이다. CPU 속도는 이 법칙에 맞춰 지난 30년간 엄청난 속도로 발전했다.</p>
+<p><strong>하지만 메모리의 접근 속도는 그렇게 많이 빨라지지 않았다.</strong></p>
+<p>물론 저장 매체의 '가격'은 빠르게 떨어지고 있다. 하지만 속도 측면에서는 메모리-프로세서의 차이가 벌어지고 있다.</p>
+<p>따라서 전체 프로그램의 속도를 향상시키기 위해서 '메모리 접근 속도'를 높이는 게 중요하다. 메모리에서 값을 가져와서, CPU가 계산을 하는 게 컴퓨터의 일이다. </p>
+<p>'저장 매체의 트레이드 오프'를 고려하면서도 '메모리 접근 속도'를 높이려면 어떻게 해야할까? </p>
+<p>다음에 나올 '지역성' 원리가 중요한 이유다.</p>
+<h1 id="2-지역성">2. 지역성</h1>
+<p>우리는 익숙한 것에 계속 손이 가는 경향이 있다. </p>
+<p>옷도 입던 스타일과 비슷한 옷이 편하다.<br/>
+음식도 자주 먹던 음식을 많이 찾는다.</p>
+<p>프로그램도 데이터를 찾을 때 비슷한 경향이 있다. (물론 프로그램에 취향은 없겠지만)</p>
+<p><strong>최근에 찾은 데이터나, 최근에 찾은 데이터 근처의 데이터를 많이 참조한다.</strong></p>
+<p>이걸 지역성(Locality)라고 한다.</p>
+<p>아주 단순하지만, 프로그램이 보편적으로 가지는 속성이다. 그리고 매우 중요하다. 하드웨어, 소프트웨어의 설계에 어마어마한 영향을 끼치기 때문이다.</p>
+<h2 id="시간-지역성">시간 지역성</h2>
+<p>최근에 참조된 메모리 위치를 다시 참조할 가능성이 높다. </p>
+<p>이 경향을 시간 지역성이라고 한다.</p>
+<p>뒤집어 말하면, 동일한 변수를 반복적으로 참조하는 프로그램은 시간 지역성이 있다.</p>
+<h2 id="공간-지역성">공간 지역성</h2>
+<p>최근에 참조한 메모리 위치 '근처의' 메모리를 다시 참조할 가능성이 높다. </p>
+<p>이건 공간적인 개념이라 공간 지역성이라고 한다.</p>
+<p>메모리 주소를 차례차례 참조하는 프로그램은 공간 지역성이 있다. 이를 테면 배열의 순회를 돈다든지.</p>
+<h2 id="지역성이-있는-코드">지역성이 있는 코드</h2>
+<p>컴퓨팅 시스템은 프로그램이 '지역성이 있다'는 가정 하에 최적화를 한다.</p>
+<p>하드웨어, 운영체제, 어플리케이션, 웹에 이르기까지 컴퓨팅 시스템의 모든 레벨은 지역성을 활용한다.</p>
+<p>최근에 사용한 데이터, 최근에 사용한 위치 근처의 데이터를 빨리 접근할 수 있도록 임시 보관소 (캐시)에 저장해둔다.</p>
+<p>지역성이 높은 코드는 캐시를 더 많이 활용한다. 그 결과 실행 속도가 빨라진다.</p>
+<p>어떤 코드가 지역성이 있는 코드일까?</p>
+<p>같은 변수를 반복적으로 참조하는 코드.<br/>
+연속 저장된 데이터를 차례차례 참조하는 코드. (순차 참조)<br/>
+이런 코드가 지역성이 높다.</p>
+<p>순차 참조 패턴을 보이는 코드 중에서도, 참조의 간격이 작을수록 좋은 지역성을 가진 코드다.</p>
+<p>예를 들어, 배열의 인덱스를 +1 하는 루프문, +3 씩 도는 루프문이 있다고 하자. +1 루프문이 +3 루프문보다 지역성이 좋다.</p>
+<pre><code class="language-javascript"><span class="token comment">// 1번</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> columns<span class="token punctuation">;</span> i <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span>j <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> j <span class="token operator">&lt;</span> rows<span class="token punctuation">;</span> j <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token operator">**</span>arr<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">**</span><span class="token operator">*=</span> <span class="token number">2</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<pre><code class="language-javascript"><span class="token comment">// 2번</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> columns<span class="token punctuation">;</span> i <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span>j <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> j <span class="token operator">&lt;</span> rows<span class="token punctuation">;</span> j <span class="token operator">+=</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token operator">**</span>arr<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token operator">**</span> <span class="token operator">*=</span> <span class="token number">2</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>차이를 발견했는가?</p>
+<p>아주 조그만 차이 같지만, 1번에서는 j가 행, i가 열이다. 2번에서는 i가 행, j가 열이다.</p>
+<p>1번은 [0,0] -&gt; [1,0] -&gt; [2,0] -&gt; [1,1] 순으로 같은 열(column)의 위치부터 참조한다.<br/>
+2번은 [0,0] -&gt; [0,1] -&gt; [0,2] -&gt; [1,0] 순으로 같은 행(row)를 차례로 참조한다.</p>
+<p>배열은 메모리 상에 연속적인 형태로 저장된다. 배열의 인덱스와 메모리 위치를 단순화해본다면 이 순서다.</p>
+<blockquote>
+<p>(0,0) | (0,1) | (0,2) | (1,0) | (1,1) | (1,2) | (2,0) | (2,1) | (2,2)</p>
+</blockquote>
+<p>2번 루프는 차례대로 +1 씩 돈다. 1번 루프는 위치상 +3씩 계속 점프한다.</p>
+<p>따라서 2번이 더 지역성이 좋은 코드다.</p>
+<p>이런 식으로 어떤 코드가 지역성이 있는지 없는지 대략적인 감을 잡을 수 있으면 좋다.<br/>
+예시를 하나 더 보면서 감을 잡아보자.</p>
+<h2 id="퀵-정렬이-빠른-이유">퀵 정렬이 빠른 이유</h2>
+<p><a href="https://velog.io/@eddy_song/merge-sort">합병 정렬 (Merge Sort)</a>, <a href="https://velog.io/@eddy_song/heap-sort">힙 정렬 (Heap Sort)</a>, <a href="https://velog.io/@eddy_song/quick-sort">퀵 정렬(Quick Sort)</a>. 빠른 정렬 3총사는 모두 시간 복잡도가 <code>O(N log N)</code>이다. </p>
+<p>실제 실행 속도는 퀵 정렬이 가장 빠르다고 알려져있다. '퀵' 정렬인 이유다.</p>
+<p>그 이유 중 하나가 바로 '지역성'이다. 퀵 정렬 구현 코드가 힙 정렬이나 머지 정렬보다 지역성이 높기 때문이다.</p>
+<p>퀵 정렬은 피벗을 고르고, 파티셔닝하는 과정의 반복이다. 이 과정에서 같은 피벗 위치나, 좁은 범위의 변수를 반복 참조한다. </p>
+<p>반면 힙 정렬은 이진 트리에서 부모/자식 노드에 접근하기 위해 계속해서 '곱하기 2' '나누기 2'를 해서 인덱스를 참조한다.</p>
+<p>머지 정렬은 아예 새로운 메모리 위치에 배열을 만든다.</p>
+<p>따라서 퀵 정렬이 메모리 계층 전반에서 훨씬 더 캐시를 많이 활용한다. 메모리 접근 속도가 줄어드니 성능이 빠르다.</p>
+<p>애니메이션으로 보면 이 셋의 차이를 좀 더 직관적으로 이해할 수 있다.</p>
+<p><strong>합병 정렬</strong>을 시각화한 애니메이션이다.</p>
+<p><img alt="merge" src="https://i.imgur.com/oMbHRV9.gif"/></p>
+<p><strong>힙 정렬</strong>을 시각화한 애니메이션이다.</p>
+<p><img alt="heap" src="https://i.imgur.com/CLGDr3I.gif"/></p>
+<p><strong>퀵 정렬</strong>을 시각화한 애니메이션이다.<br/>
+위의 2가지 정렬보다 훨씬 더 고정된, 좁은 범위의 참조가 많이 일어난다.</p>
+<p><img alt="quick" src="https://i.imgur.com/GdAe2WF.gif"/></p>
+<p>(출처: <a href="https://imgur.com/gallery/omL5k">Sorting Algorithm Visualization</a>)</p>
+<p>지역성과 캐시의 활용이 얼마나 성능에 영향을 미치는지 실감할 수 있다.</p>
+<h1 id="3-메모리-계층과-캐시">3. 메모리 계층과 캐시</h1>
+<p>챕터 1과 챕터 2에서 뭘 배웠나?</p>
+<p>2가지로 요약해볼 수 있다.</p>
+<p><strong>1. 하드웨어의 특성: 저장 매체의 가격-성능 트레이드오프</strong><br/>
+-&gt; 빠를수록 비싸다.</p>
+<p><strong>2. 소프트웨어의 특성: 프로그램의 지역성</strong><br/>
+-&gt; 이미 참조한 위치나 그 근처를 계속 참조한다.</p>
+<p>이 2가지 근본 특성이 조합되어, 메모리 계층이 생긴다.</p>
+<h2 id="메모리-계층-피라미드">메모리 계층 피라미드</h2>
+<p>메모리 계층을 피라미드로 표현한 그림이다.</p>
+<p><strong>위로 갈수록 작고 빠르고 비싸다.<br/>
+아래로 갈수록 크고 느리고 싸다.</strong></p>
+<p><img src="https://velog.velcdn.com/images/eddy_song/post/f2823fe9-0c64-4466-be01-75b1acee452d/image.png"/><br/>
+(출처: 컴퓨터 시스템)</p>
+<p><strong>* CPU 레지스터</strong><br/>
+맨 위에는 레지스터가 있다. 겨우 몇십-몇백 바이트 정도밖에 저장할 수 없다. 프로세서가 즉각 접근할 수 있다. 겨우 1 클락 사이클 밖에 걸리지 않는다. 나노세컨드 (10억분의 1초) 수준에서 가져올 수 있다.</p>
+<p><strong>* CPU 캐시</strong><br/>
+CPU 안에는 SRAM을 사용한 캐시들이 있다. 이 캐시들도 계층별로 나뉜다. CPU 안에는 L1, 캐시와 L2, L3 캐시가 있다. 각각은 아래 계층의 메모리보다 빠르게 데이터를 가져올 수 있는 캐시로 이뤄진다. 실제 CPU를 보면 캐시가 많은 면적을 차지한다.</p>
+<p><img src="https://velog.velcdn.com/images/eddy_song/post/218ef5ff-feaa-43b9-9811-ed55dfd1e33f/image.jpeg"/></p>
+<p><strong>* 메인 메모리 </strong><br/>
+DRAM으로 만들어진 메모리가 있다. 데이터를 가져오는 데 수백 클락 사이클 정도가 걸린다.</p>
+<p><strong>* 보조 기억 장치 (디스크)</strong><br/>
+크기는 매우 크지만, 매우 느린 디스크 저장 공간이 있다.<br/>
+이 계층에 캐싱을 해두면, 외부 서버에 갔다오지 않고도 데이터를 불러올 수 있다.<br/>
+메인 메모리 캐시와 다르게 앱을 껐다 켜도 유지가 된다.</p>
+<p><strong>* 원격 서버</strong><br/>
+같은 기기는 아니지만, 네트워크를 통해 연결된 원격 저장소가 있다. 흔히 HTTP를 통해 데이터를 가져오는 외부 서버다.<br/>
+대체로 로컬 디바이스보다 훨씬 더 큰 용량이 크다. 대신 네트워크를 거쳐서 가져와야하므로 당연히 훨씬 더 느리다.</p>
+<p>원격 서버에서 데이터를 가져오는 애플리케이션은, 대부분 디스크나 메인 메모리에 데이터를 캐싱한다. 원격 웹서버의 데이터를 가져오는 데는 시간이 오래걸리기 때문이다.</p>
+<p>예를 들어, 웹 브라우저는 용량이 큰 이미지 등을 브라우저에 캐싱해 놓는다. 이런 캐시 관리 웹 브라우저와 HTTP의 중요한 기능 중 하나다.</p>
+<h2 id="캐시-cache">캐시 (Cache)</h2>
+<p>여기서 잠깐, 캐시라는 용어에 대해 짚고 넘어가자.</p>
+<p>'캐시'란 <strong>더 크고 느린 저장 공간에 있는 데이터를 임시 저장해두는 장소</strong>다.<br/>
+캐시에 데이터를 저장해두는 것을 캐싱이라고 한다.</p>
+<p>캐시는 현대 컴퓨팅 시스템 어디든지 있다. CPU 칩, 분산 파일 시스템, 월드 와이드 웹... 어디를 봐도 캐싱을 사용하지 않는 곳이 없다. 그만큼 중요하다.</p>
+<p>사실, 이 캐싱은 우리 일상 생활에서도 정말 흔하다.</p>
+<p>신발을 생각해보자. </p>
+<p>자주 안 신는 신발은 신발장에 넣어두고, 자주 쓰는 신발은 항상 현관에 나와있다. 왜냐하면 필요할 때 빨리 신을 수 있으니까. <strong>'신발'이 데이터라면 '현관'은 캐시다.</strong></p>
+<p><img src="https://img.hani.co.kr/imgdb/resize/2017/0919/150572059449_20170919.JPG"/></p>
+<p>(현관도 캐시다. 출처:한겨레)</p>
+<p>흔히 CPU에 있는 캐시 메모리든, 웹 브라우저에 저장되는 캐시든 모두 '캐시'라고 퉁쳐서 부른다. 캐시가 특정한 저장 매체를 가리킨다는 느낌이 든다.</p>
+<p>하지만 CPU의 캐시 메모리는 'CPU 안에서 캐시 역할을 하는 저장 장치'라는 뜻이다. '캐시' 자체는 특정한 하드웨어를 가리키지 않는다.</p>
+<p><strong>캐시는 더 보편적이고 추상적인 '역할'이다.</strong> 캐시라는 이름을 쓰기도 하고 안 쓰기도 하지만, 따져보면 결국 <strong>모든 계층이 캐시 역할</strong>을 한다.</p>
+<p><strong>메모리 계층의 본질이 바로 캐싱</strong>이다. 각 레벨의 저장 공간이 다음 레벨의 캐시 역할을 한다.</p>
+<p>꼭 저 계층에 표시돼있지 않아도, 우리가 필요하면 얼마든지 중간에 임시 저장소를 만들 수 있다. 그것도 캐시다.</p>
+<p>빨라지는 프로세서 속도에 맞춰서, 메모리 속도를 높이기 위해 컴퓨터 공학은 이 메모리 계층을 계속해서 발전시켜야했다. <strong>캐시의 캐시, 그 캐시의 캐시를 만드는 방식</strong>으로. </p>
+<p>대부분의 애플리케이션이 자체적으로 캐시를 활용한다. 이 캐시의 성능과 용량을 효과적인 수준으로 유지하기 위해서는 '캐시 관리'를 해야한다. <strong>'캐시 관리'</strong>도 프로그래머가 잘 알아야 하는 주제다.</p>
+<hr/>
+<h2 id="참고-캐싱을-제공하고-돈-버는-회사-cdn">(참고) 캐싱을 제공하고 돈 버는 회사: CDN</h2>
+<p>네트워크 상에서 캐싱은 중요하다. 인터넷 사용자들은 점점 더 용량이 큰 이미지, 영상, 게임을 많이 소비하고 있다. 이런 콘텐츠를 빠르고 효율적으로 제공하기 위해 캐싱은 필수다.</p>
+<p>콘텐츠 소비자 근처에 캐시 역할을 하는 별도 서버가 필요하다. 거리가 짧으면 그만큼 더 빨리 데이터를 보내줄 수 있기 때문이다. 이런 캐시 서버를 제공하는 서비스를 Content Deilvery Network (CDN)이라고 한다. 잘 알려져있지 않지만 인터넷 인프라의 매우 중요한 축을 담당한다. 전세계 CDN 시장은 10조원이 넘는 크기다.</p>
+<p>미국에 있는 유튜브 서버에서 한국에 있는 내 스마트폰으로 영상을 전송한다고 해보자. 이 영상 데이터는 해저 케이블을 타고 태평양을 건너 이런 저런 인프라를 거친다. </p>
+<p>하지만 유튜브가 한국인이 자주 찾는 영상을 한국에 있는 서버에 복사해둔다면? 네트워크 사용량도 적고 훨씬 더 빠르게 전송해줄 수 있다. 네트워크 병목이나 원서버의 부하도 줄여준다. 글로벌 서비스를 하는 회사 입장에서는 큰 메리트다. CDN은 전세계에 데이터 센터를 확보하고, 서비스 회사들에게 이런 인프라를 빌려주는 대신 돈을 버는 구조다.</p>
+<hr/>
+<h1 id="4-캐시-관리">4. 캐시 관리</h1>
+<p>캐시의 관리는 실제로 캐시를 구현한 각 계층이 담당한다. 관리 방법 또한 구현에 따라서 다르다. 보편적인 몇 개 개념만 살펴보자.</p>
+<h2 id="캐시의-성능">캐시의 성능</h2>
+<p>만약에 찾는 데이터가 캐시에 있으면, <strong>캐시 히트</strong>다. 캐시에서 바로 데이터를 읽어올 수 있다.<br/>
+반대로 원하는 데이터가 캐시에 없으면 <strong>캐시 미스</strong>다. 아래 계층으로 넘어가 데이터를 찾아와야 한다.</p>
+<p>전체 참조에서 <strong>캐시 히트의 비율을 적중률(Hit Ratio)</strong>라고 한다. (반대는 Miss Ratio.)</p>
+<p>캐시의 성능은 주로 '적중률(Hit ratio)'로 표현한다. </p>
+<h2 id="캐시-성능과-용량의-트레이드-오프">캐시 성능과 용량의 트레이드 오프</h2>
+<p>캐시 용량이 크면 적중률이 올라간다. 캐싱을 해둘 수 있는 데이터가 많아지기 때문이다. </p>
+<p>하지만 캐시는 접근 속도가 빠른 대신 용량이 작다고 했다. 어디까지나 임시 저장소이고, 원본 데이터의 일부만 들어간다.</p>
+<p>캐시 용량이 다 차면, 필요없는 캐시를 지워준다. </p>
+<p>다시 말해 캐시 데이터는 언제든지 삭제될 수 있다. 말 그대로 임시 보관소이기 때문.</p>
+<h2 id="캐시-교체-알고리즘">캐시 교체 알고리즘</h2>
+<p>그렇다면 캐시 용량이 꽉 찼을 때 어떤 데이터부터 삭제해야할까?</p>
+<p>캐시 교체(Cache Replacement) 혹은 캐시 퇴거(Cache eviction)라고 부르며, 이걸 결정하는 알고리즘이 캐시 교체 알고리즘이다.</p>
+<p>각 메모리 계층별로 다양한 캐시 교체 알고리즘이 사용된다. 구현과 성능이 다 다르다. </p>
+<p>하지만 결국 어떤 데이터를 더 우선순위에 둘 건지를 결정하는 알고리즘이라는 점에서는 다 비슷하다. 대표적인 3가지만 알아보자. </p>
+<h3 id="1-fifofirst-in-first-out"><strong>1. FIFO(First in First Out)</strong></h3>
+<ul>
+<li>가장 먼저 들어간 데이터를 교체.</li>
+<li>가장 간단하지만, 지역성을 바탕으로 앞으로 참조될 가능성을 고려하지 않아서 캐시 성능이 떨어진다.</li>
+</ul>
+<h3 id="2-lfuleast-frequently-used"><strong>2. LFU(Least Frequently Used)</strong></h3>
+<ul>
+<li>가장 사용 횟수가 적은 데이터를 교체한다.</li>
+<li>캐시에 저장을 했는데 '다른 데이터보다 참조하는 횟수가 낮다면, 앞으로도 자주 안 쓰이겠지.' 라고 가정한다.</li>
+<li>최근에 저장한 데이터는 참조 횟수가 적기 때문에 교체 가능성이 높은데, 지역성 관점에서는 참조될 가능성이 높기 때문에 이 부분에서는 비효율이 발생할 수 있다.</li>
+</ul>
+<h3 id="3-lruleast-recently-used"><strong>3. LRU(Least Recently Used)</strong></h3>
+<ul>
+<li>가장 오랫동안 사용되지 않은 데이터를 교체한다.</li>
+<li>LFU와 미묘하게 다르다. 오랫동안 쓰지 않은 데이터가 앞으로도 안 쓰일거라고 가정한다.</li>
+<li><strong>시간적 지역성을 가장 잘 반영해서 성능이 높다.</strong></li>
+<li>LRU를 구현하기 위해서는 캐시에 저장된 데이터가 사용될 때마다 시간 순서를 기록해야 한다. 여기에 드는 오버헤드가 다른 알고리즘보다 크다.</li>
+<li>애플리케이션에서 LRU 캐시를 구현할 때는 Hash Table과 Doubly Linked list를 같이 쓰는데, 코딩 테스트에 자주 나오는 <a href="https://school.programmers.co.kr/learn/courses/30/lessons/17680">문제</a>이기도 하다.</li>
+</ul>
+<h2 id="캐시-무효화">캐시 무효화</h2>
+<p>임시 보관소에 있는 복사본을 사용하면, 한가지 더 <strong>골치 아픈 일</strong>이 생긴다. </p>
+<p>다른 프로세스나 스레드에서 Disk에 있는 <strong>파일을 수정했는데, 캐시에는 그 수정이 반영이 안된다면 어떨까?</strong> 원본이 바뀌었는데도 캐시 데이터를 여전히 참조해서 일관성 없는 결과를 내놓는다. </p>
+<p>즉, 원본 데이터에 변경이 생기면, 느린 저장소에 있는 원본 데이터와 캐시 저장소에 있는 데이터를 일치시켜야한다. </p>
+<p>원본 데이터에 변경이 있는 경우 캐시를 무효화해서, 실제 데이터와 일치시키는 메커니즘을 '캐시 무효화'라고 한다. 하위 계층에 데이터가 변경이 있는지 물어보거나, 일정 주기를 기준으로 캐시를 삭제해주는 방법 등이 있다. </p>
+<p>흔히 웹브라우저 오류 해결을 하다가, 잘 안 될 때 '캐시 파일을 삭제해보세요~'라는 말을 볼 수 있다. 설정을 변경했는데 캐시에 이전 데이터가 저장되어있으면, 변경된 설정이 반영 안될 수 있기 때문이다.</p>
+<h1 id="요약-정리">요약 정리</h1>
+<ul>
+<li>
+<p>프로그래머는 <strong>프로그램의 성능을 이해하기 위해 </strong>메모리 계층을 알아야 한다.</p>
+</li>
+<li>
+<p>주요 저장 매체에는 SRAM, DRAM, HDD, SSD 등이 있다. <strong>빠를수록 용량당 가격이 비싸고, 느릴수록 용량당 가격이 싸다.</strong></p>
+</li>
+<li>
+<p>프로그램은 최근에 참조했거나, 최근에 참조한 데이터 근처에 있는 데이터를 더 많이 참조하는 경향 (지역성)이 있다. </p>
+</li>
+<li>
+<p><strong>'저장 매체의 트레이드오프'</strong>와 <strong>'프로그램의 지역성'</strong>이라는 근본 특성으로 인해서, 메모리 계층이 생기게 된다. </p>
+</li>
+<li>
+<p>캐시는 더 크고 느린 저장공간에 있는 데이터를 임시 저장해두는 빠르고 작은 저장공간을 말한다.</p>
+</li>
+<li>
+<p>메모리 계층에서 위층은 아래층에 대한 캐시 역할을 한다.</p>
+</li>
+<li>
+<p>캐시의 성능은 적중률(Hit ratio)로 판단할 수 있다. </p>
+</li>
+<li>
+<p>캐시 용량을 관리하기 위해서는 적절한 교체 알고리즘이 필요하다.</p>
+</li>
+<li>
+<p>캐시와 원본의 일관성을 유지하기 위해서 캐시 무효화도 필요하다.</p>
+</li>
+</ul>
+<h3 id="참고-문헌">[참고 문헌]</h3>
+<ul>
+<li>컴퓨터 시스템 3판 / Randal E. Bryan , David R. O'Hallaron</li>
+<li>알고리즘, 인생을 계산하다 / 브라이언 크리스천, 톰 그리피스</li>
+<li>한 권으로 읽는 컴퓨터 구조와 프로그래밍 / 조너선 스타인하트</li>
+</ul>
+</body>
+</html>

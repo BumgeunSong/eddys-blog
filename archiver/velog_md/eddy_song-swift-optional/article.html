@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>안전한 Swift의 비결,  옵셔널(Optional)</title>
+</head>
+<body>
+  <h1>안전한 Swift의 비결,  옵셔널(Optional)</h1>
+  <p><em>by eddy_song</em></p>
+  <h2 id="안전-안전-안전">안전, 안전, 안전!</h2>
+<p>Swift는 안전(Safety)를 무척 강조한다. </p>
+<p>Swift 소개 페이지를 보자. 맨 처음부터 Safety라는 단어가 나온다.<br/>
+기능(Feature) 챕터에서도 Safety만 따로 소개한다. </p>
+<p>딱 봐도 안전을 최우선에 놓고 만든 언어라는 느낌이 온다. </p>
+<p>자동차 브랜드로 치자면 볼보 같은 느낌이랄까?</p>
+<p><img alt="volvo" src="https://velog.velcdn.com/images%2Feddy_song%2Fpost%2Fb6b8410d-5829-4ae9-b0dc-24e660b55de0%2F83009_Volvo_US%20Election.jpeg"/></p>
+<p>자동차가 안전한 건 뭔지 알겠다. 하지만 <strong>프로그래밍 언어가 '안전'하다는 건 무슨 뜻일까? </strong></p>
+<p>프로그래밍 언어가 안전하다는 건, <strong>예상치 못한 오류를 최대한 빨리 찾아낼 수 있다</strong>는 말이다.<br/>
+실행하기 전, 코드를 컴파일하는 시점에 최대한 많은 오류를 잡아낸다. </p>
+<p>실행 시점이 되어서야 에러가 터진다면, 굉장히 불안할 것이다. 디버깅하기도 더 어렵다.</p>
+<p>자동차 주행 중에 문제가 생기면 큰 피해를 입는 것과 똑같다.</p>
+<p>Swift는 코드를 컴파일하는 시점에 예상치 못한 상황을 잡아낼 수 있도록 여러 기능을 갖추고 있다. </p>
+<p>마치 시동만 걸어도, 안전 벨트를 했는지 안했는지,<br/>
+자동차 내부에 문제는 없는지 알려주는 계기판처럼 말이다.</p>
+<h2 id="swift의-안전-기능-옵셔널">Swift의 안전 기능, 옵셔널</h2>
+<p><strong>Swift의 대표적인 안전 기능이 바로 옵셔널(Optional)</strong>이다.<br/>
+Swift 언어의 독특한 특징이기도 하다.</p>
+<p>맨 처음 Swift를 배울 때 옵셔널이 싫었다.<br/>
+조건문, 변수 선언 등이야 다른 언어에도 많이 있는 거니까 익숙하지만 옵셔널은 아니었다.</p>
+<p>중간 중간 계속해서 물음표, 느낌표가 튀어나오고,<br/>
+Xcode가 한 줄 코딩할 때마다 끊임없이 에러 메세지를 뱉어내는데... 되게 귀찮았다.</p>
+<p>그땐 옵셔널을 다루는데 익숙하지 않으니까 계속 컴파일 에러만 잡았다. </p>
+<p>(원래 안전하면 사용할 때는 더 귀찮다.)</p>
+<p>하지만 나중에 좀 익숙해지고 나니까, 옵셔널이 굉장히 좋은 녀석이란 걸 알게 되었다.</p>
+<p>비록 코딩을 할 때 에러는 더 많이 뜨지만,<br/>
+덕분에 예상치 못한 실행 시점의 충돌이나 디버깅 시간은 훨씬 줄어든다.</p>
+<p><img src="https://velog.velcdn.com/images%2Feddy_song%2Fpost%2F230192e8-58e1-44fa-9f0b-782191df0cba%2F%E1%84%8F%E1%85%A9%E1%84%8A%E1%85%B3%E1%86%A8.jpeg"/></p>
+<blockquote>
+<p>옵셔널... 너 좋은 놈이었구나. </p>
+</blockquote>
+<h2 id="nil-비어있는-값"><code>nil</code>: 비어있는 값</h2>
+<p>프로그래밍을 하다보면, '비어있는 값'을 표현해야 할 때가 있다.</p>
+<p>예를 들어,</p>
+<ul>
+<li>사용자가 주소란에 주소를 입력하지 않았을 때</li>
+<li>배열에서 원하는 값을 찾을 수 없을 때</li>
+<li>DB에서 데이터를 불러오는 데 실패했을 때</li>
+</ul>
+<p>등등...</p>
+<p>이럴 때 결과값으로 뭘 써야할까?<br/>
+<code>0</code>이나 빈 스트링 <code>""</code>을 쓸 수는 없다.</p>
+<p>Swift는 비어있는 값을 <code>nil</code>로 표현한다.</p>
+<h2 id="옵셔널-nil일-수도-있는-타입">옵셔널: <code>nil</code>일 수도 있는 타입</h2>
+<p>Swift에서는, 모든 타입의 인스턴스가 <code>nil</code>을 아예 가질 수가 없다.</p>
+<p>다른 언어는 <code>int</code> 타입 변수에 undefined가 들어갈 수도 있고,<br/>
+string 타입에 null이 들어가기도 한다.</p>
+<p>하지만 Swift에서는 안 된다. </p>
+<p>어떤 변수에 <code>nil</code>을 넣으려면, 반드시 '옵셔널 타입'으로 선언해야 한다.<br/>
+타입 이름 뒤에 <code>?</code> 를 넣어서 옵셔널 타입을 표현한다.</p>
+<p><code>Int</code>는 비어있을 수가 없다. <code>0</code>이든 <code>-1</code>이든 <code>134098</code>이든 항상 값을 가져야 한다.<br/>
+하지만 <code>Int?</code>는 비어있을 수도 있고, 값이 들어있을 수도 있다.</p>
+<p>다시 말해, <strong><code>nil</code>이 될 가능성이 있는 변수는 반드시 옵셔널 타입</strong>이다.</p>
+<p>따라서 타입 뒤에 <code>?</code>는 <strong>'이거 <code>nil</code>일 수도 있다!'라고 미리 알려주는 역할</strong>을 한다.</p>
+<blockquote>
+<p>Swift에는 타입 이름 외에도 옵셔널을 활용하는 경우가 있다.<br/>
+<code>as?</code> <code>init?</code> <code>try?</code> 등이다. 하지만 결국 옵셔널 타입과 의도는 같다.<br/>
+'실패할 가능성'이 있는 작업임을 미리 표시하는 것이다. </p>
+</blockquote>
+<h2 id="언래핑">언래핑</h2>
+<p>이전에 다른 언어에선 어떤 변수는 비어있을 가능성이 있고,<br/>
+어떤 변수는 가능성이 없다는 걸 미리 알 수 없었다.</p>
+<p>하지만 Swift에서는...</p>
+<ul>
+<li>nil은 옵셔널 타입에만 넣을 수 있다.</li>
+<li>옵셔널 타입은 처음부터 명시적으로 지정한다.</li>
+</ul>
+<p>결과적으로 <strong>Swift는 <code>nil</code>이 될 가능성이 있는 변수를 코드만 보고 미리 알 수 있다.</strong><br/>
+그리고 이런 값을 사용할 때는 반드시 <code>nil</code>인지 아닌지 확인하도록 강제한다.</p>
+<p>그냥 옵셔널 타입의 값을 조작하려고 하면 에러를 뱉는다.</p>
+<p>혹시나 nil인데 조작하려고 하면 런타임 에러가 뜰 것이기 때문에,<br/>
+Swift 컴파일러가 미리 막는 것이다.</p>
+<p>이 옵셔널 타입이 nil인지 아닌지 확인하고,<br/>
+그 안에 든 값을 꺼내는 것을 <strong>언래핑(Unwrapping)</strong>이라고 한다.</p>
+<p>Swift에서는 <strong>반드시 언래핑을 해야만 옵셔널 값을 다룰 수 있다.</strong></p>
+<p>언래핑을 하는 방법은 다른 글에서 알아보도록 하자.</p>
+<h2 id="요약--정리">요약 &amp; 정리</h2>
+<ul>
+<li>Swift는 안전을 강조하는 언어다.</li>
+<li>Optional은 Swift의 대표적인 안전 기능이다.</li>
+<li>Optional 타입 때문에, nil이 될 가능성이 있는 변수인지 미리 알 수 있다.</li>
+<li>Swift는 Optional 타입을 다룰 때 언래핑을 강제한다. </li>
+<li>결과적으로 런타임 시점에 nil을 조작하는 에러가 생기지 않는다.</li>
+</ul>
+<h2 id="다음-글">다음 글</h2>
+<p>👉 <a href="https://velog.io/@eddy_song/optional-under-the-hood">옵셔널(Optional)은 어떻게 만들었을까</a><br/>
+👉 <a href="https://velog.io/@eddy_song/optional-unwrapping">옵셔널(Optional)을 언박싱.. 아니 언래핑(Unwrapping) 해보자</a></p>
+</body>
+</html>

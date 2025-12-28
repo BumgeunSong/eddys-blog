@@ -1,0 +1,170 @@
+---
+title: 옵셔널(Optional)은 어떻게 만들었을까
+published_date: 2022-01-15 16:03
+tags: swift
+meta_description: 이번엔 옵셔널이 실제로 어떻게 구현되어 있는지 들여다보자.
+meta_image: https://images.velog.io/images/eddy_song/post/c5e0dfce-e61d-4087-b9a7-f921c3716ea4/mario-box.jpeg
+lang: ko
+---
+
+# 옵셔널(Optional)은 어떻게 만들었을까
+
+*by eddy_song*
+
+전 포스팅에서 옵셔널이 어떤 문제를 해결하는 기능인지 알아보았다.
+이번엔 옵셔널이 실제로 어떻게 구현되어있는지 들여다보자.
+
+옵셔널의 구현을 이해하기 위해선, Enum과 Generic에 대해서 알아야 한다.
+
+## enum과 associcated value
+
+`enum` 은 swift에서 직접 타입을 정의해줄 때 쓰는 키워드 중 하나다.
+enum은 해당 타입에 속하는 값을 일일이 나열해서 정의하는 타입이다.
+
+`enum`으로 계절(`season`) 타입을 만든다면, 다음과 같이 4개의 계절을 모두 명시해준다.
+
+``` swift
+enum Season {
+    case spring
+    case summer
+    case autumn
+    case winter
+}
+```
+
+enum 타입에 속하는 인스턴스는 그 안에 또 다른 값을 가질 수 있다. 해당 인스턴스와 연관된 값을 담아준다.. 라고 해서 이 값을 `associated value`라고 한다.
+
+연관값이라는 게 무슨 뜻인지, 간단한 예로 알아보자.
+
+fetch를 실행했을 때 발생할 수 있는 상황이 2가지가 있다. 성공(success)와 에러(error)다. 그러면 이걸 FetchResult라는 enum 타입으로 묶어준다.
+
+``` swift
+enum FetchResult {
+    case success
+    case error(message: String)
+}
+```
+
+이 때 error의 경우에는, error를 설명하는 message를 전달해주고 싶다. 그러면 단순히 error 값만 정의하지 않고, error와 연관된 값의 파라미터 이름과 타입을 추가해줄 수 있다.
+
+``` swift
+enum FetchResult {
+    case success
+    case error(message: String)
+}
+```
+
+error는 이제 message라는 이름의 String 타입 값을 가지게 된다. 나중에 이 값을 사용할 때는 .error(let message)같은 바인딩 문법으로 꺼내서 사용할 수 있다.
+
+여기서는 옵셔널을 이해하는데 필요한 정도만 알아보고,
+이제 2번째 알아야할 개념, 제네릭으로 가보자.
+
+## Generic Type
+
+Swift에는 Generic 타입이 있다. 쉽게 말하면 다른 타입과 '조합'되어 만들어지는 타입이다.
+
+예를 들어, Array를 생각해보자. Swift에서 String을 담은 Array, Array과 Int를 담은 Array는 서로 다른 타입이다.
+
+하지만 String을 담은 Array를 정의하고,Int를 담은 Array도 정의하고... 모든 타입에 대해 정의해줘야 한다면 매우 번거롭다.
+
+그래서 `무언가`을 담은 Array 타입을 `Array<T>`로 한번에 표현할 수 있다.
+
+우리가 struct, enum, class 로 직접 타입을 정의할 때도 타입 이름 옆에 `<T>`를 붙여주면 된다.
+Stack이라는 Generic 타입을 만든다면 이렇게 될 것이다.
+
+``` swift
+class Stack<T> {
+    let items: [T] = []
+
+    func push(_ item: T) { ... }
+    func pop() -> T { ... }
+}
+```
+
+여기서 T는 타입 파라미터(Type Parameter)로, Array 타입과 조합될 어떠한 타입을 의미한다. T가 아니라 다른 이름을 써도 상관없다. T는 타입을 선언하는 블록 안에서 쓰기 위한 임시 이름(placeholder)다.
+
+실제로 인스턴스를 생성할 때는 `Stack<T>`라는 타입은 없다.
+`Stack<String>`, `Stack<Int>` 같은 방식으로 선언해서 인스턴스를 생성하게 될 것이다.
+
+## 옵셔널(Optional)은 enum + Generic Type이다.
+
+옵셔널은 enum 으로 선언한 generic 타입이다.
+
+옵셔널이라는 enum 타입에는 딱 2가지 값이 있다.
+
+`some`과, `none`이다.
+
+옵셔널의 뜻이 무엇인지 기억나는지?
+
+옵셔널은 '이 값은 nil일 수도 있고 아닐 수도 있는 타입'을 의미한다.
+이 타입이 명시적으로 정해져있기 때문에, 컴파일러가 미리 알고 nil을 건드리지 않도록 막아주는 안전 기능이다.
+
+즉, 여기서 some이 값이 있는 상태, none이 값이 없는 상태(nil)를 의미한다.
+
+``` swift
+enum Optional {
+  case none
+  case some
+}
+```
+
+물론 이게 끝은 아니다.
+
+`some`이라면, `some`의 값이 무엇인지도 저장해두어야 한다. 그래야 우리가 `nil`이 아닌 걸 체크하고 나서 꺼내쓸 수 있다.
+
+그래서 `some`에는 associated value가 담겨있다.
+
+이 associated value는 어떤 타입이든 가능하기 때문에, 타입 파라미터를 붙여서 Generic 타입으로 만들어준다.
+
+``` swift
+enum Optional<Wrapped> {
+  case none
+  case some(Wrapped)
+}
+```
+
+즉, `Optional<Int>`, `Optional<String>`, `Optional<Data>` ... 무엇이든 다 옵셔널 타입으로 '감쌀' 수 있다.
+some 안에 담겨있는 값도 타입 파라미터에 들어간 값과 같은 타입이 된다.
+
+## `Optional<Something>`과 Something?
+
+그런데 잠깐, `Optional<Int>`라고?
+우리는 옵셔널을 쓸 때 분명 타입에 ?를 붙여서 `Int?` 이런 식으로 썼었다.
+
+알고 보면 `Int?`와 `Optional<Int>`는 완벽하게 똑같다.
+swift에서 어떤 쪽을 써도 동일하게 옵셔널 타입을 선언해준다.
+
+``` swift
+  var birthDate: Optional<Date>
+  var birthDate: Date?
+```
+
+## Optional.none과 nil
+
+비어있는 값을 나타내는 `nil` 이라는 키워드도, 사실은 별로 특별한 존재가 아니다.
+`nil`은 `Optional.none`을 줄여서 부르는 별명이었다.
+
+`nil`과 `Optional.none`은 똑같은 값이다.
+
+``` swift
+ nil == .none   // true
+```
+
+물론 `?` 를 붙이는 방식과 `nil` 이 훨씬 더 널리 쓰이는 표준이다.
+
+어쨌든 들여다보면, Optional의 구현은 enum + generic이고
+`nil`은 enum 값 중 하나인 `.none` 일 뿐이라는 것!
+
+## 요약 정리
+
+- enum은 타입에 속하는 값을 일일이 나열해서 정의하는 타입이다.
+- enum의 값은 관련된 값을 담을 수 있다. 이걸 associated value라고 한다.
+- Generic Type은 다른 여러 타입과 조합되어 만들어지는 타입이다.
+- 옵셔널 타입은 `enum`을 사용한 generic 타입이다.
+- 옵셔널 `enum`은 `none`과 `some`으로 이뤄져있으며, `some`의 associated value에는 감싸진 값이 담겨있다.
+- `Optional<Int>`는 `Int?`와 똑같고, `Optional.none`은 `nil`과 똑같다.
+
+## 관련 글
+
+👈 [안전한 Swift의 비결, 옵셔널(Optional)](https://velog.io/@eddy_song/swift-optional)
+👉 [옵셔널(Optional)을 언박싱.. 아니 언래핑(Unwrapping) 해보자](https://velog.io/@eddy_song/optional-unwrapping)

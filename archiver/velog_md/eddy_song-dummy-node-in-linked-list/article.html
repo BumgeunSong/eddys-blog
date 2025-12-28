@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>Linked list 추가, 삭제를 구현할 때 유용한 Dummy Node</title>
+</head>
+<body>
+  <h1>Linked list 추가, 삭제를 구현할 때 유용한 Dummy Node</h1>
+  <p><em>by eddy_song</em></p>
+  <p>연결 리스트(Linked list) 알고리즘을 구현할 때 유용한 간단한 트릭을 소개한다.</p>
+<h2 id="연결-리스트linked-list">연결 리스트(Linked list)</h2>
+<p>연결 리스트(Linked List)는 데이터와, 포인터를 가지는 노드를 연결한 형태의 자료 구조다.<br/>
+연결 리스트는 배열(Array)에 비해서 삽입과 삭제가 빠르다는 게 장점이다.</p>
+<blockquote>
+<p>연결 리스트는 2가지 종류가 있다.<br/>
+다음을 가리키는 포인터 하나만 가지는 단일 연결 리스트(Singly linked list).<br/>
+각각 이전과 다음을 가리키는 포인터 2개를 가지는 이중 연결 리스트(Doubly linked list).<br/>
+여기서는 단일 연결 리스트를 설명한다.</p>
+</blockquote>
+<p><img alt="singly-linked-list" src="https://velog.velcdn.com/images%2Feddy_song%2Fpost%2Ff6bfc879-44a0-4cce-90b5-b32fac33598e%2FSingly-Linked-List1.png"/></p>
+<h2 id="연결-리스트의-노드를-삭제하는-알고리즘">연결 리스트의 노드를 삭제하는 알고리즘</h2>
+<p>연결 리스트의 '삽입'과 '삭제'를 구현하다보면 번거로운 경우가 생긴다.</p>
+<p>예를 들어, 이런 알고리즘을 구현한다고 해보자.</p>
+<blockquote>
+<p>Linked list의 Head가 주어진다.<br/>
+<code>value</code>라는 인자가 주어진다.<br/>
+Linked list에서 <code>value</code>와 같은 값을 가진 노드를 삭제한다.<br/>
+Linked list를 반환한다. </p>
+</blockquote>
+<p>이 알고리즘을 구현하는 건 어렵지 않다. <code>pointer</code> 를 head로 설정한다. <code>pointer.next</code> 노드의 값을 확인한다.<br/>
+만약 값이 <code>value</code>와 같다면, <code>pointer.next</code>를 <code>pointer.next.next</code>에 할당한다.<br/>
+원래 있던 <code>pointer.next</code>가 사라진다.</p>
+<pre><code class="language-swift"><span class="token comment">/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     public var val: Int
+ *     public var next: ListNode?
+ *     public init() { self.val = 0; self.next = nil; }
+ *     public init(_ val: Int) { self.val = val; self.next = nil; }
+ *     public init(_ val: Int, _ next: ListNode?) { self.val = val; self.next = next; }
+ * }
+ */</span>
+ 
+<span class="token keyword">func</span> <span class="token function">delete</span><span class="token punctuation">(</span><span class="token number">_</span> head<span class="token punctuation">:</span> <span class="token builtin">ListNode</span><span class="token operator">?</span><span class="token punctuation">,</span> <span class="token number">_</span> value<span class="token punctuation">:</span> <span class="token builtin">Int</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> <span class="token builtin">ListNode</span><span class="token operator">?</span> <span class="token punctuation">{</span>
+  <span class="token keyword">var</span> pointer <span class="token operator">=</span> head
+    
+  <span class="token keyword">while</span> pointer<span class="token operator">?</span><span class="token punctuation">.</span>next <span class="token operator">!=</span> <span class="token constant">nil</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> pointer<span class="token operator">?</span><span class="token punctuation">.</span>next<span class="token operator">?</span><span class="token punctuation">.</span>val <span class="token operator">==</span> value <span class="token punctuation">{</span>
+      pointer<span class="token operator">?</span><span class="token punctuation">.</span>next <span class="token operator">=</span> pointer<span class="token operator">?</span><span class="token punctuation">.</span>next<span class="token operator">?</span><span class="token punctuation">.</span>next
+      <span class="token keyword">break</span>
+    <span class="token punctuation">}</span>
+    pointer <span class="token operator">=</span> pointer<span class="token operator">?</span><span class="token punctuation">.</span>next
+  <span class="token punctuation">}</span>
+  
+  <span class="token keyword">return</span> head
+<span class="token punctuation">}</span></code></pre>
+<h2 id="head를-삭제하거나-추가하게-될-때">Head를 삭제하거나 추가하게 될 때</h2>
+<p>그러나 위의 알고리즘에는 문제가 있다.</p>
+<p>만약 head가 <code>value</code>와 같은 값을 가진 노드라면?</p>
+<p>당연히 head를 삭제해야 한다. 하지만 head는 <code>pointer.next</code>에 해당하지 않는다.<br/>
+<strong>head를 삭제하려면, 별도의 조건문으로 처리를 해줘야 한다.</strong></p>
+<p>아마 이런 식으로 해결할 수 있을 것이다.</p>
+<pre><code class="language-swift"><span class="token keyword">func</span> <span class="token function">delete</span><span class="token punctuation">(</span><span class="token number">_</span> head<span class="token punctuation">:</span> <span class="token builtin">ListNode</span><span class="token operator">?</span><span class="token punctuation">,</span> <span class="token number">_</span> value<span class="token punctuation">:</span> <span class="token builtin">Int</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> <span class="token builtin">ListNode</span><span class="token operator">?</span> <span class="token punctuation">{</span>
+  <span class="token keyword">var</span> pointer <span class="token operator">=</span> head
+  
+  <span class="token comment">// head를 삭제해야 할 때</span>
+  <span class="token keyword">if</span> head<span class="token operator">?</span><span class="token punctuation">.</span>val <span class="token operator">==</span> value <span class="token punctuation">{</span>
+    head <span class="token operator">=</span> head<span class="token operator">?</span><span class="token punctuation">.</span>next
+  <span class="token punctuation">}</span>
+    
+  <span class="token keyword">while</span> pointer<span class="token operator">?</span><span class="token punctuation">.</span>next <span class="token operator">!=</span> <span class="token constant">nil</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> pointer<span class="token operator">?</span><span class="token punctuation">.</span>next<span class="token operator">?</span><span class="token punctuation">.</span>val <span class="token operator">==</span> value <span class="token punctuation">{</span>
+      pointer<span class="token operator">?</span><span class="token punctuation">.</span>next <span class="token operator">=</span> pointer<span class="token operator">?</span><span class="token punctuation">.</span>next<span class="token operator">?</span><span class="token punctuation">.</span>next
+      <span class="token keyword">break</span>
+    <span class="token punctuation">}</span>
+    pointer <span class="token operator">=</span> pointer<span class="token operator">?</span><span class="token punctuation">.</span>next
+  <span class="token punctuation">}</span>
+  
+  <span class="token keyword">return</span> head
+<span class="token punctuation">}</span></code></pre>
+<p>이건 새로운 노드를 추가할 때도 마찬가지다.<br/>
+새로 추가할 노드가 head 자리에 와야한다면, 똑같이 조건문으로 예외 처리를 해줘야 한다.</p>
+<p>노드의 추가/삭제를 포함하는 알고리즘은 굉장히 많을 수 있다.<br/>
+<strong>그때마다 head를 다루는 조건문을 써줘야 한다는 건 다소 번거롭다. </strong></p>
+<h2 id="dummy-node를-head로-설정하기">Dummy Node를 head로 설정하기</h2>
+<p>이 때 코드를 간단하게 만들 수 있는 트릭이 있다.<br/>
+Dummy Node를 사용하면, head를 다루는 조건문을 쓰지 않아도 된다.</p>
+<pre><code class="language-swift"><span class="token keyword">func</span> <span class="token function">delete</span><span class="token punctuation">(</span><span class="token number">_</span> head<span class="token punctuation">:</span> <span class="token builtin">ListNode</span><span class="token operator">?</span><span class="token punctuation">,</span> <span class="token number">_</span> value<span class="token punctuation">:</span> <span class="token builtin">Int</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> <span class="token builtin">ListNode</span><span class="token operator">?</span> <span class="token punctuation">{</span>
+  
+  <span class="token comment">// dummy node를 생성하고 head에 연결한다.</span>
+  <span class="token keyword">let</span> dummy <span class="token operator">=</span> <span class="token function">ListNode</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> head<span class="token punctuation">)</span>
+  <span class="token keyword">var</span> pointer <span class="token operator">=</span> dummy
+    
+  <span class="token keyword">while</span> pointer<span class="token operator">?</span><span class="token punctuation">.</span>next <span class="token operator">!=</span> <span class="token constant">nil</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> pointer<span class="token operator">?</span><span class="token punctuation">.</span>next<span class="token operator">?</span><span class="token punctuation">.</span>val <span class="token operator">==</span> value <span class="token punctuation">{</span>
+      pointer<span class="token operator">?</span><span class="token punctuation">.</span>next <span class="token operator">=</span> pointer<span class="token operator">?</span><span class="token punctuation">.</span>next<span class="token operator">?</span><span class="token punctuation">.</span>next
+      <span class="token keyword">break</span>
+    <span class="token punctuation">}</span>
+    pointer <span class="token operator">=</span> pointer<span class="token operator">?</span><span class="token punctuation">.</span>next
+  <span class="token punctuation">}</span>
+  
+  <span class="token keyword">return</span> dummy<span class="token punctuation">.</span>next
+<span class="token punctuation">}</span></code></pre>
+<p>먼저, dummy node를 하나 만든다. 말 그대로 잠깐 자리만 맡아줄 가짜 데이터다.<br/>
+그리고 <strong><code>dummy</code>의 포인터(<code>next</code>)가 head를 가리키게 한다.</strong></p>
+<p>이제 <code>pointer</code>를 <code>dummy</code>에 두고 연결 리스트를 탐색한다.</p>
+<p><img alt="dummy" src="https://velog.velcdn.com/images%2Feddy_song%2Fpost%2Fe48c89b8-772d-45f7-bbb4-a506dea36f70%2FScreen%20Shot%202022-01-11%20at%2011.29.20%20PM.png"/></p>
+<p><code>dummy</code>로 head를 만들어줬기 때문에, 진짜 head는 맨 앞이 아닌 중간 노드처럼 다룰 수 있다.<br/>
+따라서 별도의 조건문을 만들지 않고, 중간 노드를 삭제/삽입하는 알고리즘을 똑같이 적용한다.</p>
+<p>조작을 끝낸 이후에는<strong> head 대신, <code>dummy.next</code>를 반환한다.</strong><br/>
+이렇게 하면 dummy node는 사라지고, dummy의 포인터가 가리키는 곳, 즉 <strong>원래의 head를 반환</strong>하다.</p>
+</body>
+</html>

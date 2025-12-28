@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>너의 MVC는 나의 MVC와 다르다</title>
+</head>
+<body>
+  <h1>너의 MVC는 나의 MVC와 다르다</h1>
+  <p><em>by eddy_song</em></p>
+  <h1 id="mvc의-다양한-변형">MVC의 다양한 변형</h1>
+<p>MVC는 널리 쓰이는 아키텍처 패턴이다. </p>
+<p>1970년대 GUI라는 것이 처음 등장했다. GUI 개발의 주역은 제록스 파크의 연구원들이었다. 그 중 하나였던 트라이브 린스케이지는 한 가지 아이디어를 냈다. Model, View, Controller로 소프트웨어를 구조화하자는 것이었다. </p>
+<p>MVC는 스몰톡(Smalltalk)으로 처음 구현됐다. 이게 MVC 아키텍처의 원조라고 할 수 있다.</p>
+<p>하지만 그 후 MVC는 오랫동안 널리 퍼져나갔고, <strong>조금씩 변형되고 개선되면서 다양한 의미</strong>를 갖게 됐다.</p>
+<p>마치 전세계에서 카레를 먹지만, 지역마다 카레의 스타일과 맛이 다른 것처럼 말이다.</p>
+<p>MVC도 다양한 스타일과 변형이 존재한다. 특히 iOS의 MVC는 그 중에서도 지역색이 있는 편이다. iOS로 MVC를 처음 배운 나는, 구글링해서 나오는 다른 자료들을 볼 때마다 굉장히 헷갈렸다.</p>
+<blockquote>
+<p>iOS에서는 이걸 MVC라고 부르는데, 저 동네에서는 MVC가 그 MVC가 아니네?</p>
+</blockquote>
+<p>인도 사람이 처음 일본에 가서 '카레'를 시키면, '이게 카레라고?' 하면서 놀라는 느낌이랄까.</p>
+<p>그래서 MVC라는 단어에 대해 탐구해봤는데, 혼란스러웠던 누군가에게는 교통정리가 되는 글이었으면 좋겠다.</p>
+<h1 id="원조-mvc">원조 MVC</h1>
+<p>이제는 더 이상 스몰톡을 현업에서 쓰지 않겠지만, MVC의 첫 구현은 스몰톡이었다.</p>
+<p>당시의 MVC는 이런 구조였다. </p>
+<p><img src="https://cms-assets.tutsplus.com/cdn-cgi/image/width=630/uploads/users/41/posts/29423/image/figure-mvc-diagram-01.jpg"/><br/>
+(출처: Bart Jacobs)</p>
+<p>주로 컨트롤러가 사용자 입력을 담당하고, 모델이 그걸 받아서 데이터를 업데이트 한다.<br/>
+뷰는 모델 데이터를 받아와서 화면에 보여주는 역할을 맡았다.<br/>
+물론 컨트롤러가 직접 뷰를 업데이트할 수도 있다.</p>
+<p>애플 공식 문서에는 이런 다이어그램으로 표현하고 있다.</p>
+<p><img src="https://velog.velcdn.com/images/eddy_song/post/b25f429b-d9ab-43ee-b7b6-d64bcdfe2e21/image.png"/></p>
+<p>중요한 점은<br/>
+1) 뷰가 변할 때 반드시 컨트롤러를 거치도록 강제하지 않으며,<br/>
+2) 뷰와 모델이 서로를 알고 의존한다는 점이다.</p>
+<p>이 MVC가 서버 사이드 프레임워크에서 흔히 말하는 MVC이기도 하다.</p>
+<h1 id="ios의-mvc">iOS의 MVC</h1>
+<p>iOS(MacOS)의 MVC는 원조 MVC에서 파생된 변형 버전이다. </p>
+<p>(정확히 말하면, iOS가 등장하기 훠얼씬 전인 90년대까지 거슬러 올라가지만, 우리는 iOS에 초점을 맞출 거니까 iOS라고 부르도록 하자.)</p>
+<p>애플은 자신들의 MVC가 다소 다르다는 점을 명확하게 밝히고 있다. 여기에 대한 <a href="https://developer.apple.com/library/archive/documentation/General/Conceptual/CocoaEncyclopedia/Model-View-Controller/Model-View-Controller.html#//apple_ref/doc/uid/TP40010810-CH14">공식 문서</a>가 따로 있을 정도다.</p>
+<p>iOS의 MVC를 표현한 그림이다.</p>
+<p><img src="https://cms-assets.tutsplus.com/cdn-cgi/image/width=630/uploads/users/41/posts/29423/image/figure-mvc-diagram-002.jpg"/></p>
+<p>사용자 입력이 뷰를 통해 컨트롤러에게 전달된다.<br/>
+컨트롤러는 모델에게 그걸 전달하고, 모델이 업데이트를 한다.<br/>
+그 후 모델에서 바뀐 데이터는 '컨트롤러를 통해'서 뷰에 업데이트된다.</p>
+<p><strong>iOS의 MVC 구조에서는 '컨트롤러'의 역할이 더 커지고 중요</strong>해진다.</p>
+<p><img src="https://velog.velcdn.com/images/eddy_song/post/a151dda9-b2a4-4f7f-a06d-65fe669d4703/image.png"/></p>
+<p>이전에 나왔던 그림과 매우 비슷해보인다.</p>
+<p>하지만 매우 중요한 차이가 있다.</p>
+<p>1) 뷰와 모델은 서로를 전혀 모른다.<br/>
+2) 뷰와 모델 간의 데이터 흐름은 반드시 '컨트롤러'를 거쳐가야 한다.</p>
+<p>이 변형 MVC 구조는 오-랫동안 애플의 UI 프레임워크에서 기본값이자 표준이었다.</p>
+<blockquote>
+<p>어... 그렇구나... 근데... 어쩌라고? 🤔 </p>
+</blockquote>
+<p><img src="https://velog.velcdn.com/images/eddy_song/post/0f9021e3-8ff9-4903-8106-9ddba95a55f6/image.png"/></p>
+<p><strong>아직 끝이 아니다.</strong><br/>
+여기서 한발 더 나아가보자.</p>
+<p><strong>진짜 우리가 무언가를 배울 수 있는 부분은 '왜'에 있다.</strong><br/>
+애플은 왜 굳이 이런 변형 버전을 기본 아키텍쳐로 선택한 것일까?</p>
+<h1 id="재사용하기-좋은-뷰">재사용하기 좋은 뷰</h1>
+<p>애플은 이 구조를 만들어놓은 이유가, '재사용성'을 극대화하기 위해서라고 했다.</p>
+<p>기존 MVC에서는 모델과 뷰가 서로에게 의존한다. 하지만 모델과 뷰를 완전히 분리시켜서, 컨트롤러를 통해서만 연결되도록 하면, 뷰와 모델의 결합도가 낮아진다.</p>
+<p>모델은 뷰와 관련된 로직을 전혀 알 필요가 없다.<br/>
+뷰 또한 그냥 컨트롤러가 보내주는 데이터를 받아서 보여주기만 한다. 소극적인 역할로 만든다.</p>
+<p>이렇게 소극적(Passive)인 애들로 만들어주면 뭐가 좋은가?<br/>
+소극적인 애들은 특정한 로직이나 의존성에 대해서 많이 알고 있지 않기 때문에, 언제든지 여러곳에서 재사용이 가능하다는 것이다.</p>
+<p>애플의 말에 따르면, 뷰 객체는 OS와 앱의 '룩앤필(Look &amp; Feel)'을 담당한다.<br/>
+따라서 모습과 행동이 반드시 일관적인 디자인을 유지해야 한다. </p>
+<p>그래서 뷰는 최대한 커스터마이즈하는 부분(App-spcific)을 줄이고, 많이 재사용을 해야한다는 것이다.</p>
+<p><img src="https://velog.velcdn.com/images/eddy_song/post/9c668a04-8a64-4dc5-b282-cc67707530a7/image.png"/></p>
+<p>반대로 뷰에 특정한 로직이 들어가거나, 모델에게 직접 데이터를 받아오거나 가공하게 된다면? 뷰의 재사용성을 그만큼 떨어진다.</p>
+<p>그래서 대부분의 로직(App-specific)은 컨트롤러에게 위임해버린다. 뷰는 그저 일관된 시각적 디자인과 반응을 보여주는 UI만 담당하고, 구체적인 로직들은 모두 컨트롤러에게 준다.</p>
+<p><strong>직원과 매니저의 예를 들어볼까?</strong> 마치 모든 것을 일일이 지시하는 마이크로 매니저처럼 말이다. 매니저가 하나부터 열까지 모든 일을 결정한다면, 아마 어떤 직원을 갖다놓더라도 상관이 없을 것이다. </p>
+<p>직원이 이 팀에서 일하다가 저 팀에서 일해도 상관이 없고, 이직도 문제가 없을 것이다. 다른 회사에 가서도 그냥 시키는 일만 하면 될 테니까. (음... 사람에 비유하니까 뭔가 슬픈데?)</p>
+<p>아무튼 UIKit 프레임워크는 대부분 이런 구조로 되어있다. </p>
+<ul>
+<li>
+<p>UI 컴포넌트 (<code>UIView</code>)는 어떻게 화면에 그릴지만 담당한다. </p>
+</li>
+<li>
+<p>셀이 눌리면 어떤 작업을 해야할지, 셀 안에 어떤 텍스트를 넣어야 할지 같은 것들은 <code>Delegate</code>, <code>DataSource</code> 프로토콜을 사용해서 컨트롤러(<code>UIViewController</code>)에게 모두 위임한다.</p>
+</li>
+<li>
+<p>UIKit 프레임워크에서 <code>UIView</code> - <code>UIViewController</code>는 기본적으로 한 쌍을 이루게 되며,<br/>
+<code>UIView</code>에 필요한 로직은 대부분 <code>UIViewController</code>에 배치한다.</p>
+</li>
+</ul>
+<p>그렇다면 '컨트롤러'의 재사용성은? 당연하게도 <strong>'컨트롤러'의 재사용성은 낮아진다. </strong></p>
+<p>앱에 특화된 로직들을 모두 담당해야 하니까. 뷰와 모델을 알고 서로간 데이터 흐름을 중재하는 역할을 전부 하게 되면서 다소 무거워지게 된다.</p>
+<p>(모든 걸 다 지시하는 마이크로매니저가 이직을 하기 쉽지 않고, 일이 많은 건 당연하겠지?)</p>
+<p>아무튼 덕분에 <code>UITableView</code>, <code>UICollectionView</code> 같은 UI 컴포넌트들은 수백만 개의 iOS 앱에서 재사용된다. 비슷한 '룩앤필'을 내게 된다.</p>
+<blockquote>
+<p>🤔 서버 사이드 MVC는 재사용성이 중요하지 않은 걸까?<br/>
+여기서 드는 작은 의문. 사실 뷰와 모델의 결합도를 낮추고, 재사용성을 높이는 건 어디서나 다 바람직한 상황 아닌가?<br/>
+왜 애플만 이런 변형된 MVC를 도입하고, 다른 플랫폼에서는 기존 MVC가 많이 쓰일까?<br/>
+아마도 GUI와 API의 차이가 아닐까, 생각해본다. 클라이언트에서 뷰란 시각적인 UI를 의미한다.<br/>
+서버에서 뷰란 (html/json 파일을 생성하고) 클라이언트에게 제공하는 API를 의미한다. 따라서 일관된 룩앤필이나 뷰의 재사용성이 그-렇게 중요한 니즈는 아니지 않았을까? </p>
+</blockquote>
+<h1 id="mvp-또다른-변형-모델의-등장">MVP, 또다른 변형 모델의 등장</h1>
+<p>하지만 원조 MVC의 문제를 iOS만 느낀 건 아니었나보다. 다른 플랫폼에서도 MVC의 변형 버전이 등장한다.</p>
+<p>그게 바로 MVP다.</p>
+<p>MVP의 시초도 오래전으로 거슬러 올라간다. (오래전에 없어진) Taligent라는 회사가 있었는데, 이 회사가 1990년대에 처음으로 MVP라는 용어와 개념을 만들어냈다.</p>
+<p>하지만 당시에 유행은 아니었던 거 같다. 이후 2000년대에 들어 .NET과 JAVA 진영에서 도입되어 쓰이기 시작하면서 유명해졌다.</p>
+<p>MVP에서는 모델과 뷰를 분리시킨다.<br/>
+그리고 '프레젠터(Presenter)'가 중재자 역할을 한다.</p>
+<p><img src="https://velog.velcdn.com/images/eddy_song/post/50c11a8c-a873-4fe2-9a22-a7e7c02e78ec/image.png"/></p>
+<blockquote>
+<p>음...? 이거... 애플이 만든 MVC랑 똑같은 거 아냐?</p>
+</blockquote>
+<p>맞다. <strong>컨트롤러를 프레젠터로 바꿔보면, 사실상 거의 같은 구조다.</strong></p>
+<p>애플은 이 변형된 구조를 여전히 MVC라고 불렀고,<br/>
+다른 플랫폼에서는 변형된 컨트롤러 역할을 프레젠터라고 바꾼뒤에 MVP라고 불렀을 뿐이다.</p>
+<p>하지만 중요한 점이 하나 있다.<br/>
+개념적으로는 동일하다고 봐도 되지만, <strong>구현상에서는 분명한 차이</strong>가 있다.</p>
+<p>바로 iOS의 <code>ViewController</code>라는 녀석 때문이다.</p>
+<h1 id="ios-mvc의-문제점-뷰-뷰컨트롤러의-강결합">iOS MVC의 문제점: 뷰-뷰컨트롤러의 강결합</h1>
+<p>UIKit 프레임워크에서 <code>ViewController</code>는 앱의 핵심적인 역할을 담당한다.<br/>
+UIKit 앱을 생성하면 <code>ViewController</code>의 서브클래스를 만들어서 코딩을 하게 된다. </p>
+<p>이 <code>ViewController</code> 객체는 프레임워크에 의해서 View를 생성하고 사용한다.<br/>
+이건 프로그래머가 아닌, iOS의 UIKit 프레임워크에서 이미 결정된 구조다.</p>
+<p><code>ViewController</code>가 <code>View</code>를 직접 생성하고 사용하는데다, <code>View</code> 또한 대부분의 로직을 <code>ViewController</code>에게 위임하기까지 하니까, 결합도가 굉장히 높아질 수 밖에 없다.</p>
+<p>UIKit을 쓰는 이상, 이 둘의 관계를 분리하는 것은 (불가능하지는 않지만) 굉장히 까다롭다.</p>
+<p>이게 더욱더 문제가 되는 지점은 단위 테스팅을 할 때다.  <code>ViewController</code> 객체에 담긴 로직은 테스트하기가 어렵다. </p>
+<p>뷰와 강하게 결합이 되어있기 때문이다. 화면에 보여지는 데이터를 가공하는 프레젠테이션 로직 같은 것을 떼어내서 테스트하고 결과를 확인하는 게 쉽지가 않다.</p>
+<p>그렇다고 아예 <code>ViewController</code>를 없애버리는 것도 쉽지가 않다. 프레임워크에서 의도한 사용방법이 아니기 때문이다.</p>
+<p>따라서 이론상의 iOS MVC는 위에서 봤던 그림일지 몰라도, 실제로는 이렇게 되어버리고 만다.</p>
+<p><img src="https://velog.velcdn.com/images/eddy_song/post/2a49e234-d7c3-4039-930e-8895c62fbf29/image.png"/></p>
+<blockquote>
+<p>🤔 프레임워크와 라이브러리의 차이<br/>
+개인적으로 이 부분에서 프레임워크와 라이브러리의 차이를 실감했다. 프레임워크와 라이브러리는 둘 다 남이 쓴 코드를 가져와서 사용하는 것이지만, 프로그래머가 코드에 대한 주도권이 얼마나 있느냐에 따라 나뉘게 된다.<br/>
+흔히 라이브러리에선 프로그래머가 라이브러리를 호출하고, 프레임워크에선 프레임워크가 프로그래머의 코드를 호출한다고 표현한다.<br/>
+프레임워크를 사용하려면 프레임워크가 전제하고 있는 구조와 규칙을 따라야 한다. 이런 점에서 UIKit은 확실히 '프레임워크'라고 할 수 있다.</p>
+</blockquote>
+<h1 id="ios의-mvp">iOS의 MVP</h1>
+<p>이런 iOS MVC의 현실적인 한계 때문에, iOS에서 MVP는 일반적인 MVP와도 조금 다르다. </p>
+<p>MVP 아키텍처에서 Presenter는 View에게 의존하지 않아야 한다.</p>
+<p>하지만 UIKit 프레임워크에서는 <strong>ViewController와 View의 결합을 떼어내는 것도 어렵고</strong>, 그렇다고 <strong>아예 ViewController를 없애는 것도 어렵다.</strong></p>
+<blockquote>
+<p>😭 어떻게 하지...?</p>
+</blockquote>
+<blockquote>
+<p>💁‍♂️  훗. 뭘 그렇게 고민하냐? <code>ViewController</code>를 그냥 View 계층에 속하는 애로 치면 되잖아.</p>
+</blockquote>
+<p><img src="https://velog.velcdn.com/images/eddy_song/post/ef63b2fe-dcfb-4940-9c9e-f28e5fa7f1ca/image.jpeg"/></p>
+<p>그래서 요즘에 <strong>iOS에서 MVP라고 하면, UIView와 UIViewController를 모두 뷰 계층으로 간주</strong>한다.</p>
+<p>프레젠터는 별도로 존재하며, 아예 UIKit을 알지 못하는 독립적인 객체가 된다. </p>
+<p>이렇게 하면 View를 모두 소극적이고 재사용가능하게 유지하면서도, 다른 계층을 View에 전혀 의존하지 않도록 만들 수 있다!</p>
+<p>프레젠터가 다루는 View는 쉽게 갈아끼울 수 있다. 덕분에 프레젠터는 테스트하기도 훨씬 쉬워진다.</p>
+<h1 id="viewcontroller는-view다">ViewController는 View다.</h1>
+<p><strong>이 점 때문에 iOS에서 MVP는 MVC와 분리</strong>된다.</p>
+<p>MVP나 iOS MVC나 이름만 다르지 같은 거 아니야? 라고 묻는다면, 개념적으로는 맞다. </p>
+<p>하지만 iOS의 MVP는 ViewController를 View로 취급한다. 기존의 iOS MVC가 구현하려했던 View의 재사용성 극대화를 달성하고, 다른 객체와 View의 결합도 끊을 수 있다.</p>
+<p>어찌보면, iOS MVP는 'View와의 분리를 제대로 구현한 iOS MVC'라고도 할 수 있겠다.</p>
+<p>물론 UIKit의 구조를 약간 우회하는 느낌이고 수동으로 구현해야할 것들이 많아진다는 점에서 약간 더 복잡한 구조다.</p>
+<h1 id="ios의-mvvm">iOS의 MVVM</h1>
+<p>MVVM은 iOS 플랫폼에서 인기있는 아키텍처다.</p>
+<p>iOS의 MVVM도, 결국 MVP와 같은 맥락에서 이해할 수 있다. <strong>MVP와 같은 이유로 ViewController를 View로 취급하기 때문</strong>이다.</p>
+<p>MVP의 프레젠터가, MVVM에서는 뷰 모델(ViewModel)로 바뀌었다. 하지만 <strong>ViewModel과 View를 '바인딩'</strong>해서 모델의 상태 변화를 화면에 출력한다는 게 큰 차이다. </p>
+<p>이 부분에 대해서는 또 하나의 글이 필요할 것 같으니, 나중에 다시 깊게 알아보도록 하자.</p>
+<p>여기서 <strong>SwiftUI</strong>도 언급하고 넘어가야겠다. </p>
+<p>iOS의 UI 프레임워크는 오랫동안 UIKit이었지만, 2019년 애플에서 SwiftUI를 발표하면서, 최근 SwiftUI가 빠르게 떠오르고 있다.</p>
+<p>UIKit의 MVP, MVVM은 비록 가능하지만 뭔가 깔끔하지 않게 느껴진다. 컨트롤러가 떡하니 View에 버티고 있으니까 말이다.</p>
+<p>하지만<strong> SwiftUI에서는 ViewController를 강제하는 구조가 사라졌다.</strong> SwiftUI는 기본적으로 State를 받아서 화면을 그리는 하나의 함수 형태다. 기본적으로 특정 State를 View에 바인딩하는 구조로 되어있다.</p>
+<p>따라서 프레임워크 단에서 MVVM 구조를 의도하고 있고, 구현하기에 더 적합하다. 하지만 나도 SwiftUI는 많이 다뤄보지 않아서, 이것도 나중에 다시 알아보도록 하자.</p>
+<h1 id="요약-정리">요약 정리</h1>
+<ul>
+<li>애플은 전통적 MVC에서 변형된 구조를 UI 프레임워크에 적용했다. 뷰의 재사용성을 극대화하고, 뷰와 모델의 결합을 끊기 위해서였다.</li>
+<li>동시에 다른 진영에서는 비슷한 의도로 MVP가 등장했다. 개념적으로는 iOS MVC와 같다.</li>
+<li>하지만 UIKit 프레임워크의 MVC에선 View와 ViewController 간의 결합이 너무 강했다.</li>
+<li>iOS MVP는 ViewController를 View로 취급한다. View에 독립적인 Presenter 계층을 만든다.</li>
+<li>iOS MVVM도 마찬가지다. </li>
+<li>iOS에서 MVP, MVVM을 얘기할 때는 이런 점을 명확하게 알고 있어야 한다.</li>
+</ul>
+</body>
+</html>

@@ -15,6 +15,7 @@ async function getAllPosts() {
 
   return directories
     .filter((post) => post.name !== 'index')
+    .filter((post) => post.frontMatter?.visibility !== 'private')
     .sort((a, b) => {
       const dateA = new Date(a.frontMatter?.date || 0)
       const dateB = new Date(b.frontMatter?.date || 0)

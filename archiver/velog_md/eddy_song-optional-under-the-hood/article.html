@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>옵셔널(Optional)은 어떻게 만들었을까</title>
+</head>
+<body>
+  <h1>옵셔널(Optional)은 어떻게 만들었을까</h1>
+  <p><em>by eddy_song</em></p>
+  <p>전 포스팅에서 옵셔널이 어떤 문제를 해결하는 기능인지 알아보았다.<br/>
+이번엔 옵셔널이 실제로 어떻게 구현되어있는지 들여다보자.</p>
+<p>옵셔널의 구현을 이해하기 위해선, Enum과 Generic에 대해서 알아야 한다.</p>
+<h2 id="enum과-associcated-value">enum과 associcated value</h2>
+<p><code>enum</code> 은 swift에서 직접 타입을 정의해줄 때 쓰는 키워드 중 하나다.<br/>
+enum은 해당 타입에 속하는 값을 일일이 나열해서 정의하는 타입이다.</p>
+<p><code>enum</code>으로 계절(<code>season</code>) 타입을 만든다면, 다음과 같이 4개의 계절을 모두 명시해준다.</p>
+<pre><code class="language-swift"><span class="token keyword">enum</span> <span class="token builtin">Season</span> <span class="token punctuation">{</span>
+	<span class="token keyword">case</span> spring
+	<span class="token keyword">case</span> summer
+	<span class="token keyword">case</span> autumn
+	<span class="token keyword">case</span> winter
+<span class="token punctuation">}</span></code></pre>
+<p>enum 타입에 속하는 인스턴스는 그 안에 또 다른 값을 가질 수 있다. 해당 인스턴스와 연관된 값을 담아준다.. 라고 해서 이 값을 <code>associated value</code>라고 한다.</p>
+<p>연관값이라는 게 무슨 뜻인지, 간단한 예로 알아보자.</p>
+<p>fetch를 실행했을 때 발생할 수 있는 상황이 2가지가 있다. 성공(success)와 에러(error)다. 그러면 이걸 FetchResult라는 enum 타입으로 묶어준다.</p>
+<pre><code class="language-swift"><span class="token keyword">enum</span> <span class="token builtin">FetchResult</span> <span class="token punctuation">{</span>
+	<span class="token keyword">case</span> success
+	<span class="token keyword">case</span> <span class="token function">error</span><span class="token punctuation">(</span>message<span class="token punctuation">:</span> <span class="token builtin">String</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span></code></pre>
+<p>이 때 error의 경우에는, error를 설명하는 message를 전달해주고 싶다. 그러면 단순히 error 값만 정의하지 않고, error와 연관된 값의 파라미터 이름과 타입을 추가해줄 수 있다.</p>
+<pre><code class="language-swift"><span class="token keyword">enum</span> <span class="token builtin">FetchResult</span> <span class="token punctuation">{</span>
+	<span class="token keyword">case</span> success
+	<span class="token keyword">case</span> <span class="token function">error</span><span class="token punctuation">(</span>message<span class="token punctuation">:</span> <span class="token builtin">String</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span></code></pre>
+<p>error는 이제 message라는 이름의 String 타입 값을 가지게 된다. 나중에 이 값을 사용할 때는 .error(let message)같은 바인딩 문법으로 꺼내서 사용할 수 있다.</p>
+<p>여기서는 옵셔널을 이해하는데 필요한 정도만 알아보고,<br/>
+이제 2번째 알아야할 개념, 제네릭으로 가보자.</p>
+<h2 id="generic-type">Generic Type</h2>
+<p>Swift에는 Generic 타입이 있다. 쉽게 말하면 다른 타입과 '조합'되어 만들어지는 타입이다. </p>
+<p>예를 들어, Array를 생각해보자. Swift에서 String을 담은 Array, Array과 Int를 담은 Array는 서로 다른 타입이다. </p>
+<p>하지만 String을 담은 Array를 정의하고,Int를 담은 Array도 정의하고... 모든 타입에 대해 정의해줘야 한다면 매우 번거롭다.</p>
+<p>그래서 <code>무언가</code>을 담은 Array 타입을 <code>Array&lt;T&gt;</code>로 한번에 표현할 수 있다. </p>
+<p>우리가 struct, enum, class 로 직접 타입을 정의할 때도 타입 이름 옆에 <code>&lt;T&gt;</code>를 붙여주면 된다.<br/>
+Stack이라는 Generic 타입을 만든다면 이렇게 될 것이다.</p>
+<pre><code class="language-swift"><span class="token keyword">class</span> <span class="token class-name">Stack</span><span class="token operator">&lt;</span>T<span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> items<span class="token punctuation">:</span> <span class="token punctuation">[</span>T<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+ 
+    <span class="token keyword">func</span> <span class="token function">push</span><span class="token punctuation">(</span><span class="token number">_</span> item<span class="token punctuation">:</span> T<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">}</span>
+    <span class="token keyword">func</span> <span class="token function">pop</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> T <span class="token punctuation">{</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>여기서 T는 타입 파라미터(Type Parameter)로, Array 타입과 조합될 어떠한 타입을 의미한다. T가 아니라 다른 이름을 써도 상관없다. T는 타입을 선언하는 블록 안에서 쓰기 위한 임시 이름(placeholder)다.</p>
+<p>실제로 인스턴스를 생성할 때는 <code>Stack&lt;T&gt;</code>라는 타입은 없다.<br/>
+<code>Stack&lt;String&gt;</code>, <code>Stack&lt;Int&gt;</code> 같은 방식으로 선언해서 인스턴스를 생성하게 될 것이다.</p>
+<h2 id="옵셔널optional은-enum--generic-type이다">옵셔널(Optional)은 enum + Generic Type이다.</h2>
+<p>옵셔널은 enum 으로 선언한 generic 타입이다.</p>
+<p>옵셔널이라는 enum 타입에는 딱 2가지 값이 있다.</p>
+<p><code>some</code>과, <code>none</code>이다.</p>
+<p>옵셔널의 뜻이 무엇인지 기억나는지? </p>
+<p>  옵셔널은 '이 값은 nil일 수도 있고 아닐 수도 있는 타입'을 의미한다.<br/>
+이 타입이 명시적으로 정해져있기 때문에, 컴파일러가 미리 알고 nil을 건드리지 않도록 막아주는 안전 기능이다.</p>
+<p>즉, 여기서 some이 값이 있는 상태, none이 값이 없는 상태(nil)를 의미한다. </p>
+<pre><code class="language-swift"><span class="token keyword">enum</span> <span class="token builtin">Optional</span> <span class="token punctuation">{</span>
+  <span class="token keyword">case</span> <span class="token keyword">none</span>
+  <span class="token keyword">case</span> some
+<span class="token punctuation">}</span></code></pre>
+<p>물론 이게 끝은 아니다.</p>
+<p><code>some</code>이라면, <code>some</code>의 값이 무엇인지도 저장해두어야 한다. 그래야 우리가 <code>nil</code>이 아닌 걸 체크하고 나서 꺼내쓸 수 있다.</p>
+<p>그래서 <code>some</code>에는 associated value가 담겨있다. </p>
+<p>이 associated value는 어떤 타입이든 가능하기 때문에, 타입 파라미터를 붙여서 Generic 타입으로 만들어준다.</p>
+<pre><code class="language-swift"><span class="token keyword">enum</span> <span class="token builtin">Optional</span><span class="token operator">&lt;</span><span class="token builtin">Wrapped</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  <span class="token keyword">case</span> <span class="token keyword">none</span>
+  <span class="token keyword">case</span> <span class="token function">some</span><span class="token punctuation">(</span><span class="token builtin">Wrapped</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span></code></pre>
+<p>즉, <code>Optional&lt;Int&gt;</code>, <code>Optional&lt;String&gt;</code>, <code>Optional&lt;Data&gt;</code> ... 무엇이든 다 옵셔널 타입으로 '감쌀' 수 있다.<br/>
+some 안에 담겨있는 값도 타입 파라미터에 들어간 값과 같은 타입이 된다.</p>
+<h2 id="optionalsomething과-something"><code>Optional&lt;Something&gt;</code>과 Something?</h2>
+<p>그런데 잠깐, <code>Optional&lt;Int&gt;</code>라고?<br/>
+우리는 옵셔널을 쓸 때 분명 타입에 ?를 붙여서 <code>Int?</code> 이런 식으로 썼었다.</p>
+<p>알고 보면 <code>Int?</code>와 <code>Optional&lt;Int&gt;</code>는 완벽하게 똑같다.<br/>
+swift에서 어떤 쪽을 써도 동일하게 옵셔널 타입을 선언해준다.</p>
+<pre><code class="language-swift">  <span class="token keyword">var</span> birthDate<span class="token punctuation">:</span> <span class="token builtin">Optional</span><span class="token operator">&lt;</span><span class="token builtin">Date</span><span class="token operator">&gt;</span>
+  <span class="token keyword">var</span> birthDate<span class="token punctuation">:</span> <span class="token builtin">Date</span><span class="token operator">?</span> </code></pre>
+<h2 id="optionalnone과-nil">Optional.none과 nil</h2>
+<p>비어있는 값을 나타내는 <code>nil</code> 이라는 키워드도, 사실은 별로 특별한 존재가 아니다.<br/>
+<code>nil</code>은 <code>Optional.none</code>을 줄여서 부르는 별명이었다. </p>
+<p><code>nil</code>과 <code>Optional.none</code>은 똑같은 값이다.</p>
+<pre><code class="language-swift"> <span class="token constant">nil</span> <span class="token operator">==</span> <span class="token punctuation">.</span><span class="token keyword">none</span>   <span class="token comment">// true</span></code></pre>
+<p>물론 <code>?</code> 를 붙이는 방식과 <code>nil</code> 이 훨씬 더 널리 쓰이는 표준이다.</p>
+<p>어쨌든 들여다보면, Optional의 구현은 enum + generic이고<br/>
+<code>nil</code>은 enum 값 중 하나인 <code>.none</code> 일 뿐이라는 것!</p>
+<h2 id="요약-정리">요약 정리</h2>
+<ul>
+<li>enum은 타입에 속하는 값을 일일이 나열해서 정의하는 타입이다.</li>
+<li>enum의 값은 관련된 값을 담을 수 있다. 이걸 associated value라고 한다.</li>
+<li>Generic Type은 다른 여러 타입과 조합되어 만들어지는 타입이다.</li>
+<li>옵셔널 타입은 <code>enum</code>을 사용한 generic 타입이다.</li>
+<li>옵셔널 <code>enum</code>은 <code>none</code>과 <code>some</code>으로 이뤄져있으며, <code>some</code>의 associated value에는 감싸진 값이 담겨있다.</li>
+<li><code>Optional&lt;Int&gt;</code>는 <code>Int?</code>와 똑같고, <code>Optional.none</code>은 <code>nil</code>과 똑같다.</li>
+</ul>
+<h2 id="관련-글">관련 글</h2>
+<p>👈 <a href="https://velog.io/@eddy_song/swift-optional">안전한 Swift의 비결, 옵셔널(Optional)</a><br/>
+👉 <a href="https://velog.io/@eddy_song/optional-unwrapping">옵셔널(Optional)을 언박싱.. 아니 언래핑(Unwrapping) 해보자</a></p>
+</body>
+</html>

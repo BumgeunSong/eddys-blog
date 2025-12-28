@@ -13,6 +13,7 @@ interface WrapperProps {
     source?: string
     tags?: string[]
     description?: string
+    visibility?: 'public' | 'private'
   }
 }
 

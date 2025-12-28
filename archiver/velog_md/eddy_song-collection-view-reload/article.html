@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>Collection View 비동기 로딩 에러 해결하기</title>
+</head>
+<body>
+  <h1>Collection View 비동기 로딩 에러 해결하기</h1>
+  <p><em>by eddy_song</em></p>
+  <p>이번에 콜렉션 뷰로 프로젝트를 하면서 삽질했던 기록을 남기려고 한다. 예상하지 못한 문제들이 연속으로 터고, 그때마다 디버깅을 해야하는 영역? 접근법도 달라서 정말 골치가 아팠다. </p>
+<p>하지만 지나고 보니 배운 게 많다. 의미있는 삽질이었다. 게다가 앞으로도 콜렉션 뷰(Collection view)의 비동기 로딩은 분명 써먹을 일이 많을테니. </p>
+<p>정리가 깔끔하진 않지만, 기록 삼아 남겨둔다.</p>
+<h1 id="배경-설명">배경 설명</h1>
+<ul>
+<li>다양한 제품(음식)을 콜렉션 뷰로 보여주는 앱이다. 각각의 제품은 메인, 국물, 반찬이라는 카테고리(섹션)로 나뉘어져있다. </li>
+<li>서버에 네트워크 요청을 보내서 제품의 데이터를 받아와야 한다.</li>
+<li>그런데 API를 보면 전체 제품 데이터를 요청하는 게 아니라, 각 카테고리별로 데이터를 요청할 수 있도록 되어있다.</li>
+<li>즉, API 요청을 따로 3번 해야 한다.</li>
+<li>그 후 데이터 응답을 받아서 디코딩한 뒤에, 콜렉션 뷰의 데이터 소스 역할을 하는 ViewModel에 저장한다.</li>
+<li>ViewModel이 업데이트되면, View(Controller)는 콜렉션 뷰를 reload해서 데이터를 채워 그린다.</li>
+</ul>
+<p><img src="https://velog.velcdn.com/images/eddy_song/post/c68f2d9f-01b6-46cd-be05-e028aaabeef0/image.png"/></p>
+<h1 id="문제-1-데이터-도착-완료-시점">문제 1: 데이터 도착 완료 시점</h1>
+<ul>
+<li>처음에는 각 섹션의 데이터를 <code>CategorySectionViewModel</code>로 추상화했고, 이 데이터를 상위 뷰 모델에서 <code>Array&lt;CategorySectionViewModel&gt;</code>로 갖고 있도록 만들었다. </li>
+<li>3개 섹션에 대한 데이터 응답이 모두 독립적으로 오게 된다.</li>
+<li>따라서 어떤 데이터가 마지막에 도착하는지 알 수 없다.</li>
+<li>Collection View에서 언제 데이터를 reload 하게 해줘야할지가 애매했다.</li>
+<li>각 데이터가 도착할 때마다 reload하는 건 무조건 3번 실행되기 때문에 비효율적이었다.</li>
+</ul>
+<h1 id="해결-dispatch-group">해결: Dispatch Group</h1>
+<ul>
+<li>여러 비동기 요청의 완료 시점을 알고, 그 뒤에 작업을 호출해야하는 상황이었다.</li>
+<li>이럴 때 쓸 수 있는 게 바로 GCD의 <code>DispatchGroup</code>이다. </li>
+</ul>
+<h3 id="dispatch-group">Dispatch Group</h3>
+<ul>
+<li>DispatchGroup을 쓰면 여러 비동기 작업을 묶어서 모니터링하고, 하나로 묶어서 관리할 수 있다.</li>
+<li>더 쉽게 말하면, 여러가지 비동기 작업을 묶고, 모두 완료되는 시점에 특정 작업을 실행할 수 있게 해준다.</li>
+<li>이 때 비동기 작업 안에 또 비동기 작업이 있다면, 그 작업의 완료를 알기 위해서 <code>enter()</code>와 <code>leave()</code>를 사용한다.</li>
+<li>enter가 실행된 만큼, leave가 실행되면 모든 작업이 완료된 것으로 본다.</li>
+<li>이 때 <code>notify()</code>를 사용해서 완료 시 실행할 작업을 지정할 수 있다.</li>
+</ul>
+<h3 id="실제-코드">실제 코드</h3>
+<ul>
+<li>임시 배열에 CategorySection 데이터를 추가하고, Dispatch group을 사용해 모든 작업이 완료가 되면 콜렉션 뷰에서 reload를 하도록 만들었다.</li>
+</ul>
+<pre><code class="language-swift"><span class="token keyword">func</span> <span class="token function">fetch</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">var</span> tempStorage <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token builtin">CategorySectionViewModel</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">let</span> dispatchGroup <span class="token operator">=</span> <span class="token function">DispatchGroup</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">for</span> type <span class="token keyword">in</span> <span class="token builtin">ProductType</span><span class="token punctuation">.</span>allCases <span class="token punctuation">{</span>
+
+		<span class="token comment">// DispatchGroup에 작업 시작을 알린다.</span>
+        dispatchGroup<span class="token punctuation">.</span><span class="token function">enter</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+        categoryManager<span class="token punctuation">.</span><span class="token function">fetchCategory</span><span class="token punctuation">(</span>of<span class="token punctuation">:</span> type<span class="token punctuation">)</span> <span class="token punctuation">{</span> category <span class="token keyword">in</span>
+            <span class="token keyword">let</span> productCellVMs <span class="token operator">=</span> category<span class="token punctuation">.</span>product<span class="token punctuation">.</span>compactMap <span class="token punctuation">{</span> product <span class="token keyword">in</span>
+                <span class="token comment">// productCellVM을 만든다.</span>
+            <span class="token punctuation">}</span>
+			<span class="token comment">// productCellVM을 배열로 가진 CategorySectionViewModel을 만든다.</span>
+            <span class="token keyword">let</span> categorySectionVM <span class="token operator">=</span> <span class="token function">CategorySectionViewModel</span><span class="token punctuation">(</span>type<span class="token punctuation">:</span> <span class="token punctuation">.</span>main<span class="token punctuation">,</span> productVM<span class="token punctuation">:</span> productCellVMs<span class="token punctuation">)</span>
+
+			<span class="token comment">// 임시 저장소에 추가한다.</span>
+            tempStorage<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>categorySectionVM<span class="token punctuation">)</span>
+
+			<span class="token comment">// DispatchGroup에 작업 완료를 알린다.</span>
+            dispatchGroup<span class="token punctuation">.</span><span class="token function">leave</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+	<span class="token comment">// 모든 작업이 끝나면 oberverable에 데이터를 업데이트한다. </span>
+	<span class="token comment">// 즉, collection view reload를 실행시킨다.</span>
+    dispatchGroup<span class="token punctuation">.</span><span class="token function">notify</span><span class="token punctuation">(</span>queue<span class="token punctuation">:</span> <span class="token punctuation">.</span><span class="token function">global</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> work<span class="token punctuation">:</span> <span class="token builtin">DispatchWorkItem</span> <span class="token punctuation">{</span>
+        <span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"Every section data updated"</span><span class="token punctuation">)</span>
+        cellViewModels<span class="token punctuation">.</span>value <span class="token operator">=</span> temp
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span></code></pre>
+<h1 id="문제-2-섹션별-독립적인-로딩">문제 2: 섹션별 독립적인 로딩</h1>
+<ul>
+<li>이렇게까지 하고 문제를 해결한 줄 알았다.</li>
+<li>하지만 생각해보니 지금은 비동기적으로 네트워크 요청을 해놓고, 모든 네트워크 요청이 완료될 때까지 기다렸린다. 모든 데이터가 도착하면, 그 다음 UI 업데이트를 하고 있다.</li>
+<li>그런데 '동시성'을 제대로 만족시키려면, 각 요청의 응답이 도착할 때마다 바로바로  UI 업데이트를 해서 사용자한테 보여줘야하지 않을까?</li>
+<li>어느 한 섹션 데이터가 늦게 도착하더라도, 다른 데이터들은 사용자에게 보여질 수 있어야 한다.</li>
+<li>그런데 하나의 콜렉션 뷰 안에 있는 데이터들을 어떻게 독립적으로 업데이트할 수 있지?</li>
+<li>콜렉션 뷰를 업데이트하려면 <code>reloadData()</code>로 완전히 새로고침하는 수밖에 없는...</li>
+</ul>
+<h1 id="해결-reloadsection">해결: reloadSection()</h1>
+<ul>
+<li>...줄 알았는데 아니었다.</li>
+<li>UICollectionView에는 지정한 섹션만 업데이트할 수 있도록 <a href="https://developer.apple.com/documentation/uikit/uicollectionview/1618092-reloadsections">reloadSection</a>이라는 메서드가 있다.</li>
+</ul>
+<pre><code class="language-swift"><span class="token keyword">func</span> <span class="token function">reloadSections</span><span class="token punctuation">(</span><span class="token number">_</span> sections<span class="token punctuation">:</span> <span class="token builtin">IndexSet</span><span class="token punctuation">)</span></code></pre>
+<ul>
+<li>reloadSection을 사용해서 메인 요리, 반찬 요리, 국물 요리를 따로 따로 업데이트하도록 바꿨다.</li>
+<li>각 섹션별 ViewModel을 나누고, 각 ViewModel에 지정된 섹션만 업데이트하는 reloadSection을 바인딩해주었다.</li>
+</ul>
+<pre><code class="language-swift"><span class="token builtin">CategoryType</span><span class="token punctuation">.</span>allCases<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token punctuation">{</span> type <span class="token keyword">in</span>
+    <span class="token keyword">guard</span> <span class="token keyword">let</span> categoryVM <span class="token operator">=</span> viewModel<span class="token punctuation">.</span>categoryVMs<span class="token punctuation">[</span>type<span class="token punctuation">]</span> <span class="token keyword">else</span> <span class="token punctuation">{</span><span class="token keyword">return</span><span class="token punctuation">}</span>
+    
+    categoryVM<span class="token punctuation">.</span>bind <span class="token punctuation">{</span> <span class="token number">_</span> <span class="token keyword">in</span>
+        <span class="token builtin">DispatchQueue</span><span class="token punctuation">.</span>main<span class="token punctuation">.</span>async <span class="token punctuation">{</span>
+            <span class="token keyword">self</span><span class="token punctuation">.</span>mainCollectionView<span class="token punctuation">.</span><span class="token function">reloadSections</span><span class="token punctuation">(</span><span class="token function">IndexSet</span><span class="token punctuation">(</span>integer<span class="token punctuation">:</span> type<span class="token punctuation">.</span>index<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span></code></pre>
+<h1 id="문제-3-밀림-현상">문제 3: 밀림 현상</h1>
+<ul>
+<li>이제 모든 섹션이 독립적으로 업데이트된다.</li>
+<li>하지만 앱을 실행시켜보니, 또다른 부자연스러운 현상이 일어난다.</li>
+<li>3가지 섹션의 헤더가 화면에 한번 뜨고, 그 후에 시간차를 두고 셀이 로딩되면서 헤더가 아래로 쭉 밀리는 현상이 일어났다. 그 변화가 상당히 커서 눈에 거슬렸다.</li>
+<li>왜 이런 일이 일어나지? 생각해봤다.</li>
+<li>일단 콜렉션 뷰는 맨 처음에 전체 데이터를 한번 업데이트한다. 이 때 헤더는 네트워크가 아닌 사전에 지정된 텍스트이기 때문에 바로 로딩된다.</li>
+<li>그 후 제품 데이터가 도착하면 섹션을 로딩한다. 이 과정에서 섹션 갯수가 늘어나기 때문에 추가되면서 2번째 3번째 헤더는 애니메이션과 함께 쭉- 내려가게 된다.</li>
+</ul>
+<h1 id="해결-placeholder-cell">해결: Placeholder Cell</h1>
+<ul>
+<li>이 문제를 해결하기 위해서는 초기 로딩 시에 화면에 어느 정도 셀이 채워져있어야 했다.</li>
+<li>그래야 셀이 업데이트되더라도 과도한 밀림 현상이 발생하지 않는다.</li>
+<li>임시 이미지와 타이틀을 가진 placeholder를 만들어서 넣어주었다.</li>
+<li>초반에는 이 placeholder 셀이 잠깐 등장하다가 데이터가 업데이트되면 바뀐다.</li>
+<li>훨씬 더 자연스러워졌다!</li>
+</ul>
+<p><img src="https://velog.velcdn.com/images/eddy_song/post/b0336552-413d-427b-a85d-25032ee231b2/image.gif"/></p>
+<h1 id="문제-4-invalid-update-에러">문제 4: Invalid update 에러</h1>
+<ul>
+<li>하지만 아직 산은 끝나지 않았다.</li>
+<li>실행은 잘 되긴 했지만, 그 때마다 다음과 같은 에러가 등장했다.</li>
+</ul>
+<pre><code class="language-null">[UICollectionView] Performing reloadData as a fallback 
+
+Invalid update: invalid number of items in section 0. 
+The number of items contained in an existing section after the update (8) 
+must be equal to the number of items contained in that section before the update (5) (...)
+</code></pre>
+<p><img src="https://velog.velcdn.com/images/eddy_song/post/34f7510d-0240-4706-9ffd-9d30b1b87c0c/image.jpeg"/><br/>
+(뭔 소리야..?)</p>
+<ul>
+<li>업데이트를 할 때, 현재 있는 셀의 개수와 업데이트할 셀의 개수가 다르다는 에러였다. 그래서 <code>reloadSection</code>이 실행되지 않고, fallback으로 <code>reloadData</code>가 실행되고 있었다.</li>
+<li>그치만 당연히 현재 있는 셀 개수와 업데이트는 다른 거 아닌가? </li>
+<li>미리 서버에서 데이터가 몇개 올지 알고 지정해줄 수는 없잖아??</li>
+<li>도저히 이해가 안 되어서 구글 검색을 해봐도 비슷한 사례가 잘 나오지 않았다.</li>
+<li>뷰를 업데이트하는 와중에 다른 스레드에서 데이터가 업데이트되어서 그런 걸까? 아니 그건 의도한 동작인데...</li>
+</ul>
+<h1 id="해결-alamofire의-동작-방식">해결: Alamofire의 동작 방식</h1>
+<ul>
+<li>마지막 에러 해결은 많은 사람들에게 질문을 하고, 여러가지 가설을 세웠다 폐기하면서 며칠 간 고생을 했다.</li>
+<li>하지만 해결책은 정말 예상 외의 어이없는 곳에서 등장했으니...</li>
+</ul>
+<h3 id="alamofire는-응답-처리를-메인-스레드에서-실행시킨다">Alamofire는 응답 처리를 메인 스레드에서 실행시킨다.</h3>
+<ul>
+<li>이 프로젝트에서는 네트워크 요청을 위해 서드파티 라이브러리인 <code>Alamofire</code>를 선택해서 쓰고 있었다.</li>
+<li>즉, 메인 요리, 국물 요리, 반찬 요리 데이터를 최종 요청하고, 그 응답 데이터를 파싱해서 전달해주는 역할은 Alamofire가 맡고 있었다.</li>
+<li>우리는 네트워크 요청을 하는 거니까, 당연히 Alamofire에 보낸 코드(response handler)는 백그라운드 스레드에서 실행될 거라고 가정하고 있었다. (URLSession의 response handler는 백그라운드에서 실행된다.) </li>
+<li>하지만 알고보니 Alamofire는 (네트워크 요청은 비동기로 하지만) <a href="https://stackoverflow.com/questions/41725511/alamofire-network-calls-not-being-run-in-background-thread">response handler를 메인 스레드에서 실행하도록 동작</a>하고 있었다. </li>
+</ul>
+<h3 id="데이터-업데이트-시점과-ui-업데이트-시점의-불일치">데이터 업데이트 시점과 UI 업데이트 시점의 불일치</h3>
+<ul>
+<li>나는 'UI 업데이트는 백그라운드에서 실행하면 안되지! ㅎㅎ 그 정도는 나도 안다구' 이러면서, reloadSection 코드를 Main DispatchQueue에 비동기로 요청하고 있었다.</li>
+</ul>
+<pre><code class="language-swift"><span class="token builtin">CategoryType</span><span class="token punctuation">.</span>allCases<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token punctuation">{</span> type <span class="token keyword">in</span>
+    <span class="token keyword">guard</span> <span class="token keyword">let</span> categoryVM <span class="token operator">=</span> viewModel<span class="token punctuation">.</span>categoryVMs<span class="token punctuation">[</span>type<span class="token punctuation">]</span> <span class="token keyword">else</span> <span class="token punctuation">{</span><span class="token keyword">return</span><span class="token punctuation">}</span>
+    
+    categoryVM<span class="token punctuation">.</span>bind <span class="token punctuation">{</span> <span class="token number">_</span> <span class="token keyword">in</span>
+        <span class="token builtin">DispatchQueue</span><span class="token punctuation">.</span>main<span class="token punctuation">.</span>async <span class="token punctuation">{</span>
+            <span class="token keyword">self</span><span class="token punctuation">.</span>mainCollectionView<span class="token punctuation">.</span><span class="token function">reloadSections</span><span class="token punctuation">(</span><span class="token function">IndexSet</span><span class="token punctuation">(</span>integer<span class="token punctuation">:</span> type<span class="token punctuation">.</span>index<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span></code></pre>
+<p>(아까 나왔던 코드)</p>
+<ul>
+<li>이미 저 코드는 메인 스레드에서 실행되고 있었는데, 업데이트 작업을 한번더 main.async로 보내고 있었던 거였다.</li>
+<li>따라서 만약 그전에 이미 메인 큐에 들어가있는 작업이 존재한다면, 데이터 업데이트 후에 바로 UI를 업데이트하는 게 아니었다.</li>
+<li>데이터 업데이트 - (이미 들어가 있는 작업) - UI 업데이트 순으로 실행이 되고 있었다.</li>
+<li>이걸 알고난 후, 각각의 실행 시점과 스레드를 찍어보니 다음과 같았다.</li>
+</ul>
+<pre><code class="language-zsh">✅ Data Updated: side (main thread: true)
+✅ Data Updated: main (main thread: true)
+
+▶️ Start Reload Section: side (main thread: true)
+
+2022-05-03 10:39:01.869036+0900 SideDishApp[98453:9502835] [UICollectionView] Performing reloadData as a fallback 
+
+— Invalid update: invalid number of items in section 0. The number of items contained in an existing section after the update (8) must be equal to the number of items contained in that section before the update (5), plus or minus the number of items inserted or deleted from that section (0 inserted, 0 deleted) and plus or minus the number of items moved into or out of that section (0 moved in, 0 moved out). 
+
+Collection view: <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">UICollectionView:</span></span> <span class="token attr-name">0x141039400;</span> <span class="token attr-name">frame</span> <span class="token attr-value"><span class="token punctuation">=</span> (0</span> <span class="token attr-name">91;</span> <span class="token attr-name">390</span> <span class="token attr-name">719);</span> <span class="token attr-name">clipsToBounds</span> <span class="token attr-value"><span class="token punctuation">=</span> YES;</span> <span class="token attr-name">autoresize</span> <span class="token attr-value"><span class="token punctuation">=</span> RM+BM;</span> <span class="token attr-name">gestureRecognizers</span> <span class="token attr-value"><span class="token punctuation">=</span> &lt;NSArray:</span> <span class="token attr-name">0x600002d7f060</span><span class="token punctuation">&gt;</span></span>; layer = <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">CALayer:</span></span> <span class="token attr-name">0x600002398d60</span><span class="token punctuation">&gt;</span></span>; contentOffset: {0, 0}; contentSize: {390, 1138}; adjustedContentInset: {0, 0, 0, 0}; layout: <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">UICollectionViewCompositionalLayout:</span></span> <span class="token attr-name">0x14021abe0</span><span class="token punctuation">&gt;</span></span>; dataSource: <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">SideDishApp.MainViewController:</span></span> <span class="token attr-name">0x13d716b40</span><span class="token punctuation">&gt;</span></span>&gt;
+
+⏹ End Reload Section: side (main thread: true)
+
+▶️ Start Reload Section: main (main thread: true)
+⏹ End Reload Section: main (main thread: true)
+
+✅ Data Updated: soup (main thread: true)
+
+▶️ Start Reload Section: soup (main thread: true)
+⏹ End Reload Section: soup (main thread: true)</code></pre>
+<ul>
+<li><code>side</code> 데이터가 업데이트 되고난 후, 뷰의 <code>reload</code> 가 바로 일어나는 게 아니라, <code>main</code> 데이터가 업데이트되고 있다.</li>
+<li>메인 스레드에서 다시 한번 비동기 호출을 하고 있기 때문에, reload를 실행하지 않고 바로 다음 작업으로 이어진 것이다.</li>
+<li>그 다음을 보면, <code>side</code> 데이터로 뷰를 업데이트하는 시점에 에러가 발생한다.</li>
+<li>'메인 스레드에서 비동기 호출'을 했기 때문에, 데이터 소스의 업데이트와 UI 업데이트 시점이 불일치한다. </li>
+<li>이것 때문에 계속해서 <code>reloadSection</code>이 제대로 실행되지 않았던 거였다!</li>
+</ul>
+<p><img src="https://velog.velcdn.com/images/eddy_song/post/ccd6e53b-7ce0-45e4-ac1c-624faee49972/image.jpeg"/></p>
+<h3 id="ui-업데이트를-현재-스레드에서-즉시-실행">UI 업데이트를 현재 스레드에서 즉시 실행</h3>
+<ul>
+<li>원인을 알고 나니 문제 해결은 간단했다.</li>
+<li>UI 업데이트 코드에서 <code>DispatchQueue.main.async</code> 를 지워주었다.</li>
+<li>현재 스레드가 어차피 메인 스레드이니까 UI 업데이트여도 문제가 되지 않는다.</li>
+<li>그러자 다음과 같이 실행되었고 에러 메시지가 사라졌다.</li>
+</ul>
+<pre><code class="language-zsh">✅ Data Updated: soup (main thread: true)
+▶️ Start Reload Section: soup (main thread: true)
+⏹ End Reload Section: soup (main thread: true)
+
+✅ Data Updated: side (main thread: true)
+▶️ Start Reload Section: side (main thread: true)
+⏹ End Reload Section: side (main thread: true)
+
+✅ Data Updated: main (main thread: true)
+▶️ Start Reload Section: main (main thread: true)
+⏹ End Reload Section: main (main thread: true)</code></pre>
+<ul>
+<li>데이터 업데이트와 UI 업데이트가 순서대로 잘 실행되는 걸 볼 수 있다!</li>
+</ul>
+</body>
+</html>

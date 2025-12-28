@@ -1,0 +1,19 @@
+---
+title: 5일간 산 속에서 명상하고 배운 것
+published_date: 2020-03-08 00:00
+tags: 마음, 명상, 후기
+meta_description: 푸른누리 마음닦기 후기
+meta_image: https://img1.daumcdn.net/thumb/R1280x0.fwebp/?fname=http://t1.daumcdn.net/brunch/service/guest/image/ViMNWMpGrhOr-WG3bReN4spxNzA.JPG
+lang: ko
+---
+
+# 5일간 산 속에서 명상하고 배운 것
+
+![](/Users/bumgeunsong/coding/writing-archiver/archiver/brunch_md/bumgeunsong-104/assets/f5a2402a40ebc7a1916665bf3cf2ea6a9bb2a381.webp)
+
+![](/Users/bumgeunsong/coding/writing-archiver/archiver/brunch_md/bumgeunsong-104/assets/92a1e9af2af86e7c652c82c54477284fa9c17457.webp)
+
+![](/Users/bumgeunsong/coding/writing-archiver/archiver/brunch_md/bumgeunsong-104/assets/60e1d221de9016618224df787c2cc744521d920a.webp)
+
+![](/Users/bumgeunsong/coding/writing-archiver/archiver/brunch_md/bumgeunsong-104/assets/61f3170fb7cf260504f9b10c00adac6da2bcd276.webp)
+
