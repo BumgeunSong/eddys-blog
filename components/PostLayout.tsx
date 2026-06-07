@@ -1,6 +1,6 @@
-import Link from 'next/link'
 import type { ReactNode } from 'react'
 import { formatDate } from '@/lib/format-date'
+import { BackLink } from './BackLink'
 
 interface PostMetadata {
   title?: string
@@ -30,12 +30,7 @@ export function PostLayout({ children, metadata }: PostLayoutProps) {
   return (
     <article>
       <nav className="mb-4">
-        <Link
-          href="/"
-          className="inline-block text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 motion-safe:active:-translate-x-0.5 transition-[color,transform] duration-150 ease-out"
-        >
-          ← 목록
-        </Link>
+        <BackLink />
       </nav>
 
       <header className="mb-6">

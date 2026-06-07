@@ -1,5 +1,6 @@
 import { PostItem } from '@/components/PostItem'
 import { YearNav } from '@/components/YearNav'
+import { ListScrollManager } from '@/components/ListScrollManager'
 import { getAvailableYears, getHomeYear, getPosts } from '../posts/get-posts'
 import { notFound } from 'next/navigation'
 
@@ -38,6 +39,7 @@ export default async function YearPage({ params }: { params: Promise<{ year: str
 
   return (
     <article>
+      <ListScrollManager />
       <header className="mb-5 pb-3 border-b border-black/10 dark:border-white/10">
         <h1 className="text-3xl font-bold tracking-tight">에디의 블로그</h1>
         <YearNav years={years} currentYear={year} homeYear={homeYear} />
