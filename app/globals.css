@@ -1,11 +1,42 @@
 @import 'tailwindcss';
 @import 'nextra-theme-blog/style.css';
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/[email protected]/dist/web/variable/pretendardvariable-dynamic-subset.css');
 
 @variant dark (&:where(.dark *));
+
+@theme {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --font-sans: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+  }
+}
 
 /* Unlayered styles override Nextra's layered styles via CSS cascade */
 a {
   text-decoration-line: none;
+}
+
+/* Nextra-theme-blog applies padding-top: 5rem / padding-bottom: 8rem to every <article>.
+   Our pages nest a second <article> inside, so the padding stacks. Override the outer
+   wrapper with tighter values and zero the inner one. */
+body > article {
+  padding-top: 2rem;
+  padding-bottom: 3.5rem;
+}
+@media (min-width: 640px) {
+  body > article {
+    padding-top: 3rem;
+    padding-bottom: 5rem;
+  }
+}
+article article {
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 @layer base {
@@ -16,7 +47,7 @@ a {
 
 @layer components {
   .prose-content {
-    @apply text-lg leading-relaxed text-gray-900 dark:text-gray-100 overflow-x-clip;
+    @apply text-lg leading-[1.8] text-gray-900 dark:text-gray-100 overflow-x-clip;
   }
 
   .prose-content p {
@@ -46,5 +77,31 @@ a {
 
   .prose-content img {
     @apply max-w-full h-auto my-5 rounded-lg;
+  }
+}
+
+@layer components {
+  @keyframes post-item-in {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .post-item-stagger {
+      opacity: 0;
+      transform: translateY(6px);
+      animation: post-item-in 240ms var(--ease-out) forwards;
+    }
+    .post-item-stagger:nth-child(1) { animation-delay: 0ms; }
+    .post-item-stagger:nth-child(2) { animation-delay: 30ms; }
+    .post-item-stagger:nth-child(3) { animation-delay: 60ms; }
+    .post-item-stagger:nth-child(4) { animation-delay: 90ms; }
+    .post-item-stagger:nth-child(5) { animation-delay: 120ms; }
+    .post-item-stagger:nth-child(6) { animation-delay: 150ms; }
+    .post-item-stagger:nth-child(7) { animation-delay: 180ms; }
+    .post-item-stagger:nth-child(8) { animation-delay: 210ms; }
+    .post-item-stagger:nth-child(n+9) { animation-delay: 240ms; }
   }
 }

@@ -50,3 +50,8 @@ export async function getAvailableYears(): Promise<number[]> {
 
   return Array.from(years).sort((a, b) => b - a)
 }
+
+export async function getHomeYear(): Promise<number> {
+  const years = await getAvailableYears()
+  return years[0] ?? new Date().getFullYear()
+}

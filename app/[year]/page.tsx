@@ -1,15 +1,15 @@
 import { PostItem } from '@/components/PostItem'
 import { YearNav } from '@/components/YearNav'
 import { ListScrollManager } from '@/components/ListScrollManager'
-import { getAvailableYears, getPosts } from '../posts/get-posts'
+import { getAvailableYears, getHomeYear, getPosts } from '../posts/get-posts'
 import { notFound } from 'next/navigation'
 
 export async function generateStaticParams() {
   const years = await getAvailableYears()
-  const currentYear = new Date().getFullYear()
+  const homeYear = await getHomeYear()
 
   return years
-    .filter((y) => y !== currentYear)
+    .filter((y) => y !== homeYear)
     .map((year) => ({ year: year.toString() }))
 }
 
@@ -29,6 +29,7 @@ export default async function YearPage({ params }: { params: Promise<{ year: str
   }
 
   const years = await getAvailableYears()
+  const homeYear = await getHomeYear()
 
   if (!years.includes(year)) {
     notFound()
@@ -39,9 +40,9 @@ export default async function YearPage({ params }: { params: Promise<{ year: str
   return (
     <article>
       <ListScrollManager />
-      <header className="mb-5 pb-3 border-b border-gray-200/15">
+      <header className="mb-5 pb-3 border-b border-black/10 dark:border-white/10">
         <h1 className="text-3xl font-bold tracking-tight">에디의 블로그</h1>
-        <YearNav years={years} currentYear={year} />
+        <YearNav years={years} currentYear={year} homeYear={homeYear} />
       </header>
       <div className="flex flex-col">
         {posts.map((post) => (
