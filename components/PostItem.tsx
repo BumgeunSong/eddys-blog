@@ -1,5 +1,8 @@
+'use client'
+
 import Link from 'next/link'
 import type { ReactNode } from 'react'
+import { scrollKey } from './ListScrollManager'
 
 interface Post {
   route: string
@@ -9,12 +12,17 @@ interface Post {
   }
 }
 
+function saveListScroll() {
+  sessionStorage.setItem(scrollKey(window.location.pathname), String(window.scrollY))
+}
+
 export function PostItem({ post }: { post: Post }) {
   const { date } = post.frontMatter || {}
 
   return (
     <Link
       href={post.route}
+      onClick={saveListScroll}
       className="flex flex-col gap-1 py-3 border-b border-gray-500/15 hover:opacity-60 transition-opacity last:border-b-0"
     >
       {date && (

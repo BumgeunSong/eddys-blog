@@ -1,5 +1,6 @@
 import { PostItem } from '@/components/PostItem'
 import { YearNav } from '@/components/YearNav'
+import { ListScrollManager } from '@/components/ListScrollManager'
 import { getAvailableYears, getPosts } from './posts/get-posts'
 
 export const metadata = {
@@ -13,6 +14,7 @@ export default async function HomePage() {
 
   return (
     <article>
+      <ListScrollManager />
       <header className="mb-5 pb-3 border-b border-gray-200/15">
         <h1 className="text-3xl font-bold tracking-tight">에디의 블로그</h1>
         <YearNav years={years} currentYear={currentYear} />
