@@ -61,3 +61,29 @@ a {
     @apply max-w-full h-auto my-5 rounded-lg;
   }
 }
+
+@layer components {
+  @keyframes post-item-in {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .post-item-stagger {
+      opacity: 0;
+      transform: translateY(6px);
+      animation: post-item-in 240ms var(--ease-out) forwards;
+    }
+    .post-item-stagger:nth-child(1) { animation-delay: 0ms; }
+    .post-item-stagger:nth-child(2) { animation-delay: 30ms; }
+    .post-item-stagger:nth-child(3) { animation-delay: 60ms; }
+    .post-item-stagger:nth-child(4) { animation-delay: 90ms; }
+    .post-item-stagger:nth-child(5) { animation-delay: 120ms; }
+    .post-item-stagger:nth-child(6) { animation-delay: 150ms; }
+    .post-item-stagger:nth-child(7) { animation-delay: 180ms; }
+    .post-item-stagger:nth-child(8) { animation-delay: 210ms; }
+    .post-item-stagger:nth-child(n+9) { animation-delay: 240ms; }
+  }
+}

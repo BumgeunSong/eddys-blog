@@ -13,7 +13,7 @@ export function YearNav({ years, currentYear, homeYear }: YearNavProps) {
         <Link
           key={year}
           href={year === homeYear ? '/' : `/${year}`}
-          className={`text-sm py-1 hover:opacity-70 active:scale-[0.97] transition-[opacity,transform] duration-150 ease-out ${
+          className={`text-sm py-1 hover:opacity-70 motion-safe:active:scale-[0.97] transition-[opacity,transform] duration-150 ease-out ${
             year === currentYear
               ? 'font-semibold text-gray-900 dark:text-gray-100'
               : 'text-gray-500 dark:text-gray-400'
