@@ -15,7 +15,7 @@ export function PostItem({ post }: { post: Post }) {
   return (
     <Link
       href={post.route}
-      className="flex flex-col gap-1 py-3 border-b border-gray-500/15 hover:opacity-60 transition-opacity last:border-b-0"
+      className="flex flex-col gap-1 py-3 border-b border-gray-500/15 last:border-b-0 hover:opacity-60 active:scale-[0.99] transition-[opacity,transform] duration-150 ease-out origin-left"
     >
       {date && (
         <span className="text-sm text-gray-500 tabular-nums">{date}</span>
