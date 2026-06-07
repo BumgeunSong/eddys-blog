@@ -21,6 +21,24 @@ a {
   text-decoration-line: none;
 }
 
+/* Nextra-theme-blog applies padding-top: 5rem / padding-bottom: 8rem to every <article>.
+   Our pages nest a second <article> inside, so the padding stacks. Override the outer
+   wrapper with tighter values and zero the inner one. */
+body > article {
+  padding-top: 2rem;
+  padding-bottom: 3.5rem;
+}
+@media (min-width: 640px) {
+  body > article {
+    padding-top: 3rem;
+    padding-bottom: 5rem;
+  }
+}
+article article {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
 @layer base {
   article {
     @apply max-w-[680px] px-4 sm:px-6;
