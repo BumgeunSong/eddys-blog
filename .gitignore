@@ -5,6 +5,9 @@ node_modules/
 .next/
 out/
 
+# TypeScript
+*.tsbuildinfo
+
 # Environment
 .env
 .env.local
@@ -38,3 +41,6 @@ yarn-error.log*
 # Claude (keep agents/, ignore local settings)
 .claude/settings.local.json
 .claude/plans/
+
+# OMC (oh-my-claudecode local state)
+.omc/
