@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type { ReactNode } from 'react'
+import { formatDate } from '@/lib/format-date'
 
 interface PostMetadata {
   title?: string
@@ -23,14 +24,6 @@ const sourceLabels: Record<string, string> = {
   velog: 'Velog'
 }
 
-function formatDate(dateStr: string): string {
-  const date = new Date(dateStr)
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
-  return `${year}. ${month}. ${day}`
-}
-
 export function PostLayout({ children, metadata }: PostLayoutProps) {
   const { title, date, source, tags, description } = metadata
 
@@ -46,7 +39,7 @@ export function PostLayout({ children, metadata }: PostLayoutProps) {
       </nav>
 
       <header className="mb-6">
-        <h1 className="text-2xl font-bold tracking-tight mb-3">{title}</h1>
+        <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-3 leading-tight">{title}</h1>
 
         {description && (
           <p className="text-base text-gray-500 dark:text-gray-400 mb-4 leading-relaxed">
@@ -57,12 +50,19 @@ export function PostLayout({ children, metadata }: PostLayoutProps) {
         <div className="flex flex-wrap items-center gap-x-2 text-sm text-gray-500 dark:text-gray-400">
           {date && <span>{formatDate(date)}</span>}
           {date && source && <span>·</span>}
-          {source && <span>published in {sourceLabels[source] || source}</span>}
+          {source && <span>{sourceLabels[source] || source}에 발행</span>}
         </div>
 
         {tags && tags.length > 0 && (
-          <div className="mt-3 text-sm text-gray-500 dark:text-gray-400">
-            {tags.join(', ')}
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {tags.map((tag) => (
+              <span
+                key={tag}
+                className="rounded-full bg-black/[0.05] dark:bg-white/[0.07] px-2.5 py-1 text-xs text-gray-600 dark:text-gray-300"
+              >
+                {tag}
+              </span>
+            ))}
           </div>
         )}
       </header>
