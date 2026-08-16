@@ -1,6 +1,10 @@
+/* Remote @import must come first: `@import 'tailwindcss'` and the nextra theme
+   are inlined into real CSS rules at build time, and per spec an `@import` may
+   only be preceded by @charset/@layer — otherwise the CSS optimizer drops this
+   font import (Pretendard would fail to load in production). */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/[email protected]/dist/web/variable/pretendardvariable-dynamic-subset.css');
 @import 'tailwindcss';
 @import 'nextra-theme-blog/style.css';
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/[email protected]/dist/web/variable/pretendardvariable-dynamic-subset.css');
 
 @variant dark (&:where(.dark *));
 
