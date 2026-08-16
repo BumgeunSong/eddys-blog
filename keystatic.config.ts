@@ -3,42 +3,47 @@ import { config, collection, fields } from '@keystatic/core'
 /**
  * Keystatic CMS configuration.
  *
- * STORAGE — auto-switches on whether GitHub mode has been configured, keyed on
- * the presence of NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG:
- *   - NOT set (local dev today, and any build before you create the GitHub
- *     App): LOCAL mode. The admin reads/writes the filesystem directly
- *     (content/*.mdx); no GitHub App or network needed. NOTE: at ~860 posts the
- *     local collection list takes ~40s to load because Keystatic hashes every
- *     file for its git tree — a local-mode-only cost that GitHub mode removes.
- *   - SET (production, once configured): GITHUB mode. The deployed /keystatic
- *     signs in with GitHub and commits through a GitHub App. GitHub's API
- *     serves the file tree (no local hashing) and its CDN absorbs the per-file
- *     reads, so it stays fast at 860 entries — and you could re-enable list
- *     columns there if you want (see the `columns` note below).
+ * STORAGE — explicit flag NEXT_PUBLIC_KEYSTATIC_STORAGE:
+ *   - unset / anything but 'github'  → LOCAL mode. The admin reads/writes the
+ *     filesystem directly (content/*.mdx); no GitHub App or network needed.
+ *     This is the default for `next dev` authoring and keeps `next build` green.
+ *     NOTE: at ~860 posts the local collection list takes ~40s to load because
+ *     Keystatic hashes every file for its git tree — a local-mode-only cost.
+ *   - 'github'                       → GITHUB mode. /keystatic signs in with
+ *     GitHub and commits through a GitHub App. GitHub's API serves the file
+ *     tree (no local hashing) and its CDN absorbs the per-file reads, so it
+ *     stays fast at 860 entries. REQUIRED on Vercel — the serverless filesystem
+ *     is read-only, so local mode can't persist edits there.
  *
- * Why gate on the slug env var (not NODE_ENV)? A plain NODE_ENV switch turns on
- * GitHub mode for every production build, and Keystatic then fails the build if
- * the GitHub credentials aren't set yet. Gating on the app slug keeps builds
- * green until GitHub is actually configured, then flips automatically. The var
- * is NEXT_PUBLIC_* so the browser bundle and the server agree on the mode.
+ * Why an explicit flag (not the app slug, and not NODE_ENV)?
+ *   - The "Create GitHub App" walkthrough at /keystatic/setup ONLY renders in
+ *     GitHub mode, and it is what PRODUCES the app slug + secrets. Gating GitHub
+ *     mode on the slug was a deadlock: no slug → local mode → walkthrough never
+ *     shows → slug never obtained. This flag lets you enter GitHub mode first.
+ *   - A NODE_ENV switch would force GitHub mode on every prod build and fail the
+ *     build when secrets aren't set yet. With this flag, builds without it stay
+ *     in local mode and pass; you only set it once you're ready.
+ *   The var is NEXT_PUBLIC_* so the browser bundle and server agree on the mode.
  *
- * TO FINISH GITHUB MODE (one-time):
- *   1. Deploy, then visit the deployed /keystatic — Keystatic walks you through
- *      creating a GitHub App for BumgeunSong/eddys-blog
- *      (https://keystatic.com/docs/github-mode).
- *   2. Set these env vars in the host (e.g. Vercel), then redeploy:
+ * ONE-TIME GITHUB SETUP (do the app creation LOCALLY — the prod build needs the
+ * secrets, which don't exist until the app is created):
+ *   1. Locally: `NEXT_PUBLIC_KEYSTATIC_STORAGE=github npm run dev`, open
+ *      http://localhost:3000/keystatic/setup, and use "Create GitHub App"
+ *      (Deployed App URL = https://www.eddysong.com). GitHub redirects back and
+ *      Keystatic prints the 4 env vars — save them in .env.local:
  *        KEYSTATIC_GITHUB_CLIENT_ID
  *        KEYSTATIC_GITHUB_CLIENT_SECRET
  *        KEYSTATIC_SECRET
- *        NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG   (the app's slug — also the flag
- *                                                 that switches this config)
- *   The API route handler (app/api/keystatic/[...params]/route.ts) already
- *   forwards the secrets, so no other code change is needed.
+ *        NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG
+ *   2. In Vercel set those 4 vars PLUS  NEXT_PUBLIC_KEYSTATIC_STORAGE=github,
+ *      then redeploy. The route handler (app/api/keystatic/[...params]/route.ts)
+ *      already forwards the secrets.
+ *   Docs: https://keystatic.com/docs/github-mode
  *
  * To pin one mode regardless, replace `storage` with a single literal, e.g.
  * `storage: { kind: 'local' }`.
  */
-const useGitHub = Boolean(process.env.NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG)
+const useGitHub = process.env.NEXT_PUBLIC_KEYSTATIC_STORAGE === 'github'
 
 export default config({
   storage: useGitHub
