@@ -72,6 +72,12 @@ export default config({
       // The slug drives the filename: content/{slug}.mdx
       slugField: 'title',
 
+      // Draft preview (GitHub mode): the admin's preview icon opens this URL
+      // with {branch} and {slug} filled in. It hits our /preview redirect,
+      // which forwards to the branch's Vercel preview deployment at /posts/{slug}
+      // so drafts render through the real Nextra pipeline before merge.
+      previewUrl: '/preview?branch={branch}&to=/posts/{slug}',
+
       // NOTE: no `columns` here on purpose. Adding non-slug columns (e.g.
       // ['title', 'date']) makes Keystatic read EVERY entry's file to fill the
       // list view. With ~860 posts, LOCAL mode fires hundreds of concurrent
