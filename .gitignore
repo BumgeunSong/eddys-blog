@@ -44,3 +44,5 @@ yarn-error.log*
 
 # OMC (oh-my-claudecode local state)
 .omc/
+.env*
+!.env.example
