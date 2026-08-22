@@ -12,11 +12,8 @@ import type { ReactNode } from 'react'
 // Keystatic admin (in the (admin) group) does NOT inherit the Nextra blog
 // chrome / narrow article container. Route groups are URL-transparent, so
 // blog URLs (/, /[year], /posts/*) are unchanged.
-//
-// metadataBase makes all relative OG/canonical URLs resolve to absolute ones.
-// The title template ("<page> – 에디의 블로그") applies to every child page that
-// sets a plain string title; per-post OG/Twitter is enriched in posts/[...slug].
 export const metadata: Metadata = {
+  // Lets child pages use relative OG/canonical URLs (resolved to absolute here).
   metadataBase: new URL(siteConfig.url),
   title: {
     default: siteConfig.name,

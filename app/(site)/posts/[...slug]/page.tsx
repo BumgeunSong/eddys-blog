@@ -11,8 +11,6 @@ import type { ReactNode } from 'react'
 
 export const generateStaticParams = generateStaticParamsFor('slug')
 
-// Read a post's raw MDX and derive a plain-text excerpt (used as a description
-// fallback for posts without frontmatter). I/O only — the text work is pure.
 async function excerptFromBody(slug: string[]): Promise<string | undefined> {
   try {
     const raw = await readFile(
@@ -34,17 +32,14 @@ export async function generateMetadata(props: {
 
   const route = `/posts/${params.slug.join('/')}`
   const title = typeof fm.title === 'string' ? fm.title : undefined
-  // Prefer the author's frontmatter description; otherwise derive one from the
-  // body so description-less posts get a unique snippet instead of the generic
-  // site tagline inherited from the layout.
+  // Fall back to a body excerpt so description-less posts don't all inherit the
+  // generic site tagline from the layout.
   const description =
     fm.description?.trim() || (await excerptFromBody(params.slug))
 
-  // Only emit a valid ISO publishedTime; skip if the frontmatter date is missing/bad.
   const publishedTime = parseValidDate(fm.date)?.toISOString()
 
-  // Branded share card generated on demand by /og; metadataBase (set in the
-  // root layout) resolves this relative URL to an absolute one for the tags.
+  // Relative URL; metadataBase (root layout) makes it absolute in the tags.
   const ogImage = ogCardUrl(title ?? siteConfig.name)
 
   return {

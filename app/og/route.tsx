@@ -4,13 +4,11 @@ import { join } from 'node:path'
 import { siteConfig } from '@/lib/site-config'
 import { resolveCardTitle } from '@/lib/og-card'
 
-// Standalone OG-card generator served at /og?title=<post title>.
-// It lives here (not as an opengraph-image.tsx under the /posts/[...slug]
-// catch-all) because Next.js forbids a route segment after a catch-all.
-// Pages reference it explicitly via openGraph.images / twitter.images.
+// Lives here rather than as opengraph-image.tsx under /posts/[...slug] because
+// Next.js forbids a route segment after a catch-all.
 
-// Read the font once at module scope (Satori ships no CJK glyphs, so Korean
-// titles need an explicit font). Pretendard covers Korean + Latin in one file.
+// Satori ships no CJK glyphs, so Korean titles need an explicit font; Pretendard
+// covers Korean + Latin. Read once at module scope.
 const pretendard = await readFile(
   join(process.cwd(), 'assets/Pretendard-SemiBold.otf')
 )

@@ -2,8 +2,6 @@ import { ImageResponse } from 'next/og'
 import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
-// Generated favicon served at /icon.png for the public blog. A "에" brand mark
-// on a dark tile — no static .ico asset to maintain.
 export const size = { width: 32, height: 32 }
 export const contentType = 'image/png'
 

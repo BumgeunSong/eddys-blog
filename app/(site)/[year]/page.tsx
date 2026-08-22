@@ -14,8 +14,6 @@ export async function generateStaticParams() {
     .map((year) => ({ year: year.toString() }))
 }
 
-// Year archives are thin listing pages, so keep them out of the search index
-// while still letting crawlers follow through to the posts they link.
 export async function generateMetadata({
   params
 }: {
@@ -25,8 +23,7 @@ export async function generateMetadata({
 
   return {
     title: `${year}년`,
-    // Thin listing page: keep it out of the index, but let crawlers follow
-    // its links through to the actual posts.
+    // Thin listing page: noindex, but follow so crawlers still reach the posts.
     robots: { index: false, follow: true }
   }
 }

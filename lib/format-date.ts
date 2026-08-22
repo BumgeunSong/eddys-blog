@@ -1,4 +1,3 @@
-/** Parse a date-ish value, returning undefined for missing or invalid dates. */
 export function parseValidDate(
   value?: string | number | Date | null
 ): Date | undefined {
