@@ -25,7 +25,18 @@ const PREVIEW_DEPLOY_URL =
  * @param origin origin this route is served from (production)
  * @returns absolute origin, e.g. "https://writing-archiver-git-my-draft-bumgeunsongs-projects.vercel.app"
  */
+// A single DNS label (the subdomain) can be at most 63 chars. Beyond that Vercel
+// truncates the branch and appends a hash we can't reproduce, so the host 404s.
+const MAX_SUBDOMAIN_LABEL = 63
+
 function branchToOrigin(branch: string, origin: string): string {
+  // `main` is production. Compare the RAW ref: branch names are case-sensitive,
+  // so "MAIN" or "main_" are distinct branches and must reach their own deploy —
+  // don't let sanitization collapse them onto production.
+  if (branch === 'main') {
+    return origin
+  }
+
   // Mirror Vercel's branch → subdomain transform: lowercase, collapse every run
   // of non-alphanumerics into a single "-", and trim leading/trailing "-".
   const safe = branch
@@ -33,9 +44,9 @@ function branchToOrigin(branch: string, origin: string): string {
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
 
-  // `main` is production, and an empty/degenerate branch has no branch deploy —
-  // both should just open the live site.
-  if (!safe || safe === 'main') {
+  // Nothing usable to build a host from → fall back to production rather than
+  // emit a broken URL.
+  if (!safe) {
     return origin
   }
 
@@ -51,6 +62,27 @@ export async function GET(req: Request) {
     return new Response('Missing "branch" query param', { status: 400 })
   }
 
-  const base = branchToOrigin(branch, origin)
-  redirect(new URL(to, base).toString())
+  const base = new URL(branchToOrigin(branch, origin))
+
+  // Reject branches whose subdomain would exceed the DNS label limit: the
+  // resulting Vercel host wouldn't exist, so fail loudly instead of redirecting
+  // an editor to a dead link.
+  if (base.hostname.split('.')[0].length > MAX_SUBDOMAIN_LABEL) {
+    return new Response(
+      'Branch name is too long for a Vercel preview subdomain — use a shorter branch name.',
+      { status: 400 },
+    )
+  }
+
+  // Guard against open redirects: `to` is request-controlled, and an absolute or
+  // protocol-relative URL would otherwise override `base` and send the visitor
+  // off-site. Only allow targets that resolve to a path on `base`'s own origin.
+  const target = new URL(to, base)
+  if (target.origin !== base.origin) {
+    return new Response('Invalid "to" target — must be a path on the preview origin.', {
+      status: 400,
+    })
+  }
+
+  redirect(target.toString())
 }
