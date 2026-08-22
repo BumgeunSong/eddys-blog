@@ -1,8 +1,21 @@
 // Single source of truth for site-wide SEO / social metadata.
-// Override the URL per-environment with NEXT_PUBLIC_SITE_URL (e.g. preview deploys);
-// falls back to the production domain used in keystatic.config.ts.
+function resolveSiteUrl(): string {
+  // Explicit override always wins (e.g. custom staging).
+  if (process.env.NEXT_PUBLIC_SITE_URL) {
+    return process.env.NEXT_PUBLIC_SITE_URL
+  }
+  // On Vercel preview / branch deploys, point metadata at the deployment's own
+  // URL so absolute links (og:image → /og) resolve against the site you're
+  // actually viewing, not production (which may not have this code yet).
+  if (process.env.VERCEL_ENV !== 'production' && process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`
+  }
+  // Production and local dev.
+  return 'https://www.eddysong.com'
+}
+
 export const siteConfig = {
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.eddysong.com',
+  url: resolveSiteUrl(),
   name: '에디의 블로그',
   description: '개발과 삶에 대한 글',
   author: 'Eddy Song',
