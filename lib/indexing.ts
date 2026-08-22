@@ -1,16 +1,24 @@
-import { NOINDEX_SOURCES } from './indexing-sources.mjs'
 import type { Metadata } from 'next'
 
-export {
-  NOINDEX_SOURCES,
-  NOINDEX_SLUG_PREFIXES,
-  NOINDEX_HEADER_VALUE
-} from './indexing-sources.mjs'
-
-const noIndexSources = new Set<string>(NOINDEX_SOURCES)
+/**
+ * Sources whose posts must stay out of search engines.
+ *
+ * These were written for a private group, so the posts stay reachable on the
+ * blog — still browsable from the year archives, still linkable — but are kept
+ * out of the sitemap, out of the (indexed) home listing, and marked `noindex`.
+ *
+ * Deliberately NOT enforced via robots.txt `Disallow`: blocking the crawl would
+ * stop Google from ever seeing the `noindex`, and any inbound link would keep
+ * the URL in the index as a bare title. Letting crawlers in and telling them
+ * "noindex" is what actually gets an already-indexed page dropped.
+ *
+ * Matched against frontmatter `source` only. A post's filename is not a
+ * reliable stand-in — Keystatic edits the slug and `source` independently.
+ */
+const NOINDEX_SOURCES = new Set(['daily-writing-friends'])
 
 export function isNoIndexSource(source: unknown): boolean {
-  return typeof source === 'string' && noIndexSources.has(source)
+  return typeof source === 'string' && NOINDEX_SOURCES.has(source)
 }
 
 /**
