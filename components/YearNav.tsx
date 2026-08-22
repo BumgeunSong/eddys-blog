@@ -2,17 +2,17 @@ import Link from 'next/link'
 
 interface YearNavProps {
   years: number[]
-  currentYear: number
-  homeYear: number
+  /** Omitted on the home page, which spans years rather than representing one. */
+  currentYear?: number
 }
 
-export function YearNav({ years, currentYear, homeYear }: YearNavProps) {
+export function YearNav({ years, currentYear }: YearNavProps) {
   return (
     <nav className="flex gap-4 mt-3 flex-wrap">
       {years.map((year) => (
         <Link
           key={year}
-          href={year === homeYear ? '/' : `/${year}`}
+          href={`/${year}`}
           className={`text-sm py-1 hover:opacity-70 motion-safe:active:scale-[0.97] transition-[opacity,transform] duration-150 ease-out ${
             year === currentYear
               ? 'font-semibold text-gray-900 dark:text-gray-100'
