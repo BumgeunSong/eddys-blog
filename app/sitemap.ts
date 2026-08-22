@@ -1,13 +1,15 @@
 import type { MetadataRoute } from 'next'
 import { siteConfig } from '@/lib/site-config'
 import { parseValidDate } from '@/lib/format-date'
-import { getPosts } from './(site)/posts/get-posts'
+import { getIndexablePosts } from './(site)/posts/get-posts'
 
-// getPosts() excludes visibility:private posts, so nothing private is exposed.
+// getIndexablePosts() drops visibility:private posts and noindex sources, so
+// nothing we mark noindex is also submitted here — a page can't be both
+// "please index this" and "don't index this".
 // Year archives are intentionally omitted — they're noindex, so listing them
 // here would contradict that signal.
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const posts = await getPosts()
+  const posts = await getIndexablePosts()
 
   const now = new Date()
 

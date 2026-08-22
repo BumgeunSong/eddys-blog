@@ -6,6 +6,7 @@ import { siteConfig } from '@/lib/site-config'
 import { excerptFromMarkdown } from '@/lib/excerpt'
 import { ogCardUrl } from '@/lib/og-card'
 import { parseValidDate } from '@/lib/format-date'
+import { isNoIndexSource, NOINDEX_ROBOTS } from '@/lib/indexing'
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 
@@ -28,9 +29,14 @@ export async function generateMetadata(props: {
 }): Promise<Metadata> {
   const params = await props.params
   const { metadata } = await importPage(params.slug)
-  const fm = metadata as Metadata & { date?: string; description?: string }
+  const fm = metadata as Metadata & {
+    date?: string
+    description?: string
+    source?: string
+  }
 
   const route = `/posts/${params.slug.join('/')}`
+  const noIndex = isNoIndexSource(fm.source)
   const title = typeof fm.title === 'string' ? fm.title : undefined
   // Fall back to a body excerpt so description-less posts don't all inherit the
   // generic site tagline from the layout.
@@ -45,7 +51,15 @@ export async function generateMetadata(props: {
   return {
     ...metadata,
     description,
-    alternates: { canonical: route },
+    // A canonical URL asks search engines to index *this* URL, which
+    // contradicts noindex. `canonical: null` is required rather than merely
+    // omitting `alternates`: without it the page inherits the root layout's
+    // `canonical: '/'`, telling Google these posts really live on the home page.
+    // OpenGraph/Twitter tags stay either way — they drive link previews in
+    // messengers, which is a different thing from being findable in search.
+    ...(noIndex
+      ? { robots: NOINDEX_ROBOTS, alternates: { canonical: null } }
+      : { alternates: { canonical: route } }),
     openGraph: {
       type: 'article',
       url: route,

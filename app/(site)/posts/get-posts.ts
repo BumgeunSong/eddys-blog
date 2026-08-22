@@ -1,5 +1,9 @@
 import { normalizePages } from 'nextra/normalize-pages'
 import { getPageMap } from 'nextra/page-map'
+import { isNoIndexSource } from '@/lib/indexing'
+
+/** How many posts the home page shows. Home spans years, so it needs a cap. */
+export const HOME_POST_LIMIT = 30
 
 async function getAllPosts() {
   const pageMap = await getPageMap('/posts')
@@ -36,6 +40,21 @@ export async function getPosts(year?: number) {
   })
 }
 
+/**
+ * Posts that may be exposed to search engines — feeds the home listing and the
+ * sitemap, the two surfaces crawlers actually read.
+ *
+ * Year archives deliberately do NOT use this: they're `noindex`, so they stay
+ * complete and remain the way a visitor browses the excluded posts.
+ */
+export async function getIndexablePosts(limit?: number) {
+  const posts = (await getAllPosts()).filter(
+    (post) => !isNoIndexSource(post.frontMatter?.source)
+  )
+
+  return limit === undefined ? posts : posts.slice(0, limit)
+}
+
 export async function getAvailableYears(): Promise<number[]> {
   const allPosts = await getAllPosts()
 
@@ -49,9 +68,4 @@ export async function getAvailableYears(): Promise<number[]> {
   }
 
   return Array.from(years).sort((a, b) => b - a)
-}
-
-export async function getHomeYear(): Promise<number> {
-  const years = await getAvailableYears()
-  return years[0] ?? new Date().getFullYear()
 }
