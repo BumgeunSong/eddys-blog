@@ -1,12 +1,13 @@
 import type { MetadataRoute } from 'next'
 import { siteConfig } from '@/lib/site-config'
-import { getPosts, getAvailableYears } from './(site)/posts/get-posts'
+import { getPosts } from './(site)/posts/get-posts'
 
 // Auto-generated at /sitemap.xml. Reuses getPosts(), which already excludes
 // visibility:private posts, so nothing private is ever exposed to crawlers.
+// Year-archive pages are intentionally omitted: they are noindex thin listing
+// pages, so advertising them here would contradict that signal.
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = await getPosts()
-  const years = await getAvailableYears()
 
   const now = new Date()
 
@@ -21,14 +22,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   })
 
-  const yearEntries: MetadataRoute.Sitemap = years.map((year) => ({
-    url: `${siteConfig.url}/${year}`,
-    lastModified: now
-  }))
-
-  return [
-    { url: siteConfig.url, lastModified: now },
-    ...yearEntries,
-    ...postEntries
-  ]
+  return [{ url: siteConfig.url, lastModified: now }, ...postEntries]
 }
