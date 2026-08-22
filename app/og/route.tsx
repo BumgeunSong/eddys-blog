@@ -2,6 +2,7 @@ import { ImageResponse } from 'next/og'
 import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { siteConfig } from '@/lib/site-config'
+import { resolveCardTitle } from '@/lib/og-card'
 
 // Standalone OG-card generator served at /og?title=<post title>.
 // It lives here (not as an opengraph-image.tsx under the /posts/[...slug]
@@ -16,8 +17,7 @@ const pretendard = await readFile(
 
 export function GET(request: Request) {
   const { searchParams } = new URL(request.url)
-  const raw = searchParams.get('title')?.trim()
-  const title = raw ? raw.slice(0, 120) : siteConfig.name
+  const title = resolveCardTitle(searchParams.get('title'), siteConfig.name)
 
   return new ImageResponse(
     (

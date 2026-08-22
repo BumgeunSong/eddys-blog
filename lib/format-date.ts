@@ -1,3 +1,12 @@
+/** Parse a date-ish value, returning undefined for missing or invalid dates. */
+export function parseValidDate(
+  value?: string | number | Date | null
+): Date | undefined {
+  if (value === undefined || value === null || value === '') return undefined
+  const date = new Date(value)
+  return Number.isNaN(date.getTime()) ? undefined : date
+}
+
 export function formatDate(dateStr: string): string {
   const date = new Date(dateStr)
   const year = date.getFullYear()

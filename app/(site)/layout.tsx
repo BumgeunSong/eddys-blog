@@ -3,6 +3,7 @@ import { Head } from 'nextra/components'
 import { getPageMap } from 'nextra/page-map'
 import { Footer } from '@/components/Footer'
 import { siteConfig } from '@/lib/site-config'
+import { ogCardUrl } from '@/lib/og-card'
 import '../globals.css'
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
@@ -30,13 +31,13 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     title: siteConfig.name,
     description: siteConfig.description,
-    images: [{ url: '/og', width: 1200, height: 630, alt: siteConfig.name }]
+    images: [{ url: ogCardUrl(), width: 1200, height: 630, alt: siteConfig.name }]
   },
   twitter: {
     card: 'summary_large_image',
     title: siteConfig.name,
     description: siteConfig.description,
-    images: ['/og']
+    images: [ogCardUrl()]
   }
 }
 

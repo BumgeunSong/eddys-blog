@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { siteConfig } from '@/lib/site-config'
+import { parseValidDate } from '@/lib/format-date'
 import { getPosts } from './(site)/posts/get-posts'
 
 // Auto-generated at /sitemap.xml. Reuses getPosts(), which already excludes
@@ -12,15 +13,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date()
 
   const postEntries: MetadataRoute.Sitemap = posts.map((post) => {
-    const date = post.frontMatter?.date
-      ? new Date(post.frontMatter.date)
-      : undefined
-    const hasValidDate = date && !Number.isNaN(date.getTime())
     // Omit lastModified when there's no real date, so date-less posts don't
     // look freshly updated on every build.
+    const date = parseValidDate(post.frontMatter?.date)
     return {
       url: `${siteConfig.url}${post.route}`,
-      ...(hasValidDate ? { lastModified: date } : {})
+      ...(date ? { lastModified: date } : {})
     }
   })
 
