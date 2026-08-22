@@ -1,3 +1,5 @@
+import { sliceByCodePoints } from './text'
+
 const FRONTMATTER = /^---\n[\s\S]*?\n---\n/
 const FENCED_CODE = /```[\s\S]*?```/g
 const INLINE_CODE = /`[^`]*`/g
@@ -28,7 +30,6 @@ export function excerptFromMarkdown(
 ): string | undefined {
   const text = stripMarkdown(raw)
   if (!text) return undefined
-  return text.length > maxLength
-    ? `${text.slice(0, maxLength).trimEnd()}…`
-    : text
+  const truncated = sliceByCodePoints(text, maxLength)
+  return truncated === text ? text : `${truncated.trimEnd()}…`
 }

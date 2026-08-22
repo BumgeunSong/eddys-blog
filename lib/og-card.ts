@@ -1,3 +1,5 @@
+import { sliceByCodePoints } from './text'
+
 // Owns the /og route's contract in one place so the producer (metadata) and
 // consumer (the route) can't drift on the param name or length limit.
 
@@ -10,5 +12,5 @@ export function ogCardUrl(title?: string): string {
 
 export function resolveCardTitle(param: string | null, fallback: string): string {
   const trimmed = param?.trim()
-  return trimmed ? trimmed.slice(0, OG_TITLE_MAX_LENGTH) : fallback
+  return trimmed ? sliceByCodePoints(trimmed, OG_TITLE_MAX_LENGTH) : fallback
 }

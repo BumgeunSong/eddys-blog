@@ -11,9 +11,20 @@ function resolveSiteUrl(): string {
   return 'https://www.eddysong.com'
 }
 
+// Reduce to the origin: the app has no base path, so sitemap URLs (which
+// concatenate the base) and metadataBase-resolved canonicals (which use only
+// the origin) must share one base — any path/query/fragment/trailing slash
+// would make them diverge.
+function toOrigin(url: string): string {
+  try {
+    return new URL(url).origin
+  } catch {
+    return url.replace(/\/+$/, '')
+  }
+}
+
 export const siteConfig = {
-  // Trailing slash would make `${url}${route}` double-slash.
-  url: resolveSiteUrl().replace(/\/+$/, ''),
+  url: toOrigin(resolveSiteUrl()),
   name: '에디의 블로그',
   description: '개발과 삶에 대한 글',
   author: 'Eddy Song',
