@@ -1,10 +1,38 @@
 import { generateStaticParamsFor, importPage } from 'nextra/pages'
+import { readFile } from 'node:fs/promises'
+import { join } from 'node:path'
 import { useMDXComponents } from '../../../../mdx-components'
 import { siteConfig } from '@/lib/site-config'
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 
 export const generateStaticParams = generateStaticParamsFor('slug')
+
+// Fallback description for posts whose frontmatter has none: strip the raw MDX
+// down to plain prose and take the first sentence-ish chunk (~155 chars).
+async function excerptFromBody(slug: string[]): Promise<string | undefined> {
+  try {
+    const raw = await readFile(
+      join(process.cwd(), 'content', `${slug.join('/')}.mdx`),
+      'utf8'
+    )
+    const text = raw
+      .replace(/^---\n[\s\S]*?\n---\n/, '') // drop frontmatter
+      .replace(/```[\s\S]*?```/g, ' ') // fenced code
+      .replace(/`[^`]*`/g, ' ') // inline code
+      .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ') // images
+      .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1') // links → text
+      .replace(/<[^>]+>/g, ' ') // html tags
+      .replace(/^\s{0,3}#{1,6}\s+/gm, '') // headings
+      .replace(/[*_>#|-]/g, ' ') // leftover md symbols
+      .replace(/\s+/g, ' ') // collapse whitespace
+      .trim()
+    if (!text) return undefined
+    return text.length > 155 ? `${text.slice(0, 155).trimEnd()}…` : text
+  } catch {
+    return undefined
+  }
+}
 
 export async function generateMetadata(props: {
   params: Promise<{ slug: string[] }>
@@ -15,7 +43,11 @@ export async function generateMetadata(props: {
 
   const route = `/posts/${params.slug.join('/')}`
   const title = typeof fm.title === 'string' ? fm.title : undefined
-  const description = fm.description
+  // Prefer the author's frontmatter description; otherwise derive one from the
+  // body so description-less posts get a unique snippet instead of the generic
+  // site tagline inherited from the layout.
+  const description =
+    fm.description?.trim() || (await excerptFromBody(params.slug))
 
   // Only emit a valid ISO publishedTime; skip if the frontmatter date is missing/bad.
   const published = fm.date ? new Date(fm.date) : undefined
@@ -30,6 +62,7 @@ export async function generateMetadata(props: {
 
   return {
     ...metadata,
+    description,
     alternates: { canonical: route },
     openGraph: {
       type: 'article',
