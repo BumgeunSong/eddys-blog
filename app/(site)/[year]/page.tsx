@@ -3,6 +3,7 @@ import { YearNav } from '@/components/YearNav'
 import { ListScrollManager } from '@/components/ListScrollManager'
 import { getAvailableYears, getHomeYear, getPosts } from '../posts/get-posts'
 import { notFound } from 'next/navigation'
+import type { Metadata } from 'next'
 
 export async function generateStaticParams() {
   const years = await getAvailableYears()
@@ -13,10 +14,17 @@ export async function generateStaticParams() {
     .map((year) => ({ year: year.toString() }))
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ year: string }> }) {
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ year: string }>
+}): Promise<Metadata> {
   const { year } = await params
+
   return {
-    title: `${year}년 - 에디의 블로그`
+    title: `${year}년`,
+    // Thin listing page: noindex, but follow so crawlers still reach the posts.
+    robots: { index: false, follow: true }
   }
 }
 
