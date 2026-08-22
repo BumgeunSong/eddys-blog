@@ -73,7 +73,9 @@ export async function generateMetadata(props: {
       description,
       publishedTime,
       authors: [siteConfig.author],
-      images: [{ url: ogImage, width: 1200, height: 630, alt: title }]
+      images: [
+        { url: ogImage, width: 1200, height: 630, alt: title ?? siteConfig.name }
+      ]
     },
     twitter: {
       card: 'summary_large_image',

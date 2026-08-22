@@ -15,10 +15,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const date = post.frontMatter?.date
       ? new Date(post.frontMatter.date)
       : undefined
+    const hasValidDate = date && !Number.isNaN(date.getTime())
+    // Omit lastModified when there's no real date, so date-less posts don't
+    // look freshly updated on every build.
     return {
       url: `${siteConfig.url}${post.route}`,
-      lastModified:
-        date && !Number.isNaN(date.getTime()) ? date : now
+      ...(hasValidDate ? { lastModified: date } : {})
     }
   })
 

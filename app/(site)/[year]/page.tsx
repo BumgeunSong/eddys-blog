@@ -14,21 +14,8 @@ export async function generateStaticParams() {
     .map((year) => ({ year: year.toString() }))
 }
 
-// ─────────────────────────────────────────────────────────────────────────
-// EXERCISE: year-archive pages (e.g. /2024) are thin listing pages, so we
-// keep them OUT of the search index while still letting crawlers walk through
-// to the real posts.
-//
-// The `title` is already set (the root layout's template adds the brand, so
-// this is just the year part). Your task: add a `robots` field that tells
-// search engines to NOT index this page, but DO follow its links.
-//
-// Decision to make: index vs. follow are independent flags.
-//   • index:  should this URL appear in search results?
-//   • follow: may crawlers use the links on it to discover other pages?
-// Think about which combination fits a thin archive page whose only job is to
-// point at posts. (See Next's Metadata `robots` option.)
-// ─────────────────────────────────────────────────────────────────────────
+// Year archives are thin listing pages, so keep them out of the search index
+// while still letting crawlers follow through to the posts they link.
 export async function generateMetadata({
   params
 }: {

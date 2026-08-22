@@ -15,7 +15,8 @@ function resolveSiteUrl(): string {
 }
 
 export const siteConfig = {
-  url: resolveSiteUrl(),
+  // Strip any trailing slash so `${url}${route}` never yields double slashes.
+  url: resolveSiteUrl().replace(/\/+$/, ''),
   name: '에디의 블로그',
   description: '개발과 삶에 대한 글',
   author: 'Eddy Song',
