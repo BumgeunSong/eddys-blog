@@ -72,23 +72,14 @@ export default config({
       // The slug drives the filename: content/{slug}.mdx
       slugField: 'title',
 
-      // Draft preview (GitHub mode): the admin's preview icon opens this URL
-      // with {branch} and {slug} filled in. It hits our /preview redirect,
-      // which forwards to the branch's Vercel preview deployment at /posts/{slug}
-      // so drafts render through the real Nextra pipeline before merge.
+      // Preview icon → /preview redirect → the branch's Vercel deployment at
+      // /posts/{slug}, so drafts render through the real Nextra pipeline.
       previewUrl: '/preview?branch={branch}&to=/posts/{slug}',
 
-      // NOTE: no `columns` here on purpose. Adding non-slug columns (e.g.
-      // ['title', 'date']) makes Keystatic read EVERY entry's file to fill the
-      // list view. With ~860 posts, LOCAL mode fires hundreds of concurrent
-      // requests and the browser aborts them (net::ERR_INSUFFICIENT_RESOURCES).
-      // The default list shows the slug only, which comes from the file tree in
-      // a single request.
-      //
-      // In GITHUB mode (production) GitHub's CDN handles that fan-out far
-      // better, so you can experiment with re-enabling columns THERE — e.g.:
-      //   columns: useGitHub ? ['title', 'date'] : undefined,
-      // (Left off entirely for now to keep behaviour identical in both modes.)
+      // NOTE: no `columns` on purpose. Non-slug columns make Keystatic read
+      // EVERY entry's file; with ~860 posts LOCAL mode floods the browser with
+      // concurrent requests (net::ERR_INSUFFICIENT_RESOURCES). GitHub mode's CDN
+      // handles the fan-out, so columns could be re-enabled there if wanted.
 
       schema: {
         // `fields.slug` stores the human name under `title:` in frontmatter and
