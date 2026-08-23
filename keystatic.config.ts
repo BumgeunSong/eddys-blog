@@ -72,11 +72,14 @@ export default config({
       // The slug drives the filename: content/{slug}.mdx
       slugField: 'title',
 
-      // Preview icon → /preview redirect → the branch's Vercel deployment at
-      // /posts/{slug}, so drafts render through the real Nextra pipeline.
-      // {branch} is spliced in un-encoded, so branch names must be URL-safe:
-      // avoid `&`/`#` (they'd corrupt the query). Slashes are fine.
-      previewUrl: '/preview?branch={branch}&to=/posts/{slug}',
+      // Preview icon target. LOCAL mode has no branch, so open the dev post
+      // directly; GITHUB mode redirects through /preview to the branch's Vercel
+      // deployment so drafts render through the real Nextra pipeline. There
+      // {branch} is spliced in un-encoded, so branch names must be URL-safe
+      // (avoid `&`/`#`; slashes are fine).
+      previewUrl: useGitHub
+        ? '/preview?branch={branch}&to=/posts/{slug}'
+        : '/posts/{slug}',
 
       // NOTE: no `columns` on purpose. Non-slug columns make Keystatic read
       // EVERY entry's file; with ~860 posts LOCAL mode floods the browser with
