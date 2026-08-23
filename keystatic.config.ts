@@ -74,6 +74,8 @@ export default config({
 
       // Preview icon → /preview redirect → the branch's Vercel deployment at
       // /posts/{slug}, so drafts render through the real Nextra pipeline.
+      // {branch} is spliced in un-encoded, so branch names must be URL-safe:
+      // avoid `&`/`#` (they'd corrupt the query). Slashes are fine.
       previewUrl: '/preview?branch={branch}&to=/posts/{slug}',
 
       // NOTE: no `columns` on purpose. Non-slug columns make Keystatic read

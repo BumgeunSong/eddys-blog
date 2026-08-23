@@ -47,8 +47,14 @@ export async function GET(req: Request) {
   }
 
   // Guard against open redirects: `to` is request-controlled, so reject absolute
-  // or protocol-relative targets that would resolve off `base`'s origin.
-  const target = new URL(to, base)
+  // or protocol-relative targets that would resolve off `base`'s origin. `new URL`
+  // also throws on malformed input (e.g. "http://["), which must be a 400, not a 500.
+  let target: URL
+  try {
+    target = new URL(to, base)
+  } catch {
+    return new Response('Invalid "to" target.', { status: 400 })
+  }
   if (target.origin !== base.origin) {
     return new Response('Invalid "to" target — must be a path on the preview origin.', {
       status: 400,
