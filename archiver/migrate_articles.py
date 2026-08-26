@@ -19,6 +19,7 @@ SOURCE_DIRS = [
     ('learning_man_md', 'learning_man'),
     ('daily-writing-friends_md', 'daily-writing-friends'),
     ('instagram_md', 'instagram'),
+    ('linkedin_md', 'linkedin'),
 ]
 POSTS_OUTPUT_DIR = PROJECT_ROOT / 'content'
 ASSETS_OUTPUT_DIR = PROJECT_ROOT / 'public' / 'assets' / 'posts'

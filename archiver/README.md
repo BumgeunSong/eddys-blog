@@ -17,9 +17,44 @@ python scrape.py velog https://velog.io/@author/post
 # Scrape from local platforms
 python scrape.py learning_man
 
+# Scrape from a data-export archive
+python scrape.py linkedin ~/Downloads/Complete_LinkedInDataExport_08-23-2026
+
 # Migrate all to Nextra format
 python migrate_articles.py
+
+# Migrate a single platform (leaves the other platforms' files untouched)
+python migrate_articles.py --source linkedin
 ```
+
+## LinkedIn
+
+LinkedIn has no usable API for your own writing, so the input is the unzipped
+"Settings > Data privacy > Get a copy of your data > Download larger archive"
+folder. Two kinds of writing come out of it:
+
+| In the export | Becomes |
+|---|---|
+| `Shares_<memberid>.csv` | `content/linkedin-YYYYMMDD-HHMMSS.mdx` |
+| `Articles/Articles/*.html` | `content/linkedin-article-<id>.mdx` |
+
+Things the export gets wrong, which the scraper works around:
+
+- **`ShareCommentary` quoting is broken.** The exporter closes and reopens the
+  CSV quote around every newline, so a paragraph break arrives as `"\n""\n"`.
+  Quotes the author typed are *not* escaped, so any global quote-stripping
+  corrupts real text. See `unescape_share_commentary()`.
+- **Article cover `<img src>` is a truncated stub** that 404s. The real cover
+  comes from the live Pulse page's `og:image` (the page is public, no login).
+- **Article image URLs expire** (`e=<unix ts>` in the query), so inline images
+  and covers are downloaded into `assets/` instead of hotlinked.
+- **Unpublished drafts ship alongside published articles** as `Copy of ...`
+  with `Published on ---`. They're skipped.
+
+Feed posts have no title, so one is derived from the opening sentence. Posts
+shorter than `MIN_POST_LENGTH` are one-line reactions to someone else's post
+rather than writing, and are skipped. Pure reposts never reach the scraper —
+LinkedIn files them separately in `InstantReposts_*.csv` with no text.
 
 ## Directory Structure
 
@@ -31,12 +66,14 @@ archiver/
 │   ├── local_scraper.py     # Base class for local file scrapers
 │   ├── brunch.py            # Brunch extractor
 │   ├── velog.py             # Velog extractor
-│   └── learning_man.py      # Learning Man extractor
+│   ├── learning_man.py      # Learning Man extractor
+│   └── linkedin.py          # LinkedIn data-export extractor
 ├── scrape.py                # Unified CLI
 ├── migrate_articles.py      # Migration to Nextra format
 ├── brunch_md/               # Raw Brunch articles
 ├── velog_md/                # Raw Velog articles
-└── learning_man_md/         # Raw Learning Man articles
+├── learning_man_md/         # Raw Learning Man articles
+└── linkedin_md/             # Raw LinkedIn posts and articles
 ```
 
 ## Adding a New Platform

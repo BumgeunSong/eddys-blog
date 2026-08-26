@@ -18,7 +18,12 @@ Usage:
 import argparse
 import sys
 
-from scrapers import BrunchScraper, VelogScraper, LearningManScraper
+from scrapers import (
+    BrunchScraper,
+    VelogScraper,
+    LearningManScraper,
+    LinkedInScraper,
+)
 
 
 # Registry of available scrapers
@@ -26,6 +31,7 @@ SCRAPERS = {
     'brunch': BrunchScraper,
     'velog': VelogScraper,
     'learning_man': LearningManScraper,
+    'linkedin': LinkedInScraper,
 }
 
 
@@ -55,6 +61,7 @@ Examples:
   python scrape.py brunch urls.txt
   python scrape.py velog https://velog.io/@author/post
   python scrape.py learning_man
+  python scrape.py linkedin ~/Downloads/Complete_LinkedInDataExport_08-23-2026
   python scrape.py --list
         """
     )
@@ -89,6 +96,17 @@ Examples:
 
     # Get scraper class
     scraper_class = SCRAPERS[args.platform]
+
+    # LinkedIn reads an unzipped data export off disk instead of fetching URLs,
+    # so its positional argument is a directory, not a list of links.
+    if args.platform == 'linkedin':
+        if not args.urls:
+            parser.error(
+                'linkedin needs the path to an unzipped LinkedIn data export'
+            )
+        scraper_class(args.urls[0]).run()
+        return
+
     scraper = scraper_class()
 
     # Run scraper
