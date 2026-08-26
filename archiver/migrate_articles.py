@@ -4,6 +4,7 @@ Migrate archived articles to Nextra-compatible format.
 Reads from archiver/brunch_md and archiver/velog_md,
 outputs to app/posts/ and public/assets/posts/
 """
+import argparse
 import os
 import re
 import shutil
@@ -60,6 +61,9 @@ def transform_frontmatter(fm: dict, source: str = '', slug: str = '') -> str:
     # Source (original publishing platform)
     if source:
         lines.append(f'source: {source}')
+
+    # Visibility drives the public listing; only 'private' hides a post.
+    lines.append('visibility: public')
 
     # Tags (convert comma-separated to YAML array)
     tags_str = fm.get('tags', '')
@@ -142,6 +146,25 @@ def get_first_sentence(text: str, max_length: int = 80) -> str:
     return sentence or 'Instagram Post'
 
 
+def escape_mdx_braces(body: str) -> str:
+    """
+    Escape curly braces so MDX doesn't read them as JSX expressions.
+
+    Prose that quotes code — `if this { return }` — is a hard MDX compile error
+    ("Could not parse expression with acorn"), not a rendering glitch. Braces
+    inside code fences and inline code spans are already inert, so they're left
+    alone; everything else gets a backslash.
+    """
+    # Odd indices are the captured code spans/fences, which stay untouched. The
+    # lookbehind matters: a backslash-escaped backtick (`\``, which pandoc emits
+    # for backticks the author typed as plain text) is NOT a code delimiter, so
+    # braces between a pair of them are still live MDX and still need escaping.
+    parts = re.split(r'((?<!\\)```.*?```|(?<!\\)`[^`\n]+`)', body, flags=re.DOTALL)
+    for i in range(0, len(parts), 2):
+        parts[i] = parts[i].replace('{', '\\{').replace('}', '\\}')
+    return ''.join(parts)
+
+
 def clean_mdx_content(body: str) -> str:
     """Clean content for MDX compatibility."""
     # Remove video file references (MDX can't handle them)
@@ -214,6 +237,8 @@ def clean_mdx_content(body: str) -> str:
     # Restore markdown images
     body = re.sub(r'__IMG_PLACEHOLDER__([^_]*)__SEP__([^_]*)__END__', r'![\1](\2)', body)
 
+    body = escape_mdx_braces(body)
+
     # Clean up excessive newlines
     body = re.sub(r'\n{3,}', '\n\n', body)
 
@@ -274,6 +299,17 @@ def migrate_article(source_dir: Path, article_dir: str, platform: str):
 
 def main():
     """Main migration function."""
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        '--source',
+        choices=[platform for _, platform in SOURCE_DIRS],
+        help=(
+            'Migrate only this platform. Without it every platform is '
+            'rewritten, which clobbers any hand-edits made in content/.'
+        ),
+    )
+    args = parser.parse_args()
+
     print("Starting migration...")
     print(f"Project root: {PROJECT_ROOT}")
 
@@ -281,8 +317,14 @@ def main():
     POSTS_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     ASSETS_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
+    selected = [
+        (source_name, platform)
+        for source_name, platform in SOURCE_DIRS
+        if args.source is None or platform == args.source
+    ]
+
     total = 0
-    for source_name, platform in SOURCE_DIRS:
+    for source_name, platform in selected:
         source_path = SCRIPT_DIR / source_name
         if not source_path.exists():
             print(f"Source directory not found: {source_path}")
