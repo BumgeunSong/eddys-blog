@@ -11,8 +11,13 @@ Both are written to ``archiver/linkedin_md/<slug>/article.md`` in the same
 intermediate format the other scrapers use, so ``migrate_articles.py`` does the
 final MDX conversion.
 
+The input is the *unzipped* export folder, not the .zip itself -- the scraper
+globs it for ``Shares_*.csv``. Worth double-checking what you point it at: the
+download may already arrive expanded into a directory whose name still ends in
+``.zip``.
+
 Usage:
-    python scrape.py linkedin /path/to/Complete_LinkedInDataExport_MM-DD-YYYY.zip
+    python scrape.py linkedin /path/to/Complete_LinkedInDataExport_MM-DD-YYYY
 """
 
 import csv

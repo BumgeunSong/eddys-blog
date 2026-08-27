@@ -51,10 +51,19 @@ Things the export gets wrong, which the scraper works around:
 - **Unpublished drafts ship alongside published articles** as `Copy of ...`
   with `Published on ---`. They're skipped.
 
-Feed posts have no title, so one is derived from the opening sentence. Posts
-shorter than `MIN_POST_LENGTH` are one-line reactions to someone else's post
-rather than writing, and are skipped. Pure reposts never reach the scraper —
-LinkedIn files them separately in `InstantReposts_*.csv` with no text.
+Feed posts have no title, so one is derived from the opening sentence.
+
+Reactions to other people's posts are skipped by `is_reaction()`, which tests
+structure rather than length: a reaction is a single paragraph, while anything
+composed as a post carries at least one paragraph break. Length is a poor proxy
+here — a 59-character `저만 그런가요..?` is pure reaction, while a 96-character
+post has a real setup and payoff. That split is exact over the 2026-08 export,
+but it is *fitted* to it, so the scraper prints how many it dropped
+(`Found 55 feed posts (4 reactions skipped)`) rather than filtering silently.
+Check that count when re-running against a newer export.
+
+Pure reposts never reach the scraper — LinkedIn files them separately in
+`InstantReposts_*.csv` with no text.
 
 ## Directory Structure
 
@@ -176,3 +185,11 @@ lang: ko
 - Input: `{platform}_md/{slug}/article.md`
 - Output: `content/{platform}-{slug}.mdx`
 - Assets: `public/assets/posts/{platform}-{slug}/`
+
+Re-running overwrites the output, so hand-edits and Keystatic changes to a
+migrated post are lost — use `--source` to limit the blast radius.
+
+`visibility` is the one exception: an existing value in `content/` is carried
+over, because it's a publishing decision made downstream (in Keystatic or by
+hand) and no scraper writes it into `article.md`. Without that, re-running the
+migration would silently republish a post someone deliberately hid.

@@ -44,7 +44,26 @@ def parse_frontmatter(content: str) -> tuple[dict, str]:
     return {}, content
 
 
-def transform_frontmatter(fm: dict, source: str = '', slug: str = '') -> str:
+def read_existing_visibility(output_file: Path) -> str:
+    """
+    Read `visibility` off a post that was already migrated once.
+
+    Visibility is a publishing decision the author owns downstream — it's set
+    in Keystatic or by hand, and no scraper writes it into the intermediate
+    article.md. Re-running the migration must not silently republish something
+    that was deliberately hidden, so the value in content/ wins over the
+    default. Every other field is regenerated from the archive as before.
+    """
+    if not output_file.exists():
+        return ''
+
+    existing_fm, _ = parse_frontmatter(output_file.read_text(encoding='utf-8'))
+    return existing_fm.get('visibility', '')
+
+
+def transform_frontmatter(
+    fm: dict, source: str = '', slug: str = '', visibility: str = ''
+) -> str:
     """Convert frontmatter to Nextra format."""
     lines = ['---']
 
@@ -63,8 +82,12 @@ def transform_frontmatter(fm: dict, source: str = '', slug: str = '') -> str:
     if source:
         lines.append(f'source: {source}')
 
-    # Visibility drives the public listing; only 'private' hides a post.
-    lines.append('visibility: public')
+    # Visibility drives the public listing; only 'private' hides a post. A
+    # value already on disk is the author's call and survives re-migration;
+    # a source that sets it in article.md is honoured next; otherwise public.
+    lines.append(
+        f"visibility: {visibility or fm.get('visibility') or 'public'}"
+    )
 
     # Tags (convert comma-separated to YAML array)
     tags_str = fm.get('tags', '')
@@ -271,8 +294,15 @@ def migrate_article(source_dir: Path, article_dir: str, platform: str):
         # Clean Instagram content (hashtags, special spaces)
         body = clean_instagram_content(body)
 
+    output_file = POSTS_OUTPUT_DIR / f"{slug}.mdx"
+
     # Transform frontmatter
-    new_frontmatter = transform_frontmatter(fm, source=platform, slug=slug)
+    new_frontmatter = transform_frontmatter(
+        fm,
+        source=platform,
+        slug=slug,
+        visibility=read_existing_visibility(output_file),
+    )
 
     # Update image paths
     old_path = f"{source_dir.name}/{article_dir}"
@@ -284,7 +314,6 @@ def migrate_article(source_dir: Path, article_dir: str, platform: str):
     # Combine and write MDX file
     new_content = new_frontmatter + '\n\n' + body.strip() + '\n'
 
-    output_file = POSTS_OUTPUT_DIR / f"{slug}.mdx"
     output_file.write_text(new_content, encoding='utf-8')
     print(f"  Created: {output_file.name}")
 
