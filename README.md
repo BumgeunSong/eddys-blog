@@ -68,6 +68,7 @@ writing-archiver/
 |----------|--------|
 | [Brunch](https://brunch.co.kr) | Supported |
 | [Velog](https://velog.io) | Supported |
+| [LinkedIn](https://linkedin.com) | Supported (via data export) |
 
 ## Requirements
 

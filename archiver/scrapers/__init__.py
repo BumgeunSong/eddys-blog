@@ -11,9 +11,11 @@ Usage:
 from .brunch import BrunchScraper
 from .velog import VelogScraper
 from .learning_man import LearningManScraper
+from .linkedin import LinkedInScraper
 
 __all__ = [
     'BrunchScraper',
     'VelogScraper',
     'LearningManScraper',
+    'LinkedInScraper',
 ]
