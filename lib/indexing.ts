@@ -13,7 +13,7 @@ import type { Metadata } from 'next'
  * "noindex" is what actually gets an already-indexed page dropped.
  *
  * Matched against frontmatter `source` only. A post's filename is not a
- * reliable stand-in — Keystatic edits the slug and `source` independently.
+ * reliable stand-in — the slug and `source` are edited independently.
  */
 const NOINDEX_SOURCES = new Set(['daily-writing-friends'])
 
