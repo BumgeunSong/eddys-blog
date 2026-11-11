@@ -2,16 +2,15 @@ import { Layout, Navbar } from 'nextra-theme-blog'
 import { Head } from 'nextra/components'
 import { getPageMap } from 'nextra/page-map'
 import { Footer } from '@/components/Footer'
+import { NewBlogBanner } from '@/components/NewBlogBanner'
 import { siteConfig } from '@/lib/site-config'
 import { ogCardUrl } from '@/lib/og-card'
 import '../globals.css'
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 
-// Root layout for the public blog. Lives in the (site) route group so the
-// Keystatic admin (in the (admin) group) does NOT inherit the Nextra blog
-// chrome / narrow article container. Route groups are URL-transparent, so
-// blog URLs (/, /[year], /posts/*) are unchanged.
+// Root layout for the archive. Route groups are URL-transparent, so blog URLs
+// (/, /[year], /posts/*) match the paths the old www site used.
 export const metadata: Metadata = {
   // Lets child pages use relative OG/canonical URLs (resolved to absolute here).
   metadataBase: new URL(siteConfig.url),
@@ -43,6 +42,7 @@ export default async function SiteLayout({ children }: { children: ReactNode }) 
     <html lang="ko" suppressHydrationWarning>
       <Head />
       <body>
+        <NewBlogBanner />
         <Layout>
           <Navbar pageMap={await getPageMap()} />
           {children}

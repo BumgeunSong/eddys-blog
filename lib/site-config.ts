@@ -8,7 +8,7 @@ function resolveSiteUrl(): string {
   if (process.env.VERCEL_ENV !== 'production' && process.env.VERCEL_URL) {
     return `https://${process.env.VERCEL_URL}`
   }
-  return 'https://www.eddysong.com'
+  return 'https://archive.eddysong.com'
 }
 
 // Reduce to the origin: the app has no base path, so sitemap URLs (which
