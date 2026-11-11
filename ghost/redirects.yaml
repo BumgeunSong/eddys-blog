@@ -1,0 +1,12 @@
+# Upload at Ghost Admin > Settings > Labs > Redirects.
+# Sends the old www.eddysong.com archive URLs to archive.eddysong.com.
+# Ghost runs redirects before its own routes, so every pattern here is scoped
+# to a path Ghost never serves itself. Never add a catch-all like /(.*) or
+# /assets/(.*): it would swallow new posts and the theme's /assets/built files.
+301:
+  # Post pages: /posts/<slug>
+  ^\/posts\/(.*)$: https://archive.eddysong.com/posts/$1
+  # Year listings: /2017 ... /2026
+  ^\/(20(?:17|18|19|20|21|22|23|24|25|26))\/?$: https://archive.eddysong.com/$1
+  # Post images and covers: /assets/posts/<slug>/...
+  ^\/assets\/posts\/(.*)$: https://archive.eddysong.com/assets/posts/$1
